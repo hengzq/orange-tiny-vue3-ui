@@ -88,8 +88,8 @@
   });
 
   const loginInfo = reactive({
-    username: 'admin',
-    password: 'orange',
+    username: '',
+    password: '',
     rememberPassword: false,
   });
 
@@ -108,8 +108,8 @@
 
       try {
         await userStore.login({
-          username: loginInfo.username,
-          password: encrypt(loginInfo.password),
+          loginAccount: loginInfo.username,
+          loginPassword: encrypt(loginInfo.password),
         });
         Modal.message({
           message: t('login.form.login.success'),

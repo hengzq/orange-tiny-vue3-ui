@@ -2,7 +2,7 @@ import axios from 'axios';
 import { PageParam } from '@/api/global';
 import { jsonToUrlParam } from '@/utils/formatter';
 
-const BASE_URL = '/orange-system/v1.0/permission/role';
+const BASE_URL = '/orange-system/v1.0/role';
 
 export function pageRole(params: RolePageParam) {
   return axios.post(BASE_URL.concat('/page'), params);

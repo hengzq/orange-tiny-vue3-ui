@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PageParam } from '@/api/global';
 
-const BASE_URL = '/orange-system/v1.0/permission/button';
+const BASE_URL = '/orange-system/v1.0/button';
 
 export function pageButton(params: ButtonPageParam) {
   return axios.post(BASE_URL.concat('/page'), params);

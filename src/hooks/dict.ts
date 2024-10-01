@@ -1,5 +1,5 @@
 import { ref, toRefs } from 'vue';
-import * as DictDataApi from '@/api/system/dict-data';
+import * as DictDataApi from '@/api/system/dict/data';
 
 // 数据启用状态 字典类型
 export const SYS_DATA_ENABLE_STATUS = 'sys_data_enable_status';

@@ -51,7 +51,7 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-          :setting="{ simple: true }"
+
         />
       </template>
       <tiny-grid-column
@@ -109,7 +109,7 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        width="165"
+        width="160"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -139,7 +139,7 @@
 </template>
 
 <script lang="ts" setup>
-  import * as DictTypeApi from '@/api/system/dict-type';
+  import * as DictTypeApi from '@/api/system/dict/type';
   import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
   import EditForm from './components/edit-form.vue';
 
@@ -206,9 +206,11 @@
     },
     {
       label: 'opt.edit',
+      permission: 'system:dict-type:update',
     },
     {
       label: 'opt.delete',
+      permission: 'system:dict-type:delete',
     },
   ]);
 
@@ -265,6 +267,7 @@
     {
       code: 'insert',
       name: '新增',
+      permission: 'system:dict-type:add',
     },
     // {
     //   code: 'batchDelete',

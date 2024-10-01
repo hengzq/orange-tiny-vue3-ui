@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = '/orange-system/v1.0/permission/permission';
+const BASE_URL = '/orange-system/v1.0/permission';
 
 export function getUserInfo() {
   return axios.get(BASE_URL.concat('/user-info'));

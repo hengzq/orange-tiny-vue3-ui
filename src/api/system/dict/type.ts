@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { PageParam } from '@/api/global';
 
-const BASE_URL = '/orange-system/v1.0/dict/type';
+const BASE_URL = '/orange-system/v1.0/dict-type';
 
 export function pageDictType(params: DictTypePageParam) {
   return axios.post(BASE_URL.concat('/page'), params);

@@ -18,8 +18,8 @@
   import Round from './components/round.vue';
 
   const formData = ref<ConversationParam>({
-    modelCode: 'qwen1.5-0.5b-chat',
-    platform: 'TONGYI',
+    modelCode: 'qwen2.5-3b-instruct',
+    platform: 'ALI_BAI_LIAN',
   });
 </script>
 

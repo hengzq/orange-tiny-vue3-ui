@@ -11,7 +11,7 @@ export const hasPermission = (resources: ButtonVO[]) => {
   }
   return resources.filter((button) => {
     return (
-      button.permission &&
+      !button.permission ||
       userStore.buttonPermissions.includes(button.permission)
     );
   });

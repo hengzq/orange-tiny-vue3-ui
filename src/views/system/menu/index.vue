@@ -41,7 +41,6 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-          :setting="{ simple: true }"
         />
       </template>
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
@@ -62,12 +61,10 @@
       <tiny-grid-column
         field="permission"
         :title="$t('system.menu.table.columns.permission')"
-        width="260"
       />
       <tiny-grid-column
         field="path"
         :title="$t('system.menu.table.columns.path')"
-        width="280"
         show-overflow
       />
       <tiny-grid-column
@@ -89,7 +86,6 @@
         field="hidden"
         :title="$t('system.menu.table.columns.hidden')"
         align="center"
-        width="100"
       >
         <template #default="scope">
           <dict-tag
@@ -112,12 +108,11 @@
         :title="$t('attribute.updatedAt')"
         width="150"
       />
-
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        width="150"
+        width="165"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -186,13 +181,15 @@
 
   const options = ref([
     {
-      label: 'global.table.operations.button-index',
+      label: 'opt.system.button-index',
     },
     {
       label: 'opt.edit',
+      permission: 'system:menu:update',
     },
     {
       label: 'opt.delete',
+      permission: 'system:menu:delete',
     },
   ]);
 
@@ -201,7 +198,7 @@
 
   const optionsClick = (label: string, data: MenuApi.MenuVO) => {
     switch (label) {
-      case 'global.table.operations.button-index': {
+      case 'opt.system.button-index': {
         buttonIndexRef.value.open(data);
         break;
       }
@@ -247,6 +244,7 @@
     {
       code: 'insert',
       name: '新增',
+      permission: 'system:menu:add',
     },
   ]);
 

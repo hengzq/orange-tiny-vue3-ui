@@ -103,7 +103,6 @@ const useUserStore = defineStore('user', {
       this.resetInfo();
       clearToken();
       removeRouteListener();
-      localStorage.clear();
     },
   },
 });

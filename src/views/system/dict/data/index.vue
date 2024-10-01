@@ -160,8 +160,8 @@
 </template>
 
 <script lang="ts" setup>
-  import * as DictTypeApi from '@/api/system/dict-type';
-  import * as DictDataApi from '@/api/system/dict-data';
+  import * as DictTypeApi from '@/api/system/dict/type';
+  import * as DictDataApi from '@/api/system/dict/data';
   import { getCurrentInstance, reactive, Ref, ref, toRaw, toRefs } from 'vue';
   import EditForm from './components/edit-form.vue';
 
@@ -235,9 +235,11 @@
   const options = ref([
     {
       label: 'opt.edit',
+      permission: 'system:dict-data:update',
     },
     {
       label: 'opt.delete',
+      permission: 'system:dict-data:delete',
     },
   ]);
 
@@ -287,6 +289,7 @@
     {
       code: 'insert',
       name: '新增',
+      permission: 'system:dict-data:add',
     },
     {
       code: 'batchDelete',

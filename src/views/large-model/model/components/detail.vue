@@ -72,7 +72,10 @@
       </tiny-row>
       <tiny-row>
         <tiny-col :span="6">
-          <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">
+          <tiny-form-item
+            :label="$t('attribute.enabled.status')"
+            prop="enabled"
+          >
             <tiny-radio
               v-for="(item, index) in proxy.$dict.getDictData(
                 proxy.$dict.SYS_DATA_ENABLE_STATUS,
@@ -99,11 +102,9 @@
         :label="$t('large-model.model.description')"
         prop="description"
       >
-        <Editor
+        <md-preview
           v-model="formData.description"
           style="border: 1px solid #dfe1e6; height: 500px; overflow-y: hidden"
-          :default-config="editorConfig"
-          @on-created="handleCreated"
         />
       </tiny-form-item>
     </tiny-form>
@@ -114,11 +115,11 @@
 </template>
 
 <script lang="ts" setup>
-  import '@wangeditor/editor/dist/css/style.css'; // 引入 css
+  import { MdPreview } from 'md-editor-v3';
+  import 'md-editor-v3/lib/style.css';
   import * as PlatformApi from '@/api/large-model/platform';
   import * as ModelApi from '@/api/large-model/model';
   import { computed, getCurrentInstance, Ref, ref, shallowRef } from 'vue';
-  import { Editor } from '@wangeditor/editor-for-vue';
 
   const emit = defineEmits(['ok']);
   const { proxy } = getCurrentInstance() as any;
@@ -156,13 +157,6 @@
       sort: 1,
     };
     proxy.$refs.formDataRef.resetFields();
-  };
-
-  // 编辑器实例，必须用 shallowRef
-  const editorRef = shallowRef();
-  const editorConfig = { readOnly: true };
-  const handleCreated = (editor: any) => {
-    editorRef.value = editor;
   };
 
   const open = (id: string) => {

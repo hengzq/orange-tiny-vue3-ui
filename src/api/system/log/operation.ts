@@ -1,12 +1,21 @@
 import axios from 'axios';
 import { PageParam } from '@/api/global';
 
-const BASE_URL = '/orange-system/v1.0/log/operation';
+const BASE_URL = '/orange-system/v1.0/operation-log';
+
 export function pageOperationLog(params: OperationLogPageParam) {
   return axios.post(BASE_URL.concat('/page'), params);
 }
 
-export type OperationLogPageParam = OperationLogVO & PageParam;
+export function getOperationLogById(id: string) {
+  return axios.get(BASE_URL.concat(`/${id}`));
+}
+
+export type OperationLogPageParam = OperationLogVO &
+  PageParam & {
+    resourceNameLike?: string;
+  };
+
 export interface OperationLogVO {
   /** 租户id */
   tenantId?: number;
@@ -16,6 +25,7 @@ export interface OperationLogVO {
   requestId?: string;
   /** 资源id */
   resourceId?: string;
+  resourceName?: string;
   /** User-Agent */
   userAgent?: string;
   /** 请求URL */
@@ -38,7 +48,7 @@ export interface OperationLogVO {
   /** 结束时间 */
   endTime?: string;
   /** 请求耗时,单位毫秒 */
-  executeTime?: number;
+  duration?: number | string;
   /** 请求状态 */
   status?: 'SUCCESS' | 'FAIL';
   /** Java 方法名 */

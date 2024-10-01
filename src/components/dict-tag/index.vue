@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import { DictDataVO } from '@/api/system/dict-data';
+  import { DictDataVO } from '@/api/system/dict/data';
   import { computed } from 'vue';
 
   const props = defineProps({

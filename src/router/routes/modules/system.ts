@@ -13,13 +13,13 @@ export default {
       path: 'dict',
       id: 'Dict',
       label: '字典类型管理',
-      component: () => import('@/views/system/dict-type/index.vue'),
+      component: () => import('@/views/system/dict/type/index.vue'),
     },
     {
       path: 'data',
       id: 'Data',
       label: '字典数据管理',
-      component: () => import('@/views/system/dict-data/index.vue'),
+      component: () => import('@/views/system/dict/data/index.vue'),
     },
     {
       path: 'user',

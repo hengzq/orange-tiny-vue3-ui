@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = '/orange-system/v1.0/permission/menu';
+const BASE_URL = '/orange-system/v1.0/menu';
 
 export function listMenu(params: MenuListParam) {
   return axios.post(BASE_URL.concat('/list'), params);

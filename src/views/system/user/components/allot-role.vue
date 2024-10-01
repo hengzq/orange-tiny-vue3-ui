@@ -16,10 +16,10 @@
         validate-type="text"
       >
         <tiny-form-item label="用户名称">
-          <tiny-input v-model="formData.username" disabled></tiny-input>
+          <tiny-input v-model="formData.name" disabled></tiny-input>
         </tiny-form-item>
         <tiny-form-item label="登陆账号">
-          <tiny-input v-model="formData.username" disabled></tiny-input>
+          <tiny-input v-model="formData.loginAccount" disabled></tiny-input>
         </tiny-form-item>
         <tiny-form-item label="角色">
           <tiny-select
@@ -88,7 +88,7 @@
 
   const open = async (id: string) => {
     if (id) {
-      await UserApi.getUserById(id).then((res) => {
+      await UserApi.getUserById(id, { showRole: true }).then((res) => {
         let data = res.data as UserApi.UserDetailVO;
         formData.value = data;
         roleIds.value = data.roles?.map((item) => item.id) as [];

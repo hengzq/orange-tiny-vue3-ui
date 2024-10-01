@@ -70,7 +70,7 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-          :setting="{ simple: true }"
+
         />
       </template>
       <tiny-grid-column type="selection" width="60" />

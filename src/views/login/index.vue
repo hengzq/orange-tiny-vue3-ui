@@ -27,9 +27,10 @@
   import Footer from '@/components/footer/index.vue';
   import LoginForm from './components/login-form.vue';
 
-  const userStore = useUserStore();
   // 进入登陆页面 清除缓存
-  userStore.logout();
+  localStorage.clear();
+  sessionStorage.clear()
+
 </script>
 
 <style lang="less" scoped>

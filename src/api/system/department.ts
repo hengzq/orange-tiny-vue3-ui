@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = '/orange-system/v1.0/permission/department';
+const BASE_URL = '/orange-system/v1.0/department';
 
 export function addDepartment(params: DepartmentVO) {
   return axios.post(BASE_URL, params);

@@ -40,7 +40,6 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-          :setting="{ simple: true }"
         />
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
@@ -71,6 +70,7 @@
       />
 
       <tiny-grid-column
+        v-if="proxy.$hasPermission(options).length > 0"
         :title="$t('table.operations')"
         align="center"
         width="120"
@@ -155,9 +155,11 @@
   const options = ref([
     {
       label: 'opt.edit',
+      permission: 'system:button:update'
     },
     {
       label: 'opt.delete',
+      permission: 'system:button:delete'
     },
   ]);
 
@@ -236,6 +238,7 @@
     {
       code: 'insert',
       name: '新增',
+      permission: 'system:button:update'
     },
   ]);
 

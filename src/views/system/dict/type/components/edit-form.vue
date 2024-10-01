@@ -16,39 +16,20 @@
         validate-position="bottom"
         validate-type="text"
       >
-        <tiny-form-item
-          :label="$t('system.dict-data.form.dictType')"
-          prop="dictType"
-        >
-          <tiny-select
-            v-model="formData.dictType"
-            :placeholder="$t('system.dict-data.form.dictType.placeholder')"
-          >
-            <tiny-option
-              v-for="item in dictTypeOptions"
-              :key="item.dictType"
-              :label="item.name"
-              :value="item.dictType"
-            >
-            </tiny-option>
-          </tiny-select>
-        </tiny-form-item>
-        <tiny-form-item
-          :label="$t('system.dict-data.form.dictLabel')"
-          prop="dictLabel"
-        >
+        <tiny-form-item :label="$t('system.dict-type.form.name')" prop="name">
           <tiny-input
-            v-model="formData.dictLabel"
-            :placeholder="$t('system.dict-data.form.dictLabel.placeholder')"
+            v-model="formData.name"
+            :placeholder="$t('system.dict-type.form.name.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.dict-data.form.dictValue')"
-          prop="dictValue"
+          :label="$t('system.dict-type.form.dictType')"
+          prop="dictType"
         >
           <tiny-input
-            v-model="formData.dictValue"
-            :placeholder="$t('system.dict-data.form.dictValue.placeholder')"
+            v-model="formData.dictType"
+            :disabled="isModify"
+            :placeholder="$t('system.dict-type.form.dictType.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">
@@ -63,20 +44,7 @@
             {{ item.dictLabel }}
           </tiny-radio>
         </tiny-form-item>
-        <tiny-form-item
-          :label="$t('system.dict-data.form.showStyle')"
-          prop="showStyle"
-        >
-          <tiny-input
-            v-model="formData.showStyle"
-            type="color"
-            :placeholder="$t('system.dict-data.form.showStyle.placeholder')"
-          ></tiny-input>
-        </tiny-form-item>
-        <tiny-form-item
-          :label="$t('attribute.description')"
-          prop="description"
-        >
+        <tiny-form-item :label="$t('attribute.remark')" prop="remark">
           <tiny-input
             v-model="formData.description"
             :placeholder="$t('attribute.description.placeholder')"
@@ -98,34 +66,29 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, getCurrentInstance, Ref, ref, toRaw } from 'vue';
-  import * as DictTypeApi from '@/api/system/dict-type';
-  import * as DictDataApi from '@/api/system/dict-data';
+  import { computed, getCurrentInstance, ref, toRaw } from 'vue';
+  import * as DictTypeApi from '@/api/system/dict/type';
 
   const emit = defineEmits(['ok']);
-
   const { proxy } = getCurrentInstance() as any;
-
   const visible = ref(false);
   const isModify = ref(false);
   const title = computed(() => {
     return isModify.value ? '修改字典类型' : '新增字典类型';
   });
 
-  const formData = ref<DictDataApi.DictDataVO>({
+  const formData = ref<DictTypeApi.DictTypeVO>({
+    name: '',
+    dictType: '',
     enabled: true,
-    showStyle: '#67c23a',
   });
 
   const formDataRules = {
+    name: [
+      { required: true, message: '字典类型名称不能为空', trigger: 'change' },
+    ],
     dictType: [
       { required: true, message: '字典类型不能为空', trigger: 'change' },
-    ],
-    dictLabel: [
-      { required: true, message: '字典名称不能为空', trigger: 'change' },
-    ],
-    dictValue: [
-      { required: true, message: '字典值不能为空', trigger: 'change' },
     ],
   };
 
@@ -133,7 +96,7 @@
     proxy.$refs.formDataRef.validate((valid: boolean) => {
       if (valid) {
         if (formData.value.id) {
-          DictDataApi.updateDictDataById(
+          DictTypeApi.updateDictTypeById(
             formData.value.id,
             toRaw(formData.value),
           )
@@ -145,7 +108,7 @@
               console.log(err);
             });
         } else {
-          DictDataApi.addDictData(toRaw(formData.value))
+          DictTypeApi.addDictType(toRaw(formData.value))
             .then((res) => {
               proxy.$modal.message({ message: '创建成功', status: 'success' });
               onClose(true);
@@ -158,13 +121,6 @@
     });
   };
 
-  const dictTypeOptions: Ref<DictTypeApi.DictTypeVO[]> = ref([]);
-  const queryAllDictType = (query: DictTypeApi.DictTypeListParam) => {
-    DictTypeApi.listDictType(toRaw(query)).then((res) => {
-      dictTypeOptions.value = res.data;
-    });
-  };
-
   const onClose = (refresh: boolean) => {
     visible.value = false;
     formData.value = {};
@@ -173,18 +129,16 @@
     }
   };
 
-  const open = (id: string, dictType: string) => {
+  const open = (id: string) => {
     isModify.value = false;
     proxy.$refs.formDataRef.resetFields();
     if (id) {
-      DictDataApi.getDictDataById(id).then((res) => {
-        formData.value = res.data;
+      DictTypeApi.getDictTypeById(id).then((response) => {
+        formData.value = response.data;
         isModify.value = true;
       });
     }
-    formData.value.dictType = dictType;
     visible.value = true;
-    queryAllDictType({});
   };
 
   defineExpose({

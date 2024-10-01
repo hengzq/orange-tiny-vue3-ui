@@ -8,9 +8,17 @@
     >
       <tiny-row>
         <tiny-col :span="4">
-          <tiny-form-item
-            :label="$t('system.record.operation.form.operationTime')"
-          >
+          <tiny-form-item :label="$t('system.log.operation.resourceName')">
+            <tiny-input
+              v-model="filterOptions.resourceNameLike"
+              clearable
+              :placeholder="$t('system.log.operation.resourceName.placeholder')"
+            />
+          </tiny-form-item>
+        </tiny-col>
+
+        <tiny-col :span="4">
+          <tiny-form-item :label="$t('system.log.operation.operationTime')">
             <tiny-date-picker
               v-model="operationTime"
               start-placeholder="开始日期"
@@ -23,38 +31,21 @@
             ></tiny-date-picker>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.record.operation.form.status')">
+        <tiny-col v-if="unfold" :span="4">
+          <tiny-form-item :label="$t('system.log.operation.status')">
             <tiny-select
               v-model="filterOptions.status"
-              :placeholder="
-                $t('system.record.operation.form.status.placeholder')
-              "
+              :placeholder="$t('system.log.operation.status.placeholder')"
               clearable
             >
               <tiny-option
-                v-for="item in proxy.$dict.getDictData(
-                  'sys_common_operation_status',
-                )"
+                v-for="item in proxy.$dict.getDictData('sys_operation_status')"
                 :key="item.dictValue"
                 :label="item.dictLabel"
                 :value="item.dictValue"
               >
               </tiny-option>
             </tiny-select>
-          </tiny-form-item>
-        </tiny-col>
-        <tiny-col v-if="unfold" :span="4">
-          <tiny-form-item
-            :label="$t('system.record.operation.form.resourceId')"
-          >
-            <tiny-input
-              v-model="filterOptions.resourceId"
-              clearable
-              :placeholder="
-                $t('system.record.operation.form.resourceId.placeholder')
-              "
-            />
           </tiny-form-item>
         </tiny-col>
         <tiny-col v-if="!unfold" :span="4" class="search-btn">
@@ -83,13 +74,11 @@
       </tiny-row>
       <tiny-row v-if="unfold">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.record.operation.form.traceId')">
+          <tiny-form-item :label="$t('system.log.operation.requestId')">
             <tiny-input
               v-model="filterOptions.traceId"
               clearable
-              :placeholder="
-                $t('system.record.operation.form.traceId.placeholder')
-              "
+              :placeholder="$t('system.log.operation.requestId.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -130,86 +119,82 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-          :setting="{ simple: true }"
+
           refresh
         />
       </template>
       <tiny-grid-column
-        field="traceId"
-        :title="$t('system.record.operation.table.columns.traceId')"
+        field="requestId"
+        :title="$t('system.log.operation.requestId')"
         align="center"
         width="150"
       />
       <tiny-grid-column
-        field="resourceId"
-        :title="$t('system.record.operation.table.columns.resourceId')"
-        show-overflow
-        width="220"
+        field="resourceName"
+        :title="$t('system.log.operation.resourceName')"
       />
       <tiny-grid-column
-        field="requestMethod"
-        :title="$t('system.record.operation.table.columns.requestMethod')"
-        align="center"
+        :title="$t('system.log.operation.requestMethod')"
         width="80"
       >
         <template #default="data">
           <dict-tag
             :value="data.row.requestMethod"
-            :options="proxy.$dict.getDictData('sys_common_request_method')"
+            :options="proxy.$dict.getDictData('sys_request_method')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
+        show-overflow
+        :title="$t('system.log.operation.requestUrl')"
+      >
+        <template #default="data">
+          {{ data.row.requestUrl }}
+        </template>
+      </tiny-grid-column>
+      <tiny-grid-column
         field="userIp"
-        :title="$t('system.record.operation.table.columns.userIp')"
-        align="center"
+        :title="$t('system.log.operation.userIp')"
         width="120"
       />
       <tiny-grid-column
         field="userLocation"
-        :title="$t('system.record.operation.table.columns.userLocation')"
-        align="center"
+        :title="$t('system.log.operation.userLocation')"
         width="120"
       />
       <tiny-grid-column
         field="userName"
-        :title="$t('system.record.operation.table.columns.userName')"
+        :title="$t('system.log.operation.userName')"
         align="center"
         width="80"
       />
       <tiny-grid-column
         field="status"
-        :title="$t('system.record.operation.table.columns.status')"
+        :title="$t('system.log.operation.status')"
         align="center"
         width="80"
       >
         <template #default="data">
           <dict-tag
             :value="data.row.status"
-            :options="proxy.$dict.getDictData('sys_common_operation_status')"
+            :options="proxy.$dict.getDictData('sys_operation_status')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
         field="startTime"
-        :title="$t('system.record.operation.table.columns.startTime')"
+        :title="$t('system.log.operation.startTime')"
         align="center"
         width="150"
       />
       <tiny-grid-column
-        field="executeTime"
-        :title="$t('system.record.operation.table.columns.executeTime')"
+        field="duration"
+        :title="$t('system.log.operation.duration')"
         align="center"
         width="80"
       >
-        <template #default="data"> {{ data.row.executeTime }} ms </template>
+        <template #default="data"> {{ data.row.duration }} ms</template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="userAgent"
-        show-overflow
-        :title="$t('system.record.operation.table.columns.userAgent')"
-      />
-
       <tiny-grid-column
         :title="$t('table.operations')"
         align="center"
@@ -217,20 +202,20 @@
       >
         <template #default="data">
           <tiny-button type="text" @click="handleDetail(data.row.id)">
-            {{ $t('global.table.operations.detail') }}
+            {{ $t('opt.detail') }}
           </tiny-button>
         </template>
       </tiny-grid-column>
     </tiny-grid>
   </div>
 
-  <!--  <detail ref="detailsRef"></detail>-->
+  <detail ref="detailsRef"></detail>
 </template>
 
 <script lang="ts" setup>
   import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
   import * as OperationLogApi from '@/api/system/log/operation';
-  // import detail from './components/detail.vue';
+  import detail from './components/detail.vue';
 
   const { proxy } = getCurrentInstance() as any;
   const detailsRef = ref();
@@ -360,4 +345,11 @@
   };
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+  :deep(
+      .tiny-date-editor--datetimerange.tiny-input,
+      .tiny-date-editor--datetimerange.tiny-input__inner
+    ) {
+    width: 370px !important;
+  }
+</style>

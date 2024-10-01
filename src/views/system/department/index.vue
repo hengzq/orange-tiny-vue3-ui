@@ -38,7 +38,7 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-          :setting="{ simple: true }"
+
         />
       </template>
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
@@ -119,7 +119,7 @@
 
   const toolbarButtons = reactive<any[]>([
     {
-      permission: ['system:permission:department:add'],
+      permission: 'system:department:add',
       code: 'insert',
       name: '新增',
     },
@@ -138,11 +138,11 @@
 
   const options = ref<any[]>([
     {
-      permission: 'system:permission:department:edit',
+      permission: 'system:department:update',
       label: 'opt.edit',
     },
     {
-      permission: 'system:permission:department:delete',
+      permission: 'system:department:delete',
       label: 'opt.delete',
     },
   ]);

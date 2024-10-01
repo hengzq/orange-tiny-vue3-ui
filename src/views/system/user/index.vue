@@ -8,20 +8,20 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.user.nickname')">
+          <tiny-form-item :label="$t('system.user.name')">
             <tiny-input
               v-model="filterOptions.nameLike"
               clearable
-              :placeholder="$t('system.user.nickname.placeholder')"
+              :placeholder="$t('system.user.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.user.username')" prop="id">
+          <tiny-form-item :label="$t('system.user.loginAccount')" prop="id">
             <tiny-input
-              v-model="filterOptions.usernameLike"
+              v-model="filterOptions.loginAccountLike"
               clearable
-              :placeholder="$t('system.user.username.placeholder')"
+              :placeholder="$t('system.user.loginAccount.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -51,20 +51,20 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-          :setting="{ simple: true }"
         />
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
-        field="nickname"
-        :title="$t('system.user.nickname')"
+        field="name"
+        :title="$t('system.user.name')"
         align="center"
       />
       <tiny-grid-column
-        field="email"
-        :title="$t('system.user.email')"
+        field="loginAccount"
+        :title="$t('system.user.loginAccount')"
         align="center"
       />
+      <tiny-grid-column field="email" :title="$t('system.user.email')" />
       <tiny-grid-column
         field="gender"
         :title="$t('system.user.gender')"
@@ -115,7 +115,7 @@
 
   <edit-form ref="editFormRef" @ok="handleFormQuery"></edit-form>
   <allot-role ref="allotRoleRef"></allot-role>
-  <!--  <reset-password ref="resetPasswordRef"></reset-password>-->
+  <reset-password ref="resetPasswordRef"></reset-password>
 </template>
 
 <script lang="ts" setup>
@@ -123,7 +123,8 @@
   import { computed, getCurrentInstance, reactive, ref, toRefs } from 'vue';
   import EditForm from './components/edit-form.vue';
   import AllotRole from './components/allot-role.vue';
-  // import resetPassword from './components/reset-password.vue';
+  import ResetPassword from './components/reset-password.vue';
+
   const { proxy } = getCurrentInstance() as any;
 
   const state = reactive<{
@@ -184,19 +185,20 @@
   const options = ref([
     {
       label: 'opt.edit',
-      permission: 'system-permission:user:edit',
+      permission: 'system:user:update',
     },
     {
-      label: 'global.table.operations.allotUserRole',
+      label: 'opt.system.user.allotUserRole',
+      permission: 'system:permission:assign-roles-to-one-user',
     },
     {
       label: 'global.table.operations.resetPassword',
     },
     {
       label: 'opt.delete',
+      permission: 'system:user:delete',
     },
   ]);
-
 
   const editFormRef = ref();
   const allotRoleRef = ref();
@@ -208,7 +210,7 @@
         editFormRef.value.open(data.id);
         break;
       }
-      case 'global.table.operations.allotUserRole': {
+      case 'opt.system.user.allotUserRole': {
         allotRoleRef.value.open(data.id);
         break;
       }
@@ -228,7 +230,7 @@
   const handleDelete = (data: UserApi.UserVO) => {
     proxy.$modal
       .confirm({
-        message: `确定要删除用户【${data.nickname}】吗?`,
+        message: `确定要删除用户【${data.name}】吗?`,
         maskClosable: true,
         title: '删除提示',
       })
@@ -257,7 +259,7 @@
     {
       code: 'insert',
       name: '新增',
-      permission: 'system-permission:user:add',
+      permission: 'system:user:add',
     },
     {
       code: 'batchDelete',

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { PageParam } from '@/api/global';
-import { RoleVO } from '@/api/system/role';
+import { RoleDetailQueryParam, RoleVO } from '@/api/system/role';
+import { jsonToUrlParam } from '@/utils/formatter';
 
-const BASE_URL = '/orange-system/v1.0/permission/user';
+const BASE_URL = '/orange-system/v1.0/user';
 
 export function pageUser(params: UserPageParam) {
   return axios.post(BASE_URL.concat('/page'), params);
@@ -24,8 +25,12 @@ export function addUser(params: UserVO) {
   return axios.post(BASE_URL, params);
 }
 
-export function getUserById(id: string) {
-  return axios.get(BASE_URL.concat(`/${id}`));
+export function getUserById(id: string,params?: UserDetailQueryParam) {
+  let url = BASE_URL.concat(`/${id}`);
+  if (params) {
+    url = url.concat(`?${jsonToUrlParam(params)}`);
+  }
+  return axios.get(url);
 }
 
 export function updateUserById(id: string, params: UserVO) {
@@ -39,20 +44,20 @@ export function resetUserPassword(params: ResetPasswordParam) {
 export interface UserVO {
   tenantId?: number;
   id?: string;
-  nickname?: string;
+  name?: string;
   gender?: string;
   email?: string;
   phone?: string;
-  username?: string;
-  password?: string;
+  loginAccount?: string;
+  loginPassword?: string;
 }
 
 export interface UserListParam {
   name?: string;
   nameLike?: string;
   email?: string;
-  username?: string;
-  usernameLike?: string;
+  loginAccount?: string;
+  loginAccountLike?: string;
 }
 
 export interface AddUserParam extends UserVO {
@@ -69,4 +74,8 @@ export interface ResetPasswordParam {
 
 export interface UserDetailVO extends UserVO {
   roles?: RoleVO[];
+}
+
+export interface UserDetailQueryParam {
+  showRole?: boolean;
 }

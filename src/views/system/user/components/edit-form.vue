@@ -16,7 +16,10 @@
         validate-position="bottom"
         validate-type="text"
       >
-        <tiny-form-item :label="$t('system.user.department')" prop="departmentIds">
+        <tiny-form-item
+          :label="$t('system.user.department')"
+          prop="departmentIds"
+        >
           <tiny-select
             v-model="formData.departmentIds"
             value-field="id"
@@ -27,8 +30,8 @@
             :placeholder="$t('system.department.form.parentId.placeholder')"
           ></tiny-select>
         </tiny-form-item>
-        <tiny-form-item :label="$t('system.user.nickname')" prop="nickname">
-          <tiny-input v-model="formData.nickname"></tiny-input>
+        <tiny-form-item :label="$t('system.user.name')" prop="name">
+          <tiny-input v-model="formData.name"></tiny-input>
         </tiny-form-item>
         <tiny-form-item :label="$t('system.user.email')" prop="email">
           <tiny-input v-model="formData.email"></tiny-input>
@@ -45,8 +48,11 @@
         <tiny-form-item :label="$t('system.user.phone')" prop="phone">
           <tiny-input v-model="formData.phone"></tiny-input>
         </tiny-form-item>
-        <tiny-form-item :label="$t('system.user.username')" prop="username">
-          <tiny-input v-model="formData.username"></tiny-input>
+        <tiny-form-item
+          :label="$t('system.user.loginAccount')"
+          prop="loginAccount"
+        >
+          <tiny-input v-model="formData.loginAccount"></tiny-input>
         </tiny-form-item>
       </tiny-form>
       <template #footer>
@@ -73,15 +79,15 @@
     return isModify.value ? '修改用户' : '新增用户';
   });
 
-  const formData = ref<UserApi.AddUserParam>({});
+  const formData = ref<UserApi.AddUserParam>({
+    gender: 'MALE',
+  });
 
   const formDataRules = {
     departmentIds: [
       { required: true, message: '请选择部门', trigger: 'change' },
     ],
-    nickname: [
-      { required: true, message: '用户昵称不能为空', trigger: 'change' },
-    ],
+    name: [{ required: true, message: '用户昵称不能为空', trigger: 'change' }],
   };
 
   const onSubmit = () => {

@@ -51,7 +51,6 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-          :setting="{ simple: true }"
         />
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
@@ -102,7 +101,7 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        width="170"
+        :width="proxy.$hasPermission(options).length * 55"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -199,12 +198,15 @@
   const options = ref([
     {
       label: 'opt.edit',
+      permission: 'system:role:update',
     },
     {
-      label: 'global.table.operations.menuPermission',
+      label: 'opt.system.role.assignResourcesToOneRole',
+      permission: 'system:permission:assign-resources-to-one-role'
     },
     {
       label: 'opt.delete',
+      permission: 'system:role:delete',
     },
   ]);
 
@@ -214,7 +216,7 @@
         editFormRef.value.open(data.id);
         break;
       }
-      case 'global.table.operations.menuPermission': {
+      case 'opt.system.role.assignResourcesToOneRole': {
         allotResourceRef.value.open(data.id);
         break;
       }
@@ -256,6 +258,7 @@
     {
       code: 'insert',
       name: '新增',
+      permission: 'system:role:add',
     },
     // {
     //   code: 'batchDelete',

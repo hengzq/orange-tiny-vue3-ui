@@ -8,11 +8,11 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.record.login.form.account')">
+          <tiny-form-item :label="$t('system.log.login.account')">
             <tiny-input
               v-model="filterOptions.account"
               clearable
-              :placeholder="$t('system.record.login.form.account.placeholder')"
+              :placeholder="$t('system.log.login.account.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -42,36 +42,36 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-          :setting="{ simple: true }"
+
         />
       </template>
 
       <tiny-grid-column
-        field="traceId"
-        :title="$t('system.record.login.table.columns.traceId')"
+        field="requestId"
+        :title="$t('system.log.login.requestId')"
         align="center"
         width="150"
       />
       <tiny-grid-column
         field="account"
-        :title="$t('system.record.login.table.columns.account')"
+        :title="$t('system.log.login.account')"
         align="center"
       />
       <tiny-grid-column
         field="userName"
-        :title="$t('system.record.login.table.columns.userName')"
+        :title="$t('system.log.login.userName')"
         align="center"
         width="80"
       />
       <tiny-grid-column
         field="userIp"
-        :title="$t('system.record.login.table.columns.userIp')"
+        :title="$t('system.log.login.userIp')"
         align="center"
         width="120"
       />
       <tiny-grid-column
         field="userLocation"
-        :title="$t('system.record.operation.table.columns.userLocation')"
+        :title="$t('system.log.operation.userLocation')"
         align="center"
         width="120"
       />
@@ -84,33 +84,33 @@
         <template #default="data">
           <dict-tag
             :value="data.row.status"
-            :options="proxy.$dict.getDictData('sys_common_operation_status')"
+            :options="proxy.$dict.getDictData('sys_operation_status')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
         field="type"
-        :title="$t('system.record.login.table.columns.type')"
+        :title="$t('system.log.login.type')"
         align="center"
         width="80"
       >
         <template #default="data">
           <dict-tag
             :value="data.row.type"
-            :options="proxy.$dict.getDictData('sys_record_login_type')"
+            :options="proxy.$dict.getDictData('sys_log_login_type')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
         field="loginTime"
-        :title="$t('system.record.login.table.columns.loginTime')"
+        :title="$t('system.log.login.loginTime')"
         align="center"
         width="150"
       />
       <tiny-grid-column
         field="userAgent"
         show-overflow
-        :title="$t('system.record.login.table.columns.userAgent')"
+        :title="$t('system.log.login.userAgent')"
       />
 
       <tiny-grid-column
@@ -120,22 +120,22 @@
       >
         <template #default="data">
           <tiny-button type="text" @click="handleDetail(data.row)">
-            {{ $t('global.table.operations.detail') }}
+            {{ $t('opt.detail') }}
           </tiny-button>
         </template>
       </tiny-grid-column>
     </tiny-grid>
   </div>
-  <!--  <detail ref="detailsRef"></detail>-->
+    <detail ref="detailRef"></detail>
 </template>
 
 <script lang="ts" setup>
   import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
   import * as LoginLogApi from '@/api/system/log/login';
-  // import detail from './components/detail.vue';
+  import detail from './components/detail.vue';
 
   const { proxy } = getCurrentInstance() as any;
-  const detailsRef = ref();
+  const detailRef = ref();
 
   const state = reactive<{
     loading: boolean;
@@ -193,7 +193,7 @@
   }
 
   const handleDetail = (data: LoginLogApi.LoginLogVO) => {
-    detailsRef.value.open(data);
+    detailRef.value.open(data.id);
   };
 
   const handleFormQuery = () => {

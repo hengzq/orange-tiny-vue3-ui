@@ -14,16 +14,14 @@
           <h4>2.请避免输入有违公序良俗的问题，模型可能无法回答不合适的问题.</h4>
         </tiny-alert>
       </tiny-card>
-
-      <tiny-card
+      <div
         v-for="(item, index) in chatList"
         v-else
         :key="index"
         :class="[item.messageType === 'USER' ? 'question' : 'answer', 'card']"
-        type="text"
       >
-        <div v-html="item.content"></div>
-      </tiny-card>
+        <md-preview v-model="item.content" />
+      </div>
     </div>
 
     <div class="footer">
@@ -50,11 +48,8 @@
   import * as ChatApi from '@/api/large-model/chat';
   import * as ChatSessionRecordApi from '@/api/large-model/chat-sesssion-record';
   import { fetchEventSource } from '@microsoft/fetch-event-source';
-  import { Marked } from 'marked';
-  import DOMPurify from 'dompurify';
-  import { markedHighlight } from 'marked-highlight';
-  import hljs from 'highlight.js';
-  import 'highlight.js/styles/atom-one-dark.css';
+  import { MdPreview } from 'md-editor-v3';
+  import 'md-editor-v3/lib/style.css';
   import { getToken } from '@/utils/auth';
 
   const emit = defineEmits(['refresh']);
@@ -81,18 +76,10 @@
 
   const formData = ref<ChatApi.ConversationParam>({});
 
-  // 代码高亮
-  const marked = new Marked(
-    markedHighlight({
-      langPrefix: 'hljs language-',
-      highlight(code: string, lang: string, info: any) {
-        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        return hljs.highlight(code, { language }).value;
-      },
-    }),
-  );
-
   const sendMessageStream = async () => {
+    if (!formData.value.prompt) {
+      return;
+    }
     chatList.value.push({
       messageType: 'USER',
       content: formData.value.prompt || '',
@@ -111,23 +98,24 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getToken()}`
+          'Authorization': `Bearer ${getToken()}`,
         },
         body: JSON.stringify(conversationParam),
+        openWhenHidden: true,
         onmessage(event) {
           if (!props.conversationParam.sessionId && !refreshed) {
             refreshed = true;
             emit('refresh', {}, true);
           }
           const { data } = JSON.parse(event.data);
-          const html = marked.parse(data.content) as string;
-          chatList.value.splice(chatList.value.length - 1, 1, {
-            messageType: 'ASSISTANT',
-            content: DOMPurify.sanitize(html),
-          });
+          let last = chatList.value[chatList.value.length - 1];
+          last.content += data.content;
         },
         onclose() {
           console.log('close stream.');
+        },
+        onerror(err) {
+          console.log(err);
         },
       },
     );
@@ -173,5 +161,13 @@
 
   .footer {
     //position: relative;
+  }
+
+  :deep(.md-editor-preview-wrapper) {
+    padding: 0 20px !important;
+  }
+
+  :deep(.md-editor-preview) {
+    font-size: 13px !important;
   }
 </style>
