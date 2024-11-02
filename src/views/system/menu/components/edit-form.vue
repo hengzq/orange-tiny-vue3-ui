@@ -17,7 +17,7 @@
         validate-type="text"
       >
         <tiny-form-item
-          :label="$t('system.department.form.parentId')"
+          :label="$t('system.department.parentId')"
           prop="parentId"
         >
           <tiny-select
@@ -26,22 +26,22 @@
             text-field="name"
             render-type="tree"
             :tree-op="treeOp"
-            :placeholder="$t('system.department.form.parentId.placeholder')"
+            :placeholder="$t('system.department.parentId.placeholder')"
           ></tiny-select>
         </tiny-form-item>
-        <tiny-form-item :label="$t('system.menu.form.name')" prop="name">
+        <tiny-form-item :label="$t('system.menu.name')" prop="name">
           <tiny-input
             v-model="formData.name"
-            :placeholder="$t('system.menu.form.name.placeholder')"
+            :placeholder="$t('system.menu.name.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.menu.form.permission')"
+          :label="$t('system.menu.permission')"
           prop="permission"
         >
           <tiny-input
             v-model="formData.permission"
-            :placeholder="$t('system.menu.form.permission.placeholder')"
+            :placeholder="$t('system.menu.permission.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item label="可见状态" prop="hidden">
@@ -56,16 +56,16 @@
             {{ item.dictLabel }}
           </tiny-radio>
         </tiny-form-item>
-        <tiny-form-item :label="$t('system.menu.form.icon')" prop="icon">
+        <tiny-form-item :label="$t('system.menu.icon')" prop="icon">
           <tiny-input
             v-model="formData.icon"
-            :placeholder="$t('system.menu.form.icon.placeholder')"
+            :placeholder="$t('system.menu.icon.placeholder')"
           ></tiny-input>
         </tiny-form-item>
-        <tiny-form-item :label="$t('system.menu.form.path')" prop="path">
+        <tiny-form-item :label="$t('system.menu.path')" prop="path">
           <tiny-input
             v-model="formData.path"
-            :placeholder="$t('system.menu.form.path.placeholder')"
+            :placeholder="$t('system.menu.path.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item :label="$t('attribute.sort')" prop="sort">

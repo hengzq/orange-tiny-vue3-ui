@@ -17,7 +17,7 @@
         validate-type="text"
       >
         <tiny-form-item
-          :label="$t('system.department.form.parentId')"
+          :label="$t('system.department.parentId')"
           prop="parentId"
         >
           <tiny-select
@@ -26,7 +26,7 @@
             text-field="name"
             render-type="tree"
             :tree-op="treeOp"
-            :placeholder="$t('system.department.form.parentId.placeholder')"
+            :placeholder="$t('system.department.parentId.placeholder')"
           ></tiny-select>
         </tiny-form-item>
         <tiny-form-item :label="$t('system.department.name')" prop="name">

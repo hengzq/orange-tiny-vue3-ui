@@ -76,7 +76,7 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.requestId')">
             <tiny-input
-              v-model="filterOptions.traceId"
+              v-model="filterOptions.requestId"
               clearable
               :placeholder="$t('system.log.operation.requestId.placeholder')"
             ></tiny-input>
@@ -108,6 +108,7 @@
 
     <tiny-grid
       ref="gridTableRef"
+      class="table-list"
       max-height="580px"
       :fetch-data="fetchTableData"
       :pager="pagerConfig"
@@ -119,7 +120,6 @@
         <tiny-grid-toolbar
           :buttons="proxy.$hasPermission(toolbarButtons)"
           full-screen
-
           refresh
         />
       </template>
@@ -285,11 +285,11 @@
   const handleChange = (time: [string, string]) => {
     if (time) {
       let [startTime, endTime] = time;
-      // filterOptions.value.operationStartTime = startTime
-      // filterOptions.value.operationEndTime = endTime
+      filterOptions.value.operationStartTime = startTime
+      filterOptions.value.operationEndTime = endTime
     } else {
-      // filterOptions.value.operationStartTime = undefined
-      // filterOptions.value.operationEndTime = undefined
+      filterOptions.value.operationStartTime = undefined
+      filterOptions.value.operationEndTime = undefined
     }
   };
 
@@ -298,6 +298,7 @@
   };
   const handleFormReset = () => {
     state.filterOptions = {} as OperationLogApi.OperationLogPageParam;
+    operationTime.value = ''
     handleFormQuery();
   };
 

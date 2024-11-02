@@ -17,12 +17,12 @@
         validate-type="text"
       >
         <tiny-form-item
-          :label="$t('system.dict-data.form.dictType')"
+          :label="$t('system.dict-data.dictType')"
           prop="dictType"
         >
           <tiny-select
             v-model="formData.dictType"
-            :placeholder="$t('system.dict-data.form.dictType.placeholder')"
+            :placeholder="$t('system.dict-data.dictType.placeholder')"
           >
             <tiny-option
               v-for="item in dictTypeOptions"
@@ -34,21 +34,21 @@
           </tiny-select>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.dict-data.form.dictLabel')"
+          :label="$t('system.dict-data.dictLabel')"
           prop="dictLabel"
         >
           <tiny-input
             v-model="formData.dictLabel"
-            :placeholder="$t('system.dict-data.form.dictLabel.placeholder')"
+            :placeholder="$t('system.dict-data.dictLabel.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.dict-data.form.dictValue')"
+          :label="$t('system.dict-data.dictValue')"
           prop="dictValue"
         >
           <tiny-input
             v-model="formData.dictValue"
-            :placeholder="$t('system.dict-data.form.dictValue.placeholder')"
+            :placeholder="$t('system.dict-data.dictValue.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">
@@ -64,13 +64,13 @@
           </tiny-radio>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.dict-data.form.showStyle')"
+          :label="$t('system.dict-data.showStyle')"
           prop="showStyle"
         >
           <tiny-input
             v-model="formData.showStyle"
             type="color"
-            :placeholder="$t('system.dict-data.form.showStyle.placeholder')"
+            :placeholder="$t('system.dict-data.showStyle.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item

@@ -22,8 +22,6 @@ import App from './App.vue';
 import '@/api/interceptor';
 import '@/assets/style/index.less';
 
-
-
 // eslint-disable-next-line import/extensions
 import 'echarts4/map/js/china.js';
 import chinaMap from './assets/chaina.json';

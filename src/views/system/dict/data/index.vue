@@ -8,10 +8,10 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.dict-data.form.dictType')">
+          <tiny-form-item :label="$t('system.dict-data.dictType')">
             <tiny-select
               v-model="filterOptions.dictType"
-              :placeholder="$t('system.dict-data.form.dictType.placeholder')"
+              :placeholder="$t('system.dict-data.dictType.placeholder')"
               clearable
             >
               <tiny-option
@@ -25,11 +25,11 @@
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.dict-data.form.dictLabel')">
+          <tiny-form-item :label="$t('system.dict-data.dictLabel')">
             <tiny-input
               v-model="filterOptions.dictLabelLike"
               clearable
-              :placeholder="$t('system.dict-data.form.dictLabel.placeholder')"
+              :placeholder="$t('system.dict-data.dictLabel.placeholder')"
             />
           </tiny-form-item>
         </tiny-col>
@@ -60,7 +60,7 @@
           <tiny-grid-column type="selection" width="50"></tiny-grid-column>
           <tiny-grid-column
             field="dictLabel"
-            :title="$t('system.dict-data.table.columns.dictLabel')"
+            :title="$t('system.dict-data.dictLabel')"
             align="center"
           >
             <template #default="scope">
@@ -71,12 +71,12 @@
           </tiny-grid-column>
           <tiny-grid-column
             field="dictValue"
-            :title="$t('system.dict-data.table.columns.dictValue')"
+            :title="$t('system.dict-data.dictValue')"
             align="center"
           />
           <tiny-grid-column
             field="dictType"
-            :title="$t('system.dict-data.table.columns.dictType')"
+            :title="$t('system.dict-data.dictType')"
             align="center"
           >
             <template #default="scope">

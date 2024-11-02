@@ -112,14 +112,7 @@
   import 'md-editor-v3/lib/style.css';
   import * as PlatformApi from '@/api/large-model/platform';
   import * as ModelApi from '@/api/large-model/model';
-  import {
-    computed,
-    getCurrentInstance,
-    Ref,
-    ref,
-    shallowRef,
-    toRaw,
-  } from 'vue';
+  import { computed, getCurrentInstance, Ref, ref, toRaw } from 'vue';
 
   const emit = defineEmits(['ok']);
   const { proxy } = getCurrentInstance() as any;

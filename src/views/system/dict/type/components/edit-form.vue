@@ -16,20 +16,20 @@
         validate-position="bottom"
         validate-type="text"
       >
-        <tiny-form-item :label="$t('system.dict-type.form.name')" prop="name">
+        <tiny-form-item :label="$t('system.dict-type.name')" prop="name">
           <tiny-input
             v-model="formData.name"
-            :placeholder="$t('system.dict-type.form.name.placeholder')"
+            :placeholder="$t('system.dict-type.name.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item
-          :label="$t('system.dict-type.form.dictType')"
+          :label="$t('system.dict-type.dictType')"
           prop="dictType"
         >
           <tiny-input
             v-model="formData.dictType"
             :disabled="isModify"
-            :placeholder="$t('system.dict-type.form.dictType.placeholder')"
+            :placeholder="$t('system.dict-type.dictType.placeholder')"
           ></tiny-input>
         </tiny-form-item>
         <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">

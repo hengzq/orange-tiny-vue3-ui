@@ -12,13 +12,13 @@
     >
       <tiny-row>
         <tiny-col :span="6">
-          <tiny-form-item :label="$t('system.menu.form.name')" prop="name">
+          <tiny-form-item :label="$t('system.menu.name')" prop="name">
             <tiny-input v-model="formData.name"></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="6">
           <tiny-form-item
-            :label="$t('system.menu.form.permission')"
+            :label="$t('system.menu.permission')"
             prop="permission"
           >
             <tiny-input v-model="formData.permission"></tiny-input>
@@ -45,13 +45,13 @@
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
         field="name"
-        :title="$t('system.button.table.columns.name')"
+        :title="$t('system.button.name')"
         width="100"
         :editor="{ component: 'input' }"
       />
       <tiny-grid-column
         field="permission"
-        :title="$t('system.button.table.columns.permission')"
+        :title="$t('system.button.permission')"
         width="260"
         :editor="{ component: 'input' }"
       />

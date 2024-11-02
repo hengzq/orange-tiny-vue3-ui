@@ -8,20 +8,20 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.role.form.name')">
+          <tiny-form-item :label="$t('system.role.name')">
             <tiny-input
               v-model="filterOptions.nameLike"
               clearable
-              :placeholder="$t('system.role.form.name.placeholder')"
+              :placeholder="$t('system.role.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.role.form.permission')">
+          <tiny-form-item :label="$t('system.role.permission')">
             <tiny-input
               v-model="filterOptions.permissionLike"
               clearable
-              :placeholder="$t('system.role.form.permission.placeholder')"
+              :placeholder="$t('system.role.permission.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -56,12 +56,12 @@
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
         field="name"
-        :title="$t('system.role.table.columns.name')"
+        :title="$t('system.role.name')"
         align="center"
       />
       <tiny-grid-column
         field="permission"
-        :title="$t('system.role.table.columns.permission')"
+        :title="$t('system.role.permission')"
         align="center"
       />
       <tiny-grid-column
@@ -201,7 +201,7 @@
       permission: 'system:role:update',
     },
     {
-      label: 'opt.system.role.assignResourcesToOneRole',
+      label: 'system.role.opt.assignResourcesToOneRole',
       permission: 'system:permission:assign-resources-to-one-role'
     },
     {
@@ -216,7 +216,7 @@
         editFormRef.value.open(data.id);
         break;
       }
-      case 'opt.system.role.assignResourcesToOneRole': {
+      case 'system.role.opt.assignResourcesToOneRole': {
         allotResourceRef.value.open(data.id);
         break;
       }

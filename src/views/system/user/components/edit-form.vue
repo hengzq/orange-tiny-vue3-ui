@@ -27,7 +27,7 @@
             render-type="tree"
             multiple
             :tree-op="treeOp"
-            :placeholder="$t('system.department.form.parentId.placeholder')"
+            :placeholder="$t('system.department.parentId.placeholder')"
           ></tiny-select>
         </tiny-form-item>
         <tiny-form-item :label="$t('system.user.name')" prop="name">
@@ -94,23 +94,17 @@
     proxy.$refs.formDataRef.validate((valid: boolean) => {
       if (valid) {
         if (formData.value.id) {
-          UserApi.updateUserById(formData.value.id, toRaw(formData.value))
-            .then((res) => {
+          UserApi.updateUserById(formData.value.id, toRaw(formData.value)).then(
+            (res) => {
               proxy.$modal.message({ message: '修改成功', status: 'success' });
               onClose(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+            },
+          );
         } else {
-          UserApi.addUser(toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({ message: '创建成功', status: 'success' });
-              onClose(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          UserApi.addUser(toRaw(formData.value)).then((res) => {
+            proxy.$modal.message({ message: '创建成功', status: 'success' });
+            onClose(true);
+          });
         }
       }
     });

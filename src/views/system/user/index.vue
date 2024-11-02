@@ -188,11 +188,11 @@
       permission: 'system:user:update',
     },
     {
-      label: 'opt.system.user.allotUserRole',
+      label: 'system.user.opt.allotUserRole',
       permission: 'system:permission:assign-roles-to-one-user',
     },
     {
-      label: 'global.table.operations.resetPassword',
+      label: 'system.user.opt.resetPassword',
     },
     {
       label: 'opt.delete',
@@ -210,11 +210,11 @@
         editFormRef.value.open(data.id);
         break;
       }
-      case 'opt.system.user.allotUserRole': {
+      case 'system.user.opt.allotUserRole': {
         allotRoleRef.value.open(data.id);
         break;
       }
-      case 'global.table.operations.resetPassword': {
+      case 'system.user.opt.resetPassword': {
         resetPasswordRef.value.open(data.id);
         break;
       }

@@ -27,11 +27,14 @@
     <div class="footer">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="11">
-          <tiny-input
+          <md-editor
             v-model="formData.prompt"
-            placeholder="请输入内容"
+            :toolbars="toolbars"
+            :footers="footers"
+            :preview="false"
+            style="height: 55px"
             @keyup.enter="sendMessageStream"
-          ></tiny-input>
+          />
         </tiny-col>
         <tiny-col :span="1">
           <tiny-button type="primary" @click="sendMessageStream">
@@ -48,11 +51,14 @@
   import * as ChatApi from '@/api/large-model/chat';
   import * as ChatSessionRecordApi from '@/api/large-model/chat-sesssion-record';
   import { fetchEventSource } from '@microsoft/fetch-event-source';
-  import { MdPreview } from 'md-editor-v3';
+  import { MdPreview, MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
   import { getToken } from '@/utils/auth';
 
   const emit = defineEmits(['refresh']);
+
+  const toolbars = [];
+  const footers = [];
 
   const { VITE_API_BASE_URL } = import.meta.env || {};
   const props = defineProps({

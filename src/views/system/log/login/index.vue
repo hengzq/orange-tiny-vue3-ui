@@ -30,6 +30,7 @@
 
     <tiny-grid
       ref="gridTableRef"
+      class="table-list"
       max-height="580px"
       :fetch-data="fetchTableData"
       :pager="pagerConfig"
@@ -42,7 +43,6 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-
         />
       </template>
 
@@ -126,7 +126,7 @@
       </tiny-grid-column>
     </tiny-grid>
   </div>
-    <detail ref="detailRef"></detail>
+  <detail ref="detailRef"></detail>
 </template>
 
 <script lang="ts" setup>

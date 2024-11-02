@@ -36,12 +36,6 @@ const useUserStore = defineStore('user', {
   },
 
   actions: {
-    switchRoles() {
-      return new Promise((resolve) => {
-        // this.role = this.role === 'user' ? 'admin' : 'user';
-        // resolve(this.role);
-      });
-    },
     // Set user's information
     setInfo(partial: Partial<UserState>) {
       this.$patch(partial);
@@ -52,14 +46,6 @@ const useUserStore = defineStore('user', {
       this.$reset();
     },
 
-    // Reset filter information
-    resetFilterInfo() {
-      // this.startTime = '';
-      // this.endTime = '';
-      // this.filterStatus = [];
-      // this.filterType = [];
-    },
-
     async info() {
       const res = await PermissionApi.getUserInfo();
       const { roles } = res.data;
@@ -67,7 +53,6 @@ const useUserStore = defineStore('user', {
         // rolePermissions: roles.map((item: RoleVO) => item.permission),
         ...res.data,
       };
-      console.log(userInfo);
       this.setInfo(userInfo);
     },
 

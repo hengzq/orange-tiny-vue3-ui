@@ -136,7 +136,7 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        width="145"
+        :width="proxy.$hasPermission(options).length * 50"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -224,7 +224,6 @@
   };
   const options = ref<any[]>([
     {
-      permission: 'orange-ai:model:update',
       label: 'opt.detail',
     },
     {

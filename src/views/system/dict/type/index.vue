@@ -8,20 +8,20 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.dict-type.form.name')">
+          <tiny-form-item :label="$t('system.dict-type.name')">
             <tiny-input
               v-model="filterOptions.nameLike"
               clearable
-              :placeholder="$t('system.dict-type.form.name.placeholder')"
+              :placeholder="$t('system.dict-type.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.dict-type.form.dictType')">
+          <tiny-form-item :label="$t('system.dict-type.dictType')">
             <tiny-input
               v-model="filterOptions.dictType"
               clearable
-              :placeholder="$t('system.dict-type.form.dictType.placeholder')"
+              :placeholder="$t('system.dict-type.dictType.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -51,16 +51,12 @@
           :buttons="proxy.$hasPermission(toolbarButtons)"
           refresh
           full-screen
-
         />
       </template>
-      <tiny-grid-column
-        field="name"
-        :title="$t('system.dict-type.table.columns.name')"
-      />
+      <tiny-grid-column field="name" :title="$t('system.dict-type.name')" />
       <tiny-grid-column
         field="dictType"
-        :title="$t('system.dict-type.table.columns.dictType')"
+        :title="$t('system.dict-type.dictType')"
       />
       <tiny-grid-column
         field="enabled"
@@ -109,7 +105,11 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        width="160"
+        :width="
+          proxy.$hasPermission(options).length == 1
+            ? 80
+            : proxy.$hasPermission(options).length * 55
+        "
       >
         <template #default="scope">
           <tiny-action-menu
@@ -202,7 +202,7 @@
 
   const options = ref([
     {
-      label: 'system.dict-type.operations.dataList',
+      label: 'system.dict-type.opt.dataList',
     },
     {
       label: 'opt.edit',
@@ -218,7 +218,7 @@
 
   const optionsClick = (label: string, data: DictTypeApi.DictTypeVO) => {
     switch (label) {
-      case 'system.dict-type.operations.dataList': {
+      case 'system.dict-type.opt.dataList': {
         proxy.$router.push({
           path: `${import.meta.env.VITE_CONTEXT}system/data`,
           query: { dictType: data.dictType },

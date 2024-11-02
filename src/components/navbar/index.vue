@@ -49,15 +49,13 @@
         </tiny-user-head>
         <div class="trigger-user">
           <li
-            v-for="(item, index) in userlist"
+            v-for="(item, index) in userList"
             :key="index"
             :value="item.label"
             @click="switchUser(item.value)"
           >
-            <iconReplace v-if="item.value === 1"></iconReplace>
-            <iconUser v-if="item.value === 2"></iconUser>
-            <iconWriting v-if="item.value === 3"></iconWriting>
-            <iconCheckOut v-if="item.value === 4"></iconCheckOut>
+            <iconUser v-if="item.value === 1"></iconUser>
+            <iconCheckOut v-if="item.value === 10"></iconCheckOut>
             {{ $t(item.label) }}
           </li>
         </div>
@@ -69,28 +67,20 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useI18n } from 'vue-i18n';
-  import { UserHead as TinyUserHead, Modal } from '@opentiny/vue';
-  import {
-    IconReplace,
-    IconUser,
-    IconCheckOut,
-    IconWriting,
-  } from '@opentiny/vue-icon';
-  import { useAppStore, useUserStore } from '@/store';
+  import { UserHead as TinyUserHead } from '@opentiny/vue';
+  import { IconCheckOut, IconUser } from '@opentiny/vue-icon';
+  import { useAppStore } from '@/store';
   import router from '@/router';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
 
   const i18 = useI18n();
-  const iconReplace = IconReplace();
   const iconUser = IconUser();
   const iconCheckOut = IconCheckOut();
-  const iconWriting = IconWriting();
   const lan = ref(false);
 
   const appStore = useAppStore();
-  const userStore = useUserStore();
   const { logout } = useUser();
   const { changeLocale } = useLocale();
   const locales = [...LOCALE_OPTIONS];
@@ -99,6 +89,7 @@
   const changeLan = () => {
     lan.value = !lan.value;
   };
+
   // 帮助中心
   const help = () => {
     window.open('http://hengzq.cn', '_blank');
@@ -110,24 +101,17 @@
   };
 
   // 用户设置
-  const userlist = [
-    { label: 'messageBox.switchRoles', value: 1 },
-    { label: 'messageBox.userCenter', value: 2 },
-    { label: 'messageBox.userSettings', value: 3 },
-    { label: 'messageBox.logout', value: 4 },
+  const userList = [
+    { label: 'messageBox.userCenter', value: 1 },
+    { label: 'messageBox.logout', value: 10 },
   ];
-
 
   const switchUser = (e: number) => {
     switch (e) {
-
-      case 2:
+      case 1:
         router.push({ name: 'Info' });
         break;
-      case 3:
-        router.push({ name: 'Setting' });
-        break;
-      case 4:
+      case 10:
         logout();
         break;
       default:
@@ -275,7 +259,7 @@
 
     .trigger-user {
       position: absolute;
-      bottom: -102px;
+      bottom: -58px;
       display: none;
       width: 100px;
       margin-left: -43px;

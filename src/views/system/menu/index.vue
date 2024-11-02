@@ -8,11 +8,11 @@
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('system.menu.form.name')">
+          <tiny-form-item :label="$t('system.menu.name')">
             <tiny-input
               v-model="filterOptions.nameLike"
               clearable
-              :placeholder="$t('system.menu.form.name.placeholder')"
+              :placeholder="$t('system.menu.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -46,11 +46,11 @@
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
       <tiny-grid-column
         field="name"
-        :title="$t('system.menu.table.columns.name')"
+        :title="$t('system.menu.name')"
       />
       <tiny-grid-column
         field="icon"
-        :title="$t('system.menu.table.columns.icon')"
+        :title="$t('system.menu.icon')"
         align="center"
         width="80"
       >
@@ -60,11 +60,11 @@
       </tiny-grid-column>
       <tiny-grid-column
         field="permission"
-        :title="$t('system.menu.table.columns.permission')"
+        :title="$t('system.menu.permission')"
       />
       <tiny-grid-column
         field="path"
-        :title="$t('system.menu.table.columns.path')"
+        :title="$t('system.menu.path')"
         show-overflow
       />
       <tiny-grid-column
@@ -84,7 +84,7 @@
       </tiny-grid-column>
       <tiny-grid-column
         field="hidden"
-        :title="$t('system.menu.table.columns.hidden')"
+        :title="$t('system.menu.hidden')"
         align="center"
       >
         <template #default="scope">
@@ -181,7 +181,7 @@
 
   const options = ref([
     {
-      label: 'opt.system.button-index',
+      label: 'system.button.opt.button-index',
     },
     {
       label: 'opt.edit',
@@ -198,7 +198,7 @@
 
   const optionsClick = (label: string, data: MenuApi.MenuVO) => {
     switch (label) {
-      case 'opt.system.button-index': {
+      case 'system.button.opt.button-index': {
         buttonIndexRef.value.open(data);
         break;
       }

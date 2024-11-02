@@ -15,19 +15,19 @@
       validate-position="bottom"
       validate-type="text"
     >
-      <tiny-form-item :label="$t('system.role.form.name')" prop="name">
+      <tiny-form-item :label="$t('system.role.name')" prop="name">
         <tiny-input
           v-model="formData.name"
-          :placeholder="$t('system.role.form.name.placeholder')"
+          :placeholder="$t('system.role.name.placeholder')"
         ></tiny-input>
       </tiny-form-item>
       <tiny-form-item
-        :label="$t('system.role.form.permission')"
+        :label="$t('system.role.permission')"
         prop="permission"
       >
         <tiny-input
           v-model="formData.permission"
-          :placeholder="$t('system.role.form.permission.placeholder')"
+          :placeholder="$t('system.role.permission.placeholder')"
         ></tiny-input>
       </tiny-form-item>
       <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">

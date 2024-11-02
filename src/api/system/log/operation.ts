@@ -14,6 +14,8 @@ export function getOperationLogById(id: string) {
 export type OperationLogPageParam = OperationLogVO &
   PageParam & {
     resourceNameLike?: string;
+    operationStartTime?: string;
+    operationEndTime?: string;
   };
 
 export interface OperationLogVO {
