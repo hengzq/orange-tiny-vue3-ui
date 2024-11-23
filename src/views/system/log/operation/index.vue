@@ -1,18 +1,18 @@
 <template>
   <div class="container-list">
     <tiny-form
-      :model="filterOptions"
-      label-position="right"
-      label-width="80px"
-      class="filter-form"
+        :model="filterOptions"
+        label-position="right"
+        label-width="80px"
+        class="filter-form"
     >
       <tiny-row>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.resourceName')">
             <tiny-input
-              v-model="filterOptions.resourceNameLike"
-              clearable
-              :placeholder="$t('system.log.operation.resourceName.placeholder')"
+                v-model="filterOptions.resourceNameLike"
+                clearable
+                :placeholder="$t('system.log.operation.resourceName.placeholder')"
             />
           </tiny-form-item>
         </tiny-col>
@@ -20,29 +20,29 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.operationTime')">
             <tiny-date-picker
-              v-model="operationTime"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['00:00:00', '23:59:59']"
-              type="datetimerange"
-              clearable
-              value-format="yyyy-MM-dd HH:mm:ss"
-              @change="handleChange"
+                v-model="operationTime"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="['00:00:00', '23:59:59']"
+                type="datetimerange"
+                clearable
+                value-format="yyyy-MM-dd HH:mm:ss"
+                @change="handleChange"
             ></tiny-date-picker>
           </tiny-form-item>
         </tiny-col>
         <tiny-col v-if="unfold" :span="4">
           <tiny-form-item :label="$t('system.log.operation.status')">
             <tiny-select
-              v-model="filterOptions.status"
-              :placeholder="$t('system.log.operation.status.placeholder')"
-              clearable
+                v-model="filterOptions.status"
+                :placeholder="$t('system.log.operation.status.placeholder')"
+                clearable
             >
               <tiny-option
-                v-for="item in proxy.$dict.getDictData('sys_operation_status')"
-                :key="item.dictValue"
-                :label="item.dictLabel"
-                :value="item.dictValue"
+                  v-for="item in proxy.$dict.getDictData('sys_operation_status')"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
               >
               </tiny-option>
             </tiny-select>
@@ -55,18 +55,10 @@
           <tiny-button @click="handleFormReset">
             {{ $t('opt.reset') }}
           </tiny-button>
-          <tiny-button
-            type="text"
-            style="color: #4e5969"
-            @click="
-              () => {
-                unfold = true;
-              }
-            "
-          >
+          <tiny-button type="text" style="color: #4e5969" @click="() => {unfold = true;}">
             <svg-icon
-              name="system-chevron-down"
-              style="vertical-align: middle"
+                name="system-chevron-down"
+                style="vertical-align: middle"
             />
             展开
           </tiny-button>
@@ -76,9 +68,9 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.requestId')">
             <tiny-input
-              v-model="filterOptions.requestId"
-              clearable
-              :placeholder="$t('system.log.operation.requestId.placeholder')"
+                v-model="filterOptions.requestId"
+                clearable
+                :placeholder="$t('system.log.operation.requestId.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -90,16 +82,16 @@
             {{ $t('opt.reset') }}
           </tiny-button>
           <tiny-button
-            v-if="unfold"
-            type="text"
-            style="color: #4e5969"
-            @click="
+              v-if="unfold"
+              type="text"
+              style="color: #4e5969"
+              @click="
               () => {
                 unfold = false;
               }
             "
           >
-            <svg-icon name="system-chevron-up" style="vertical-align: middle" />
+            <svg-icon name="system-chevron-up" style="vertical-align: middle"/>
             收起
           </tiny-button>
         </tiny-col>
@@ -107,99 +99,78 @@
     </tiny-form>
 
     <tiny-grid
-      ref="gridTableRef"
-      class="table-list"
-      max-height="580px"
-      :fetch-data="fetchTableData"
-      :pager="pagerConfig"
-      :loading="loading"
-      :auto-resize="true"
-      @toolbar-button-click="toolbarButtonClickEvent"
+        ref="gridTableRef"
+        class="table-list"
+        max-height="88%"
+        :fetch-data="fetchTableData"
+        :pager="pagerConfig"
+        :loading="loading"
+        :auto-resize="true"
+        @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
-        <tiny-grid-toolbar
-          :buttons="proxy.$hasPermission(toolbarButtons)"
-          full-screen
-          refresh
-        />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen refresh/>
       </template>
       <tiny-grid-column
-        field="requestId"
-        :title="$t('system.log.operation.requestId')"
-        align="center"
-        width="150"
+          field="requestId"
+          :title="$t('system.log.operation.requestId')"
+          align="center"
+          width="150"
       />
       <tiny-grid-column
-        field="resourceName"
-        :title="$t('system.log.operation.resourceName')"
+          field="resourceName"
+          :title="$t('system.log.operation.resourceName')"
       />
       <tiny-grid-column
-        :title="$t('system.log.operation.requestMethod')"
-        width="80"
+          :title="$t('system.log.operation.requestMethod')"
+          width="80"
       >
         <template #default="data">
           <dict-tag
-            :value="data.row.requestMethod"
-            :options="proxy.$dict.getDictData('sys_request_method')"
+              :value="data.row.requestMethod"
+              :options="proxy.$dict.getDictData('sys_request_method')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-        show-overflow
-        :title="$t('system.log.operation.requestUrl')"
+          show-overflow
+          :title="$t('system.log.operation.requestUrl')"
       >
         <template #default="data">
           {{ data.row.requestUrl }}
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-        field="userIp"
-        :title="$t('system.log.operation.userIp')"
-        width="120"
+          field="userIp"
+          :title="$t('system.log.operation.userIp')"
+          width="120"
       />
       <tiny-grid-column
-        field="userLocation"
-        :title="$t('system.log.operation.userLocation')"
-        width="120"
+          field="userLocation"
+          :title="$t('system.log.operation.userLocation')"
+          width="120"
       />
       <tiny-grid-column
-        field="userName"
-        :title="$t('system.log.operation.userName')"
-        align="center"
-        width="80"
+          field="userName"
+          :title="$t('system.log.operation.userName')"
+          align="center"
+          width="80"
       />
-      <tiny-grid-column
-        field="status"
-        :title="$t('system.log.operation.status')"
-        align="center"
-        width="80"
-      >
+      <tiny-grid-column field="status" :title="$t('system.log.operation.status')" align="center" width="80">
         <template #default="data">
-          <dict-tag
-            :value="data.row.status"
-            :options="proxy.$dict.getDictData('sys_operation_status')"
-          />
+          <dict-tag :value="data.row.status" :options="proxy.$dict.getDictData('sys_operation_status')"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-        field="startTime"
-        :title="$t('system.log.operation.startTime')"
-        align="center"
-        width="150"
+          field="startTime"
+          :title="$t('system.log.operation.startTime')"
+          align="center"
+          width="150"
       />
-      <tiny-grid-column
-        field="duration"
-        :title="$t('system.log.operation.duration')"
-        align="center"
-        width="80"
-      >
+      <tiny-grid-column field="duration" :title="$t('system.log.operation.duration')" align="center" width="80">
         <template #default="data"> {{ data.row.duration }} ms</template>
       </tiny-grid-column>
-      <tiny-grid-column
-        :title="$t('table.operations')"
-        align="center"
-        width="100"
-      >
+      <tiny-grid-column :title="$t('table.operations')" align="center" width="100">
         <template #default="data">
           <tiny-button type="text" @click="handleDetail(data.row.id)">
             {{ $t('opt.detail') }}
@@ -213,123 +184,123 @@
 </template>
 
 <script lang="ts" setup>
-  import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
-  import * as OperationLogApi from '@/api/system/log/operation';
-  import detail from './components/detail.vue';
+import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
+import * as OperationLogApi from '@/api/system/log/operation';
+import detail from './components/detail.vue';
 
-  const { proxy } = getCurrentInstance() as any;
-  const detailsRef = ref();
+const {proxy} = getCurrentInstance() as any;
+const detailsRef = ref();
 
-  const state = reactive<{
-    loading: boolean;
-    filterOptions: OperationLogApi.OperationLogPageParam;
-  }>({
-    loading: false,
-    filterOptions: {} as OperationLogApi.OperationLogPageParam,
-  });
+const state = reactive<{
+  loading: boolean;
+  filterOptions: OperationLogApi.OperationLogPageParam;
+}>({
+  loading: false,
+  filterOptions: {} as OperationLogApi.OperationLogPageParam,
+});
 
-  const unfold = ref(false);
+const unfold = ref(false);
 
-  const pagerConfig = reactive({
-    attrs: {
-      currentPage: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 30, 50, 100],
-      total: 0,
-      align: 'right',
-      layout: 'total, prev, pager, next, jumper, sizes',
-    },
-  });
+const pagerConfig = reactive({
+  attrs: {
+    currentPage: 1,
+    pageSize: 10,
+    pageSizes: [10, 20, 30, 50, 100],
+    total: 0,
+    align: 'right',
+    layout: 'total, prev, pager, next, jumper, sizes',
+  },
+});
 
-  const gridTableRef = ref();
-  const { loading, filterOptions } = toRefs(state);
+const gridTableRef = ref();
+const {loading, filterOptions} = toRefs(state);
 
-  const fetchTableData = reactive({
-    api: ({ page }: any) => {
-      const { currentPage, pageSize } = page;
-      return getPageData({
-        pageNo: currentPage,
-        pageSize,
-      });
-    },
-  });
+const fetchTableData = reactive({
+  api: ({page}: any) => {
+    const {currentPage, pageSize} = page;
+    return getPageData({
+      pageNo: currentPage,
+      pageSize,
+    });
+  },
+});
 
-  async function getPageData(
+async function getPageData(
     params: OperationLogApi.OperationLogPageParam = {
       pageNo: 1,
       pageSize: 10,
     },
-  ) {
-    const queryParams: OperationLogApi.OperationLogPageParam = {
-      ...filterOptions.value,
-      ...params,
+) {
+  const queryParams: OperationLogApi.OperationLogPageParam = {
+    ...filterOptions.value,
+    ...params,
+  };
+  state.loading = true;
+  try {
+    const {data} = await OperationLogApi.pageOperationLog(queryParams);
+    const {records, total} = data;
+    return {
+      result: records,
+      page: {total},
     };
-    state.loading = true;
-    try {
-      const { data } = await OperationLogApi.pageOperationLog(queryParams);
-      const { records, total } = data;
-      return {
-        result: records,
-        page: { total },
-      };
-    } finally {
-      state.loading = false;
-    }
+  } finally {
+    state.loading = false;
   }
+}
 
-  const handleDetail = (id: string) => {
-    detailsRef.value.open(id);
-  };
+const handleDetail = (id: string) => {
+  detailsRef.value.open(id);
+};
 
-  const operationTime = ref();
-  const handleChange = (time: [string, string]) => {
-    if (time) {
-      let [startTime, endTime] = time;
-      filterOptions.value.operationStartTime = startTime
-      filterOptions.value.operationEndTime = endTime
-    } else {
-      filterOptions.value.operationStartTime = undefined
-      filterOptions.value.operationEndTime = undefined
+const operationTime = ref();
+const handleChange = (time: [string, string]) => {
+  if (time) {
+    let [startTime, endTime] = time;
+    filterOptions.value.operationStartTime = startTime
+    filterOptions.value.operationEndTime = endTime
+  } else {
+    filterOptions.value.operationStartTime = undefined
+    filterOptions.value.operationEndTime = undefined
+  }
+};
+
+const handleFormQuery = () => {
+  gridTableRef?.value.handleFetch('reload');
+};
+const handleFormReset = () => {
+  state.filterOptions = {} as OperationLogApi.OperationLogPageParam;
+  operationTime.value = ''
+  handleFormQuery();
+};
+
+const toolbarButtons = reactive([
+  {
+    code: 'clear',
+    name: '清空',
+  },
+  {
+    code: 'export',
+    name: '导出',
+  },
+]);
+
+const toolbarButtonClickEvent = ({code}: any) => {
+  switch (code) {
+    case 'clear': {
+      handleClear();
+      break;
     }
-  };
-
-  const handleFormQuery = () => {
-    gridTableRef?.value.handleFetch('reload');
-  };
-  const handleFormReset = () => {
-    state.filterOptions = {} as OperationLogApi.OperationLogPageParam;
-    operationTime.value = ''
-    handleFormQuery();
-  };
-
-  const toolbarButtons = reactive([
-    {
-      code: 'clear',
-      name: '清空',
-    },
-    {
-      code: 'export',
-      name: '导出',
-    },
-  ]);
-
-  const toolbarButtonClickEvent = ({ code }: any) => {
-    switch (code) {
-      case 'clear': {
-        handleClear();
-        break;
-      }
-      case 'export': {
-        proxy.$modal.message('开发中...');
-        break;
-      }
-      default:
-        console.log('code is error.');
+    case 'export': {
+      proxy.$modal.message('开发中...');
+      break;
     }
-  };
+    default:
+      console.log('code is error.');
+  }
+};
 
-  const handleClear = () => {
-    proxy.$modal
+const handleClear = () => {
+  proxy.$modal
       .confirm({
         message: `确定清空所有操作日志吗？`,
         maskClosable: true,
@@ -343,14 +314,8 @@
           // })
         }
       });
-  };
+};
 </script>
 
 <style scoped lang="less">
-  :deep(
-      .tiny-date-editor--datetimerange.tiny-input,
-      .tiny-date-editor--datetimerange.tiny-input__inner
-    ) {
-    width: 370px !important;
-  }
 </style>

@@ -51,7 +51,7 @@ export default {
   'login.banner.slogan3': 'Access visualization enhancement tool AUX',
   'login.banner.subSlogan3': 'Realize flexible block development',
   'login.icon.language': 'language',
-  'login.tip.info': 'User name: admin; password: admin',
+  'login.tip.info': 'User name: orange; password: hengzq.cn',
   'login.tip.mail': "User name: admin{'@'}example.com; password: admin",
   'login.tip.right': 'Enter the correct user name and password',
   'login.main.text': 'TinyPro Mid-Back-End Front-End Solution',

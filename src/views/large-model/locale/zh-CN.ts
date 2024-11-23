@@ -10,8 +10,11 @@ export default {
     'large-model.model.code.placeholder': '请输入模型编码',
     'large-model.model.description': '模型描述',
     'large-model.model.description.placeholder': '请输入模型信息',
-    
-    'large-model.image.prompt': '图片描述',
-    'large-model.image.prompt.placeholder': '请输入图片描述',
 
+    'large-model.image.prompt': '图片描述(Prompt)',
+    'large-model.image.prompt.placeholder': '请输入图片描述',
+    'large-model.image.quantity': '图片数量',
+    'large-model.image.quantity.placeholder': '请输入图片数量',
+    'large-model.image.resolution': '选择分辨率:',
+    'large-model.image.resolution.placeholder': '请选择分辨率',
 };

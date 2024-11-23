@@ -1,18 +1,18 @@
 <template>
   <div class="container-list">
     <tiny-form
-      :model="filterOptions"
-      label-position="right"
-      label-width="100px"
-      class="filter-form"
+        :model="filterOptions"
+        label-position="right"
+        label-width="100px"
+        class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.menu.name')">
             <tiny-input
-              v-model="filterOptions.nameLike"
-              clearable
-              :placeholder="$t('system.menu.name.placeholder')"
+                v-model="filterOptions.nameLike"
+                clearable
+                :placeholder="$t('system.menu.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -28,69 +28,66 @@
     </tiny-form>
 
     <tiny-grid
-      ref="gridTableRef"
-      class="table-list"
-      height="580px"
-      :data="tableData"
-      :loading="loading"
-      :tree-config="{ children: 'children' }"
-      :auto-resize="true"
-      @toolbar-button-click="toolbarButtonClickEvent"
+        ref="gridTableRef"
+        class="table-list"
+        max-height="88%"
+        :data="tableData"
+        :loading="loading"
+        :tree-config="{ children: 'children' }"
+        :auto-resize="true"
+        @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
-        <tiny-grid-toolbar
-          :buttons="proxy.$hasPermission(toolbarButtons)"
-          full-screen
-        />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
       <tiny-grid-column
-        field="name"
-        :title="$t('system.menu.name')"
+          field="name"
+          :title="$t('system.menu.name')"
       />
       <tiny-grid-column
-        field="icon"
-        :title="$t('system.menu.icon')"
-        align="center"
-        width="80"
+          field="icon"
+          :title="$t('system.menu.icon')"
+          align="center"
+          width="80"
       >
         <template #default="data">
-          <svg-icon :name="data.row.icon" />
+          <svg-icon :name="data.row.icon"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-        field="permission"
-        :title="$t('system.menu.permission')"
+          field="permission"
+          :title="$t('system.menu.permission')"
       />
       <tiny-grid-column
-        field="path"
-        :title="$t('system.menu.path')"
-        show-overflow
+          field="path"
+          :title="$t('system.menu.path')"
+          show-overflow
       />
       <tiny-grid-column
-        field="preset"
-        :title="$t('attribute.preset.status')"
-        align="center"
-        width="80"
+          field="preset"
+          :title="$t('attribute.preset.status')"
+          align="center"
+          width="80"
       >
         <template #default="scope">
           <dict-tag
-            :value="scope.row.preset"
-            :options="
+              :value="scope.row.preset"
+              :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_PRESET_STATUS)
             "
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-        field="hidden"
-        :title="$t('system.menu.hidden')"
-        align="center"
+          field="hidden"
+          :title="$t('system.menu.hidden')"
+          align="center"
       >
         <template #default="scope">
           <dict-tag
-            :value="scope.row.hidden"
-            :options="
+              :value="scope.row.hidden"
+              :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_HIDDEN_STATUS)
             "
           />
@@ -98,35 +95,35 @@
       </tiny-grid-column>
 
       <tiny-grid-column
-        field="sort"
-        :title="$t('attribute.sort')"
-        align="center"
-        width="80"
+          field="sort"
+          :title="$t('attribute.sort')"
+          align="center"
+          width="80"
       />
       <tiny-grid-column
-        field="updatedAt"
-        :title="$t('attribute.updatedAt')"
-        width="150"
+          field="updatedAt"
+          :title="$t('attribute.updatedAt')"
+          width="150"
       />
       <tiny-grid-column
-        v-if="proxy.$hasPermission(options).length !== 0"
-        :title="$t('table.operations')"
-        align="center"
-        width="165"
+          v-if="proxy.$hasPermission(options).length !== 0"
+          :title="$t('table.operations')"
+          align="center"
+          width="165"
       >
         <template #default="scope">
           <tiny-action-menu
-            :max-show-num="3"
-            :spacing="8"
-            :options="proxy.$hasPermission(options)"
-            @item-click="
+              :max-show-num="3"
+              :spacing="8"
+              :options="proxy.$hasPermission(options)"
+              @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                v-if="data.label == 'opt.delete'"
-                style="color: var(--button-delete-color)"
+                  v-if="data.label == 'opt.delete'"
+                  style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -143,80 +140,80 @@
 </template>
 
 <script lang="ts" setup>
-  import * as MenuApi from '@/api/system/menu';
-  import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
-  import { listToTreeConverter } from '@/utils/tree';
+import * as MenuApi from '@/api/system/menu';
+import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
+import {listToTreeConverter} from '@/utils/tree';
 
-  import EditForm from './components/edit-form.vue';
-  import ButtonIndex from './components/button-index.vue';
+import EditForm from './components/edit-form.vue';
+import ButtonIndex from './components/button-index.vue';
 
-  const { proxy } = getCurrentInstance() as any;
-  const state = reactive<{
-    loading: boolean;
-    filterOptions: MenuApi.MenuListParam;
-  }>({
-    loading: false,
-    filterOptions: {} as MenuApi.MenuListParam,
-  });
+const {proxy} = getCurrentInstance() as any;
+const state = reactive<{
+  loading: boolean;
+  filterOptions: MenuApi.MenuListParam;
+}>({
+  loading: false,
+  filterOptions: {} as MenuApi.MenuListParam,
+});
 
-  const gridTableRef = ref();
-  const { loading, filterOptions } = toRefs(state);
+const gridTableRef = ref();
+const {loading, filterOptions} = toRefs(state);
 
-  const tableData = ref<MenuApi.MenuTreeVO[]>([]);
+const tableData = ref<MenuApi.MenuTreeVO[]>([]);
 
-  async function getAllData() {
-    const queryParams: MenuApi.MenuListParam = {
-      ...filterOptions.value,
-    };
-    state.loading = true;
-    try {
-      const { data } = await MenuApi.listMenu(queryParams);
-      tableData.value = listToTreeConverter(data);
-    } finally {
-      state.loading = false;
-    }
-  }
-
-  getAllData();
-
-  const options = ref([
-    {
-      label: 'system.button.opt.button-index',
-    },
-    {
-      label: 'opt.edit',
-      permission: 'system:menu:update',
-    },
-    {
-      label: 'opt.delete',
-      permission: 'system:menu:delete',
-    },
-  ]);
-
-  const editFormRef = ref();
-  const buttonIndexRef = ref();
-
-  const optionsClick = (label: string, data: MenuApi.MenuVO) => {
-    switch (label) {
-      case 'system.button.opt.button-index': {
-        buttonIndexRef.value.open(data);
-        break;
-      }
-      case 'opt.edit': {
-        editFormRef.value.open(data.id);
-        break;
-      }
-      case 'opt.delete': {
-        handleDelete(data);
-        break;
-      }
-      default:
-        console.log('code is error.');
-    }
+async function getAllData() {
+  const queryParams: MenuApi.MenuListParam = {
+    ...filterOptions.value,
   };
+  state.loading = true;
+  try {
+    const {data} = await MenuApi.listMenu(queryParams);
+    tableData.value = listToTreeConverter(data);
+  } finally {
+    state.loading = false;
+  }
+}
 
-  const handleDelete = (data: MenuApi.MenuVO) => {
-    proxy.$modal
+getAllData();
+
+const options = ref([
+  {
+    label: 'system.button.opt.button-index',
+  },
+  {
+    label: 'opt.edit',
+    permission: 'system:menu:update',
+  },
+  {
+    label: 'opt.delete',
+    permission: 'system:menu:delete',
+  },
+]);
+
+const editFormRef = ref();
+const buttonIndexRef = ref();
+
+const optionsClick = (label: string, data: MenuApi.MenuVO) => {
+  switch (label) {
+    case 'system.button.opt.button-index': {
+      buttonIndexRef.value.open(data);
+      break;
+    }
+    case 'opt.edit': {
+      editFormRef.value.open(data.id);
+      break;
+    }
+    case 'opt.delete': {
+      handleDelete(data);
+      break;
+    }
+    default:
+      console.log('code is error.');
+  }
+};
+
+const handleDelete = (data: MenuApi.MenuVO) => {
+  proxy.$modal
       .confirm({
         message: `确定要删除菜单【${data.name}】吗?`,
         maskClosable: true,
@@ -226,38 +223,38 @@
         if (data.id && res === 'confirm') {
           MenuApi.deleteMenuById(data.id).then(() => {
             getAllData();
-            proxy.$modal.message({ message: '删除成功', status: 'success' });
+            proxy.$modal.message({message: '删除成功', status: 'success'});
           });
         }
       });
-  };
+};
 
-  const handleFormQuery = () => {
-    getAllData();
-  };
-  const handleFormReset = () => {
-    state.filterOptions = {} as MenuApi.MenuListParam;
-    handleFormQuery();
-  };
+const handleFormQuery = () => {
+  getAllData();
+};
+const handleFormReset = () => {
+  state.filterOptions = {} as MenuApi.MenuListParam;
+  handleFormQuery();
+};
 
-  const toolbarButtons = reactive([
-    {
-      code: 'insert',
-      name: '新增',
-      permission: 'system:menu:add',
-    },
-  ]);
+const toolbarButtons = reactive([
+  {
+    code: 'insert',
+    name: '新增',
+    permission: 'system:menu:add',
+  },
+]);
 
-  const toolbarButtonClickEvent = ({ code }: any) => {
-    switch (code) {
-      case 'insert': {
-        editFormRef.value.open();
-        break;
-      }
-      default:
-        console.log('code is error.');
+const toolbarButtonClickEvent = ({code}: any) => {
+  switch (code) {
+    case 'insert': {
+      editFormRef.value.open();
+      break;
     }
-  };
+    default:
+      console.log('code is error.');
+  }
+};
 </script>
 
 <style scoped lang="less"></style>

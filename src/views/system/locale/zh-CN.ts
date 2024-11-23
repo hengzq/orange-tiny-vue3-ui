@@ -97,4 +97,12 @@ export default {
   'system.log.login.userIp': '操作IP',
   'system.log.login.userLocation': '操作地点',
   'system.log.login.userAgent': 'User-Agent',
+
+  // 存储相关属性
+  'system.storage-config.name': '配置名称',
+  'system.storage-config.name.placeholder': '请输入配置名称',
+  'system.storage-config.mode': '存储方式',
+  'system.storage-config.mode.placeholder': '请输入存储方式',
+  'system.storage-config.master': '主节点',
+
 };

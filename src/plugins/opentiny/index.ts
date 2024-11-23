@@ -10,7 +10,7 @@ import {
     Form as TinyForm, FormItem as TinyFormItem,
     Input as TinyInput, Select as TinySelect, Option as TinyOption, Numeric as TinyNumeric,
     Search as TinySearch,
-    Checkbox as TinyCheckbox, Radio as TinyRadio,
+    Checkbox as TinyCheckbox, Radio as TinyRadio, TinyRadioButton,
     DatePicker as TinyDatePicker,
     UserHead as TinyUserHead,
     Button as TinyButton, ActionMenu as TinyActionMenu, Switch as TinySwitch,
@@ -19,7 +19,7 @@ import {
     Collapse as TinyCollapse, CollapseItem as TinyCollapseItem,
     Dropdown as TinyDropdown, DropdownMenu as TinyDropdownMenu, DropdownItem as TinyDropdownItem,
     Divider as TinyDivider, Autocomplete as TinyAutocomplete,
-    Image as TinyImage, ScrollText as TinyScrollText, Alert as TinyAlert
+    Image as TinyImage, ScrollText as TinyScrollText, Alert as TinyAlert, TinySlider
 } from '@opentiny/vue';
 
 const components = [
@@ -32,7 +32,7 @@ const components = [
     TinyForm, TinyFormItem,
     TinyInput, TinySelect, TinyOption, TinyNumeric,
     TinySearch,
-    TinyCheckbox, TinyRadio,
+    TinyCheckbox, TinyRadio, TinyRadioButton,
     TinyDatePicker,
     TinyUserHead,
     TinyButton, TinyActionMenu, TinySwitch,
@@ -41,7 +41,7 @@ const components = [
     TinyCollapse, TinyCollapseItem,
     TinyDropdown, TinyDropdownMenu, TinyDropdownItem,
     TinyDivider, TinyAutocomplete,
-    TinyImage, TinyScrollText, TinyAlert
+    TinyImage, TinyScrollText, TinyAlert, TinySlider
 ]
 
 export const setupOpenTiny = (app: App) => {

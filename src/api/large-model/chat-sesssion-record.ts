@@ -11,19 +11,11 @@ export function deleteChatSessionRecordById(id: string) {
   return axios.delete(BASE_URL.concat(`/${id}`));
 }
 
-export function updateChatSessionRecordById(
+export function rateChatSessionRecordById(
   id: string,
   params: ChatSessionRecordVO,
 ) {
-  return axios.put(BASE_URL.concat(`/${id}`), params);
-}
-
-export function getChatSessionRecordById(id: string) {
-  return axios.get(BASE_URL.concat(`/${id}`));
-}
-
-export function pageChatSessionRecord(params: ChatSessionRecordPageParam) {
-  return axios.post(BASE_URL.concat('/page'), params);
+  return axios.put(BASE_URL.concat(`/rate/${id}`), params);
 }
 
 export function listChatSessionRecord(params: ChatSessionRecordListParam) {
@@ -37,6 +29,8 @@ export interface ChatSessionRecordVO {
   sessionId?: string;
   messageType?: string;
   content?: string;
+  rating?: string;
+  generating?: boolean; // 用于流式回复 生成中
 }
 
 export type ChatSessionRecordListParam = ChatSessionRecordVO;

@@ -47,8 +47,8 @@ export default {
   'login.banner.slogan3': '接入可视化增强工具AUX',
   'login.banner.subSlogan3': '实现灵活的区块式开发',
   'login.icon.language': '语言',
-  'login.tip.info': '用户名：admin，密码 admin',
-  'login.tip.mail': "用户名：admin{'@'}example.com，密码 admin",
+  'login.tip.info': '用户名：orange，密码：hengzq.cn',
+  'login.tip.mail': "用户名：orange{'@'}example.com，密码：hengzq.cn",
   'login.tip.right': '请输入正确的用户名密码',
   'login.main.text': 'Orange Cloud 中后台前端解决方案',
 };

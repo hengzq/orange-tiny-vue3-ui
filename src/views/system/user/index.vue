@@ -39,7 +39,7 @@
     <tiny-grid
       ref="gridTableRef"
       class="table-list"
-      max-height="580px"
+      max-height="88%"
       :fetch-data="fetchTableData"
       :pager="pagerConfig"
       :loading="loading"

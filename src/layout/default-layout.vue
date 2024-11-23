@@ -31,27 +31,15 @@
     </div>
     <div v-if="disTheme">
       <tiny-modal
-          v-model="disTheme"
-          :lock-scroll="true"
-          show-header
-          show-footer
-          :title="$t('theme.title.main')"
-          mask-closable="true"
-          height="922"
-          width="748"
-      >
+          v-model="disTheme" :lock-scroll="true" show-header show-footer :title="$t('theme.title.main')" mask-closable="true" height="922"
+          width="748">
         <template #default>
           <Theme/>
         </template>
         <template #footer></template>
       </tiny-modal>
     </div>
-    <img
-        v-if="!appStore.navbar"
-        src="@/assets/images/global.png"
-        class="global-setting"
-        @click="switchSet"
-    />
+    <img v-if="!appStore.navbar" src="@/assets/images/global.png" class="global-setting" @click="switchSet"/>
   </div>
 </template>
 
@@ -198,7 +186,7 @@ onMounted(() => {
 
 .theme-box {
   position: fixed;
-  top: 88%;
+  top: 90%;
   right: 30px;
   z-index: 99;
   display: flex;
