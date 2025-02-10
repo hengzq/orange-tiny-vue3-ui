@@ -14,16 +14,10 @@
         >
           <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
             <tiny-select v-model="formData.platform" @change="changePlatform">
-              <tiny-option
-                  v-for="item in platformList"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
-              >
-              </tiny-option>
+              <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>
           </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.type')" prop="modelCode">
+          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelCode">
             <tiny-select v-model="formData.modelCode">
               <tiny-option v-for="item in filterModelList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>
@@ -36,7 +30,7 @@
           <tiny-grid
               ref="gridTableRef"
               :data="tableData"
-              max-height="88%"
+              max-height="90%"
               :show-header="false"
               highlight-current-row
               @current-change="handleCurrentChange"
@@ -55,7 +49,7 @@
         </div>
       </tiny-col>
       <tiny-col :span="9">
-        <chat-index ref="chatIndexRef" :conversation-param="formData" @refresh="queryChatSession"/>
+        <chat-index ref="chatIndexRef" :conversation-param="formData" @refresh="queryChatSession" @validate="submitValidate"/>
       </tiny-col>
     </tiny-row>
   </div>
@@ -68,9 +62,18 @@ import * as ModelApi from '@/api/large-model/model';
 import * as ChatApi from '@/api/large-model/chat';
 import * as ChatSessionApi from '@/api/large-model/chat-sesssion';
 
-import ChatIndex from '@/components/chat/index.vue';
+import ChatIndex from './components/chat-index.vue';
 
 const {proxy} = getCurrentInstance() as any;
+
+const formDataRules = {
+  platform: [
+    {required: true, message: '请选择大模型供应商', trigger: 'change'},
+  ],
+  modelCode: [
+    {required: true, message: '请选择大模型', trigger: 'change'},
+  ],
+};
 
 const formData = ref<ChatApi.ConversationParam>({});
 const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
@@ -181,6 +184,14 @@ const handleCurrentChange = ({row}) => {
   formData.value.sessionId = row.id;
   chatIndexRef.value.queryHistoryChatList();
 };
+
+const submitValidate = (callback: (arg?: boolean) => void,) => {
+  let result = false;
+  proxy.$refs.formDataRef.validate((valid: boolean) => {
+    callback(valid);
+  });
+  return result;
+}
 </script>
 
 <style lang="less" scoped>

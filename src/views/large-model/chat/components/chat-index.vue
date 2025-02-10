@@ -85,7 +85,7 @@ import {useClipboard} from '@vueuse/core';
 
 const {copy} = useClipboard();
 const {proxy} = getCurrentInstance() as any;
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(['refresh', 'validate']);
 
 const toolbars: any[] = [];
 const footers: any[] = [];
@@ -114,6 +114,15 @@ const sendMessageStream = async () => {
   if (!formData.value.prompt) {
     return;
   }
+  let valid = false;
+  // 参数校验
+  await emit('validate', (result: boolean) => {
+    valid = result;
+  });
+  if (!valid) {
+    return;
+  }
+
   chatList.value.push({
     messageType: 'USER',
     content: formData.value.prompt || '',

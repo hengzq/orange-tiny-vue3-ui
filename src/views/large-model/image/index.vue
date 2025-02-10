@@ -3,21 +3,15 @@
     <tiny-row>
       <tiny-col :span="3">
         <tiny-form
-            ref="formDataRef"
-            class="tiny-drawer-body-form"
-            label-position="top"
-            :rules="formDataRules"
-            :model="formData"
-            validate-position="bottom"
-            label-width="100px"
-            validate-type="text"
+            ref="formDataRef" class="tiny-drawer-body-form" label-position="top" :rules="formDataRules" :model="formData"
+            validate-position="bottom" label-width="100px" validate-type="text"
         >
           <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
             <tiny-select v-model="formData.platform" @change="changePlatform">
               <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>
           </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.type')" prop="modelCode">
+          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelCode">
             <tiny-select v-model="formData.modelCode">
               <tiny-option v-for="item in filterModelList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>

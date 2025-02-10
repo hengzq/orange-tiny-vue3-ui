@@ -183,13 +183,13 @@
       pageSize: 10,
     },
   ) {
-    const queryParmas: DictTypeApi.DictTypePageParam = {
+    const queryParams: DictTypeApi.DictTypePageParam = {
       ...filterOptions.value,
       ...params,
     };
     state.loading = true;
     try {
-      const { data } = await DictTypeApi.pageDictType(queryParmas);
+      const { data } = await DictTypeApi.pageDictType(queryParams);
       const { records, total } = data;
       return {
         result: records,

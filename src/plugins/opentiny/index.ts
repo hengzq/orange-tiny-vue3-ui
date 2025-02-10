@@ -4,7 +4,7 @@ import {
     Container as TinyContainer, Layout as TinyLayout, Card as TinyCard,
     Breadcrumb as TinyBreadcrumb, BreadcrumbItem as TinyBreadcrumbItem,
     Drawer as TinyDrawer, Modal as TinyModal, Popover as TinyPopover, Tooltip as TinyTooltip, Floatbar as TinyFloatbar,
-    TreeMenu as TinyTreeMenu,
+    TreeMenu as TinyTreeMenu, TinyTree,
     Row as TinyRow, Col as TinyCol,
     Grid as TinyGrid, GridColumn as TinyGridColumn, GridToolbar as TinyGridToolbar, Pager as TinyPager,
     Form as TinyForm, FormItem as TinyFormItem,
@@ -19,14 +19,14 @@ import {
     Collapse as TinyCollapse, CollapseItem as TinyCollapseItem,
     Dropdown as TinyDropdown, DropdownMenu as TinyDropdownMenu, DropdownItem as TinyDropdownItem,
     Divider as TinyDivider, Autocomplete as TinyAutocomplete,
-    Image as TinyImage, ScrollText as TinyScrollText, Alert as TinyAlert, TinySlider
+    Image as TinyImage, ScrollText as TinyScrollText, Alert as TinyAlert, TinySlider, TinyFileUpload, TinyDialogBox
 } from '@opentiny/vue';
 
 const components = [
     TinyContainer, TinyLayout, TinyCard,
     TinyBreadcrumb, TinyBreadcrumbItem,
     TinyDrawer, TinyModal, TinyPopover, TinyTooltip, TinyFloatbar,
-    TinyTreeMenu,
+    TinyTreeMenu, TinyTree,
     TinyRow, TinyCol,
     TinyGrid, TinyGridColumn, TinyGridToolbar, TinyPager,
     TinyForm, TinyFormItem,
@@ -41,7 +41,7 @@ const components = [
     TinyCollapse, TinyCollapseItem,
     TinyDropdown, TinyDropdownMenu, TinyDropdownItem,
     TinyDivider, TinyAutocomplete,
-    TinyImage, TinyScrollText, TinyAlert, TinySlider
+    TinyImage, TinyScrollText, TinyAlert, TinySlider, TinyFileUpload, TinyDialogBox
 ]
 
 export const setupOpenTiny = (app: App) => {
