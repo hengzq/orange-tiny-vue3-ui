@@ -1,6 +1,6 @@
 export default {
 
-    'large-model.model.platform': '大模型供应商',
+    'large-model.model.platform': '模型供应商',
     'large-model.model.platform.placeholder': '请选择大模型供应商',
     'large-model.model.type': '模型类型',
     'large-model.model.type.placeholder': '请选择模型类型',
@@ -18,4 +18,18 @@ export default {
     'large-model.image.quantity.placeholder': '请输入图片数量',
     'large-model.image.resolution': '选择分辨率:',
     'large-model.image.resolution.placeholder': '请选择分辨率',
+
+
+    'large-model.knowledge.name': '知识库名称',
+    'large-model.knowledge.name.placeholder': '请输入知识库名称',
+    'large-model.knowledge.description': '知识库描述',
+    'large-model.knowledge.description.placeholder': '请输入知识库描述',
+
+
+    'large-model.knowledge.document.webUrl': '网址 ',
+    'large-model.knowledge.document.webUrl.placeholder': '请输入网址，http://或https://开头',
+    'large-model.knowledge.document.fileName': '文件名称 ',
+    'large-model.knowledge.document.fileName.placeholder': '请输入文件名称 ',
+    'large-model.knowledge.document.embeddingModel': '嵌入式模型 ',
+    'large-model.knowledge.document.slice': '文档切片 ',
 };
