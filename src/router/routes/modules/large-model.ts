@@ -28,10 +28,22 @@ export default {
             component: () => import('@/views/large-model/knowledge/base/index.vue'),
         },
         {
-            path: 'knowledge-document',
+            path: 'knowledge-document/:baseId',
             id: 'KnowledgeDocument',
             label: 'KnowledgeDocument',
             component: () => import('@/views/large-model/knowledge/document/index.vue'),
         },
+        {
+            path: 'agent',
+            id: 'Agent',
+            label: 'Agent',
+            component: () => import('@/views/large-model/agent/index.vue'),
+        },
+        {
+            path: 'session',
+            id: 'Session',
+            label: 'Session',
+            component: () => import('@/views/large-model/session/index.vue'),
+        }
     ],
 };

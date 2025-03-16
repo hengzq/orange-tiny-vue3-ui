@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container">
     <div class="content">
-      <tiny-card v-if="chatList.length == 0" auto-width="100%">
+      <tiny-card v-if="sessionMessageList.length == 0" auto-width="100%">
         <h1>欢迎体验AI 聊天大模型</h1>
         <p style="font-size: 13px; text-indent: 2em">
           在这里，您可以亲身体验来自阿里、智谱、OpenAI等顶尖供应商的聊天大模型在实际业务场景中的效果。
@@ -14,45 +14,7 @@
           <h4>2.请避免输入有违公序良俗的问题，模型可能无法回答不合适的问题.</h4>
         </tiny-alert>
       </tiny-card>
-      <template v-for="(item, index) in chatList" v-else :key="index">
-        <div v-if="item.messageType === 'USER'" class="item question">
-          <md-preview v-model="item.content" style="width: fit-content"/>
-        </div>
-        <div v-if="item.messageType === 'ASSISTANT'" class="item answer">
-          <md-preview v-model="item.content" style="width: fit-content"/>
-          <div class="tools" v-if="!item.generating">
-            <tiny-tooltip type="info" content="复制" placement="top">
-              <tiny-button type="text" @click="copyInfo(item)">
-                <svg-icon name="system-copy" width="18" height="18" color="#3f3f3f"/>
-              </tiny-button>
-            </tiny-tooltip>
-            <tiny-tooltip type="info" content="点赞" placement="top">
-              <tiny-button type="text" @click="toRate(item, 'THUMBS_UP')">
-                <svg-icon
-                    name="system-good" width="18" height="18"
-                    :color="
-                    item.rating === 'THUMBS_UP'
-                      ? 'var(--ti-button-primary-normal-border-color)'
-                      : '#3f3f3f'
-                  "
-                />
-              </tiny-button>
-            </tiny-tooltip>
-            <tiny-tooltip type="info" content="点踩" placement="top">
-              <tiny-button type="text" @click="toRate(item, 'THUMBS_DOWN')">
-                <svg-icon
-                    name="system-bad" width="18" height="18"
-                    :color="
-                    item.rating === 'THUMBS_DOWN'
-                      ? 'var(--ti-button-primary-normal-border-color)'
-                      : '#3f3f3f'
-                  "
-                />
-              </tiny-button>
-            </tiny-tooltip>
-          </div>
-        </div>
-      </template>
+      <session-message-index :message-list="sessionMessageList" :show-tool="false" class="session-message"/>
     </div>
 
     <div class="footer">
@@ -76,12 +38,13 @@
 <script lang="ts" setup>
 import {defineProps, getCurrentInstance, PropType, ref, Ref} from 'vue';
 import * as ChatApi from '@/api/large-model/chat';
-import * as ChatSessionRecordApi from '@/api/large-model/chat-sesssion-record';
+import * as SessionMessageApi from '@/api/large-model/session-message';
 import {fetchEventSource} from '@microsoft/fetch-event-source';
-import {MdEditor, MdPreview} from 'md-editor-v3';
+import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import {getToken} from '@/utils/auth';
 import {useClipboard} from '@vueuse/core';
+import SessionMessageIndex from "@/components/session-message/index.vue";
 
 const {copy} = useClipboard();
 const {proxy} = getCurrentInstance() as any;
@@ -98,13 +61,13 @@ const props = defineProps({
   },
 });
 
-const chatList: Ref<ChatSessionRecordApi.ChatSessionRecordVO[]> = ref([]);
+const sessionMessageList: Ref<SessionMessageApi.SessionMessageVO[]> = ref([]);
 const queryHistoryChatList = (sessId = props.conversationParam.sessionId) => {
   if (props.conversationParam.sessionId) {
-    ChatSessionRecordApi.listChatSessionRecord({
+    SessionMessageApi.listSessionMessage({
       sessionId: sessId,
     }).then((res) => {
-      chatList.value = res.data;
+      sessionMessageList.value = res.data;
     });
   }
 };
@@ -123,13 +86,13 @@ const sendMessageStream = async () => {
     return;
   }
 
-  chatList.value.push({
-    messageType: 'USER',
+  sessionMessageList.value.push({
+    role: 'USER',
     content: formData.value.prompt || '',
   });
   // 占位使用 获取答案信息
-  chatList.value.push({
-    messageType: 'ASSISTANT',
+  sessionMessageList.value.push({
+    role: 'ASSISTANT',
     content: '',
     generating: true,
   });
@@ -155,7 +118,7 @@ const sendMessageStream = async () => {
             emit('refresh', {}, true);
           }
           const {data} = JSON.parse(event.data);
-          let last = chatList.value[chatList.value.length - 1];
+          let last = sessionMessageList.value[sessionMessageList.value.length - 1];
           last.content += data.content;
           last.generating = data.event !== 'FINISHED';
           last.id = data.id
@@ -170,21 +133,21 @@ const sendMessageStream = async () => {
   );
 };
 
-const copyInfo = (item: ChatSessionRecordApi.ChatSessionRecordVO) => {
+const copyInfo = (item: SessionMessageApi.SessionMessageVO) => {
   copy(item.content || '').then(() => {
     proxy.$modal.message({message: '复制成功', status: 'success'});
   });
 };
 
-const toRate = (item: ChatSessionRecordApi.ChatSessionRecordVO, rating?: string) => {
+const toRate = (item: SessionMessageApi.SessionMessageVO, rating?: string) => {
   if (!item || !item.id || !rating) {
     return;
   }
   const param = {
     id: item.id,
     rating,
-  } as ChatSessionRecordApi.ChatSessionRecordVO;
-  ChatSessionRecordApi.rateChatSessionRecordById(item.id, param)
+  } as SessionMessageApi.SessionMessageVO;
+  SessionMessageApi.rateSessionMessageById(item.id, param)
       .then((res) => {
         proxy.$modal.message({message: '感谢支持', status: 'success'});
         item.rating = rating;
@@ -192,7 +155,7 @@ const toRate = (item: ChatSessionRecordApi.ChatSessionRecordVO, rating?: string)
 };
 
 const addChatSession = () => {
-  chatList.value = [];
+  sessionMessageList.value = [];
 };
 
 defineExpose({

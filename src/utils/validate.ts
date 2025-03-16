@@ -3,7 +3,7 @@
  * @returns {Boolean}
  */
 export function isExternal(path: string) {
-  return /^(https?:|mailto:|tel:)/.test(path)
+    return /^(https?:|mailto:|tel:)/.test(path)
 }
 
 /**
@@ -11,8 +11,8 @@ export function isExternal(path: string) {
  * @returns {Boolean}
  */
 export function validURL(url: string) {
-  const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
-  return reg.test(url)
+    const reg = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
+    return reg.test(url)
 }
 
 /**
@@ -20,8 +20,8 @@ export function validURL(url: string) {
  * @returns {Boolean}
  */
 export function validLowerCase(str: string) {
-  const reg = /^[a-z]+$/
-  return reg.test(str)
+    const reg = /^[a-z]+$/
+    return reg.test(str)
 }
 
 /**
@@ -29,8 +29,8 @@ export function validLowerCase(str: string) {
  * @returns {Boolean}
  */
 export function validUpperCase(str: string) {
-  const reg = /^[A-Z]+$/
-  return reg.test(str)
+    const reg = /^[A-Z]+$/
+    return reg.test(str)
 }
 
 /**
@@ -38,6 +38,18 @@ export function validUpperCase(str: string) {
  * @returns {Boolean}
  */
 export function validAlphabets(str: string) {
-  const reg = /^[A-Za-z]+$/
-  return reg.test(str)
+    const reg = /^[A-Za-z]+$/
+    return reg.test(str)
+}
+
+/**
+ * 路径匹配器
+ * @param {string} pattern
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isPathMatch(pattern: string, path: string) {
+    const regexPattern = pattern.replace(/\//g, '\\/').replace(/\*\*/g, '.*').replace(/\*/g, '[^\\/]*')
+    const regex = new RegExp(`^${regexPattern}$`)
+    return regex.test(path)
 }

@@ -20,7 +20,7 @@ import {
     Dropdown as TinyDropdown, DropdownMenu as TinyDropdownMenu, DropdownItem as TinyDropdownItem,
     Divider as TinyDivider, Autocomplete as TinyAutocomplete,
     Image as TinyImage, ScrollText as TinyScrollText, Alert as TinyAlert, TinySlider, TinyFileUpload, TinyDialogBox,
-    TinySteps
+    TinySteps, TinyCascader
 } from '@opentiny/vue';
 
 const components = [
@@ -43,7 +43,7 @@ const components = [
     TinyDropdown, TinyDropdownMenu, TinyDropdownItem,
     TinyDivider, TinyAutocomplete,
     TinyImage, TinyScrollText, TinyAlert, TinySlider, TinyFileUpload, TinyDialogBox,
-    TinySteps
+    TinySteps, TinyCascader
 ]
 
 export const setupOpenTiny = (app: App) => {

@@ -17,9 +17,9 @@
               <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>
           </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelCode">
-            <tiny-select v-model="formData.modelCode">
-              <tiny-option v-for="item in filterModelList" :key="item.code" :label="item.name" :value="item.code"/>
+          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
+            <tiny-select v-model="formData.modelId">
+              <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
             </tiny-select>
           </tiny-form-item>
         </tiny-form>
@@ -60,7 +60,7 @@ import {getCurrentInstance, Ref, ref} from 'vue';
 import * as PlatformApi from '@/api/large-model/platform';
 import * as ModelApi from '@/api/large-model/model';
 import * as ChatApi from '@/api/large-model/chat';
-import * as ChatSessionApi from '@/api/large-model/chat-sesssion';
+import * as SessionApi from '@/api/large-model/session';
 
 import ChatIndex from './components/chat-index.vue';
 
@@ -70,7 +70,7 @@ const formDataRules = {
   platform: [
     {required: true, message: '请选择大模型供应商', trigger: 'change'},
   ],
-  modelCode: [
+  modelId: [
     {required: true, message: '请选择大模型', trigger: 'change'},
   ],
 };
@@ -98,7 +98,7 @@ const changePlatform = (item: any) => {
 const modelList: Ref<ModelApi.ModelVO[]> = ref([]);
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'CHAT',
+    modelType: 'CHAT',
     enabled: true,
   }).then((res) => {
     modelList.value = res.data;
@@ -117,15 +117,16 @@ const addChatSession = () => {
   chatIndexRef.value.addChatSession();
 };
 const gridTableRef = ref('gridTableRef');
-const tableData: Ref<ChatSessionApi.ChatSessionVO[]> = ref([]);
+const tableData: Ref<SessionApi.SessionVO[]> = ref([]);
 const queryChatSession = (
-    params: ChatSessionApi.ChatSessionListParam = {},
+    params: SessionApi.SessionListParam = {},
     selectedFirst = false,
 ) => {
   const queryParams = {
+    'source': 'CHAT_EXPERIENCE',
     ...params,
   };
-  ChatSessionApi.listChatSession(queryParams).then((res) => {
+  SessionApi.listSession(queryParams).then((res) => {
     tableData.value = res.data;
     if (selectedFirst) {
       const selectedSession = tableData.value[0];
@@ -145,7 +146,7 @@ const options = ref<any[]>([
     label: 'opt.delete',
   },
 ]);
-const optionsClick = (label: string, data: ChatSessionApi.ChatSessionVO) => {
+const optionsClick = (label: string, data: SessionApi.SessionVO) => {
   switch (label) {
     case 'opt.edit': {
       // editFormRef.value.open(data.id);
@@ -161,7 +162,7 @@ const optionsClick = (label: string, data: ChatSessionApi.ChatSessionVO) => {
   }
 };
 
-const handleDelete = (data: ChatSessionApi.ChatSessionVO) => {
+const handleDelete = (data: SessionApi.SessionVO) => {
   proxy.$modal
       .confirm({
         message: `确定要删除回话【${data.name}】吗?`,
@@ -170,7 +171,7 @@ const handleDelete = (data: ChatSessionApi.ChatSessionVO) => {
       })
       .then((res: string) => {
         if (data.id && res === 'confirm') {
-          ChatSessionApi.deleteChatSessionById(data.id).then(() => {
+          SessionApi.deleteSessionById(data.id).then(() => {
             queryChatSession();
             proxy.$modal.message({
               message: '删除成功',
