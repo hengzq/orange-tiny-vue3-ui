@@ -1,23 +1,18 @@
 <template>
   <div class="container-list">
-    <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="100px"
-        class="filter-form"
-    >
+    <tiny-form :model="filterOptions" label-position="right" label-width="100px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.knowledge.base.embeddingModelId')" prop="embeddingModelId">
-            <tiny-cascader v-model="filterOptions.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
+          <tiny-form-item :label="$t('large-model.agent.modelId')" prop="modelId">
+            <tiny-cascader v-model="filterOptions.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.knowledge.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
+          <tiny-form-item :label="$t('large-model.agent.name')">
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.agent.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8">
+        <tiny-col :span="4">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
@@ -35,27 +30,20 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('large-model.knowledge.name')"/>
-      <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="80">
-        <template #default="scope">
-          <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
-        </template>
-      </tiny-grid-column>
-      <tiny-grid-column field="embeddingModelId" :title="$t('attribute.sort')" align="center">
+      <tiny-grid-column field="name" :title="$t('large-model.agent.name')"/>
+      <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
             <template v-for="(item, index) in modelItem.children">
-              <tiny-tag v-if="item.value === scope.row.embeddingModelId" :key="item.value" :index="index">
+              <tiny-tag v-if="item.value === scope.row.modelId" :key="item.value" :index="index">
                 {{ modelItem.label }} / {{ item.label }}
               </tiny-tag>
             </template>
           </template>
         </template>
       </tiny-grid-column>
-
-      <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center"/>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
-      <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="260"/>
+
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"
@@ -90,11 +78,14 @@
 </template>
 
 <script lang="ts" setup>
-import * as KnowledgeApi from '@/api/large-model/knowledge-base';
-import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
-import EditForm from '@/views/large-model/knowledge/base/components/edit-form.vue';
-import * as PlatformApi from "@/api/large-model/platform";
+import router from "@/router";
+import * as PlatformApi from '@/api/large-model/platform';
+import * as AgentApi from '@/api/large-model/agent';
 import * as ModelApi from "@/api/large-model/model";
+
+import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
+import EditForm from './components/edit-form.vue';
+
 
 const {proxy} = getCurrentInstance() as any;
 
@@ -111,10 +102,10 @@ const pagerConfig = reactive({
 
 const state = reactive<{
   loading: boolean;
-  filterOptions: KnowledgeApi.KnowledgePageParam;
+  filterOptions: AgentApi.AgentPageParam;
 }>({
   loading: false,
-  filterOptions: {} as KnowledgeApi.KnowledgePageParam,
+  filterOptions: {} as AgentApi.AgentPageParam,
 });
 const {loading, filterOptions} = toRefs(state);
 const gridTableRef = ref();
@@ -123,7 +114,7 @@ const handleFormQuery = () => {
   gridTableRef?.value.handleFetch('reload', null);
 };
 const handleFormReset = () => {
-  state.filterOptions = {} as KnowledgeApi.KnowledgePageParam;
+  state.filterOptions = {} as AgentApi.AgentPageParam;
   handleFormQuery();
 };
 
@@ -147,7 +138,7 @@ const toolbarButtonClickEvent = ({code}: any) => {
 };
 const options = ref<any[]>([
   {
-    label: 'opt.view',
+    label: 'large-model.agent.opt.demonstration',
   },
   {
     permission: 'orange-ai:model:update',
@@ -158,13 +149,12 @@ const options = ref<any[]>([
     label: 'opt.delete',
   },
 ]);
-
-const optionsClick = (label: string, data: KnowledgeApi.KnowledgeVO) => {
+const detailRef = ref();
+const optionsClick = (label: string, data: AgentApi.AgentVO) => {
   switch (label) {
-    case 'opt.view': {
-      proxy.$router.push({
-        path: `${import.meta.env.VITE_CONTEXT}large-model/knowledge-document/${data.id}`,
-      });
+    case 'large-model.agent.opt.demonstration': {
+      const route = router.resolve(`${import.meta.env.VITE_CONTEXT}agent-ui/${data.id}`);
+      window.open(route.href, '_blank');
       break;
     }
     case 'opt.edit': {
@@ -180,6 +170,26 @@ const optionsClick = (label: string, data: KnowledgeApi.KnowledgeVO) => {
   }
 };
 
+const handleDelete = (data: AgentApi.AgentVO) => {
+  proxy.$modal
+      .confirm({
+        message: `确定要删除模型【${data.name}】吗?`,
+        maskClosable: true,
+        title: '删除提示',
+      })
+      .then((res: string) => {
+        if (data.id && res === 'confirm') {
+          AgentApi.deleteAgentById(data.id).then(() => {
+            handleFormQuery();
+            proxy.$modal.message({
+              message: '删除成功',
+              status: 'success',
+            });
+          });
+        }
+      });
+};
+
 const modelList: Ref<ModelApi.PlatformModelTree[]> = ref([])
 const queryPlatformList = () => {
   PlatformApi.listPlatform().then((res) => {
@@ -190,7 +200,7 @@ const queryPlatformList = () => {
 
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'EMBEDDING',
+    type: 'CHAT',
     enabled: true,
   }).then((res) => {
     const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
@@ -203,24 +213,13 @@ const queryModelList = () => {
 };
 queryPlatformList()
 
-const handleDelete = (data: KnowledgeApi.KnowledgeVO) => {
-  proxy.$modal
-      .confirm({
-        message: `确定要删除模型【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          KnowledgeApi.deleteKnowledgeById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
-          });
-        }
-      });
+const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
+
+
+const modelTypeList: Ref<AgentApi.AgentTypeVO[]> = ref([]);
+const changePlatform = (item: any) => {
+  modelTypeList.value =
+      platformList.value.filter((p) => p.code === item)[0].modelTypes || [];
 };
 
 const fetchTableData = reactive({
@@ -234,18 +233,18 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: KnowledgeApi.KnowledgePageParam = {
+    params: AgentApi.AgentPageParam = {
       pageNo: 1,
       pageSize: 10,
     },
 ) {
-  const queryParams: KnowledgeApi.KnowledgePageParam = {
+  const queryParams: AgentApi.AgentPageParam = {
     ...filterOptions.value,
     ...params,
   };
   state.loading = true;
   try {
-    const {data} = await KnowledgeApi.pageKnowledge(queryParams);
+    const {data} = await AgentApi.pageAgent(queryParams);
     const {records, total} = data;
     return {
       result: records,

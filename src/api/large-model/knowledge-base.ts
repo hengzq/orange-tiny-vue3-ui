@@ -32,8 +32,7 @@ export interface KnowledgeVO {
     id?: string;
     /* 知识库名称 */
     name?: string;
-    platform?: string;
-    embeddingModel?: string;
+    embeddingModelId?: string;
     /* 模型启用状态 true:启用 false：不启用 */
     enabled?: boolean;
     /* 排序 */

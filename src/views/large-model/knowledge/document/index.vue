@@ -26,11 +26,12 @@
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="fileName" :title="$t('large-model.knowledge.document.fileName')"/>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
+      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center"/>
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"
           align="center"
-          :width="proxy.$hasPermission(options).length * 50"
+          :width="proxy.$hasPermission(options).length * 80"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -49,14 +50,18 @@
   </div>
 
   <edit-form ref="editFormRef" @ok="handleFormQuery"></edit-form>
+  <segment-index ref="segmentIndexRef" @ok="handleFormQuery"></segment-index>
   <import-web-knowledge ref="importWebKnowledgeRef" @ok="handleFormQuery"></import-web-knowledge>
+  <import-file-knowledge ref="importFileKnowledgeRef" @ok="handleFormQuery"></import-file-knowledge>
 </template>
 
 <script lang="ts" setup>
 import * as KnowledgeDocumentApi from '@/api/large-model/knowledge-document';
 import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import ImportWebKnowledge from './components/import-web-knowledge.vue';
+import ImportFileKnowledge from './components/import-file-knowledge.vue';
 import EditForm from './components/edit-form.vue';
+import SegmentIndex from './components/segment-index.vue';
 
 const {proxy} = getCurrentInstance() as any;
 
@@ -77,7 +82,7 @@ const state = reactive<{
 }>({
   loading: false,
   filterOptions: {
-    baseId: proxy.$route.query.baseId
+    baseId: proxy.$route.params.baseId
   } as KnowledgeDocumentApi.KnowledgeDocumentPageParam,
 });
 const {loading, filterOptions} = toRefs(state);
@@ -88,7 +93,7 @@ const handleFormQuery = () => {
 };
 const handleFormReset = () => {
   state.filterOptions = {
-    baseId: proxy.$route.query.baseId
+    baseId: proxy.$route.params.baseId
   } as KnowledgeDocumentApi.KnowledgeDocumentPageParam;
   handleFormQuery();
 };
@@ -99,12 +104,23 @@ const toolbarButtons = reactive<any[]>([
     code: 'import-web-knowledge',
     name: '从网页导入',
   },
+  {
+    permission: 'orange-ai:model:add',
+    code: 'import-file-knowledge',
+    name: '本地文档导入',
+  },
 ]);
+
 const importWebKnowledgeRef = ref();
+const importFileKnowledgeRef = ref();
 const toolbarButtonClickEvent = ({code}: any) => {
   switch (code) {
     case 'import-web-knowledge': {
-      importWebKnowledgeRef.value.open(proxy.$route.query.baseId);
+      importWebKnowledgeRef.value.open(proxy.$route.params.baseId);
+      break;
+    }
+    case 'import-file-knowledge': {
+      importFileKnowledgeRef.value.open(proxy.$route.params.baseId);
       break;
     }
     default:
@@ -113,8 +129,7 @@ const toolbarButtonClickEvent = ({code}: any) => {
 };
 const options = ref<any[]>([
   {
-    permission: 'orange-ai:model:update',
-    label: 'opt.edit',
+    label: 'large-model.knowledge.document.segment',
   },
   {
     permission: 'orange-ai:model:delete',
@@ -123,10 +138,11 @@ const options = ref<any[]>([
 ]);
 
 const editFormRef = ref()
+const segmentIndexRef = ref()
 const optionsClick = (label: string, data: KnowledgeDocumentApi.KnowledgeDocumentVO) => {
   switch (label) {
-    case 'opt.edit': {
-      editFormRef.value.open(data.id);
+    case 'large-model.knowledge.document.segment': {
+      segmentIndexRef.value.open(data.id);
       break;
     }
     case 'opt.delete': {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {PageParam} from '@/api/global';
+import {FileInfo} from "@/api/system/storage/object";
 
 const BASE_URL = '/orange-ai/v1.0/knowledge-document';
 
@@ -9,6 +10,10 @@ export function addKnowledge(params: KnowledgeDocumentVO) {
 
 export function addTextToKnowledge(params: AddTextToKnowledgeParam) {
     return axios.post(BASE_URL.concat(`/add-text-to-knowledge`), params);
+}
+
+export function batchAddDocumentAndSlice(params: KnowledgeDocumentSlice) {
+    return axios.post(BASE_URL.concat(`/batch-add-document-and-slice`), params);
 }
 
 export function deleteKnowledgeDocumentById(id: string) {
@@ -25,6 +30,10 @@ export function getKnowledgeDocumentById(id: string) {
 
 export function getMarkdownFromUrl(params: UrlParam) {
     return axios.post(BASE_URL.concat(`/markdown-from-url`), params);
+}
+
+export function knowledgeDocumentSplit(params: SplitParams) {
+    return axios.post(BASE_URL.concat(`/split`), params);
 }
 
 export function pageKnowledgeDocument(params: KnowledgeDocumentPageParam) {
@@ -58,6 +67,34 @@ export interface KnowledgeDocumentVO {
     /* 文件路径 */
     filePath?: string;
 }
+
+export interface SliceInfo {
+    /* 段落标题 */
+    title?: string;
+
+    /* 段落内容 */
+    content?: string;
+}
+
+export interface KnowledgeDocumentSlice {
+    /* 知识库ID */
+    baseId?: string;
+    documentList?: DocumentInfo[]
+
+}
+
+export interface DocumentInfo {
+    fileInfo: FileInfo,
+    /* 切片相关信息 */
+    sliceList?: SliceInfo[];
+}
+
+export interface SplitParams {
+
+    fileList?: FileInfo[];
+
+}
+
 
 export type KnowledgeDocumentListParam = KnowledgeDocumentVO
 

@@ -16,8 +16,7 @@ export const CONVERSATION_STREAM_URL =
 // }
 
 export interface ConversationParam  {
-  platform?: string;
-  modelCode?: string;
+  modelId?: string;
   prompt?: string;
   sessionId?: string;
 };
