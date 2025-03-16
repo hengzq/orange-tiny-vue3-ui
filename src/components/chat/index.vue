@@ -15,10 +15,10 @@
         </tiny-alert>
       </tiny-card>
       <template v-for="(item, index) in chatList" v-else :key="index">
-        <div v-if="item.messageType === 'USER'" class="item question">
+        <div v-if="item.role === 'USER'" class="item question">
           <md-preview v-model="item.content" style="width: fit-content"/>
         </div>
-        <div v-if="item.messageType === 'ASSISTANT'" class="item answer">
+        <div v-if="item.role === 'ASSISTANT'" class="item answer">
           <md-preview v-model="item.content" style="width: fit-content"/>
           <div class="tools" v-if="!item.generating">
             <tiny-tooltip type="info" content="复制" placement="top">
@@ -76,7 +76,7 @@
 <script lang="ts" setup>
 import {defineProps, getCurrentInstance, PropType, ref, Ref} from 'vue';
 import * as ChatApi from '@/api/large-model/chat';
-import * as ChatSessionRecordApi from '@/api/large-model/chat-sesssion-record';
+import * as SessionMessageApi from '@/api/large-model/session-message';
 import {fetchEventSource} from '@microsoft/fetch-event-source';
 import {MdEditor, MdPreview} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
@@ -98,10 +98,10 @@ const props = defineProps({
   },
 });
 
-const chatList: Ref<ChatSessionRecordApi.ChatSessionRecordVO[]> = ref([]);
+const chatList: Ref<SessionMessageApi.SessionMessageVO[]> = ref([]);
 const queryHistoryChatList = (sessId = props.conversationParam.sessionId) => {
   if (props.conversationParam.sessionId) {
-    ChatSessionRecordApi.listChatSessionRecord({
+    SessionMessageApi.listSessionMessage({
       sessionId: sessId,
     }).then((res) => {
       chatList.value = res.data;
@@ -115,12 +115,12 @@ const sendMessageStream = async () => {
     return;
   }
   chatList.value.push({
-    messageType: 'USER',
+    role: 'USER',
     content: formData.value.prompt || '',
   });
   // 占位使用 获取答案信息
   chatList.value.push({
-    messageType: 'ASSISTANT',
+    role: 'ASSISTANT',
     content: '',
     generating: true,
   });
@@ -161,21 +161,21 @@ const sendMessageStream = async () => {
   );
 };
 
-const copyInfo = (item: ChatSessionRecordApi.ChatSessionRecordVO) => {
+const copyInfo = (item: SessionMessageApi.SessionMessageVO) => {
   copy(item.content || '').then(() => {
     proxy.$modal.message({message: '复制成功', status: 'success'});
   });
 };
 
-const toRate = (item: ChatSessionRecordApi.ChatSessionRecordVO, rating?: string) => {
+const toRate = (item: SessionMessageApi.SessionMessageVO, rating?: string) => {
   if (!item || !item.id || !rating) {
     return;
   }
   const param = {
     id: item.id,
     rating,
-  } as ChatSessionRecordApi.ChatSessionRecordVO;
-  ChatSessionRecordApi.rateChatSessionRecordById(item.id, param)
+  } as SessionMessageApi.SessionMessageVO;
+  SessionMessageApi.rateSessionMessageById(item.id, param)
       .then((res) => {
         proxy.$modal.message({message: '感谢支持', status: 'success'});
         item.rating = rating;
