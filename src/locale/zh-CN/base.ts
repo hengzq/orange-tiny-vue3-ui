@@ -22,6 +22,5 @@ export default {
   'attribute.remark.placeholder': '请输入备注',
   'attribute.createdAt': '创建时间',
   'attribute.createdAt.placeholder': '请选择创建时间',
-  'attribute.updatedAt': '创建时间',
-  'attribute.updatedAt.placeholder': '请选择创建时间',
+  'attribute.updatedAt': '更新时间',
 };
