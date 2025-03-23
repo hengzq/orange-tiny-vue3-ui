@@ -7,7 +7,7 @@ export default {
   'settings.navbar': '简约模式',
   'settings.menuWidth': '菜单宽度 (px)',
   'settings.navbar.alerts': '消息通知',
-  'settings.navbar.help': '文档',
+  'settings.navbar.help': '使用文档',
   'settings.menu': '经典模式',
   'settings.tabBar': '多页签',
   'settings.footer': '时尚模式',
