@@ -101,7 +101,6 @@
     <tiny-grid
         ref="gridTableRef"
         class="table-list"
-        max-height="88%"
         :fetch-data="fetchTableData"
         :pager="pagerConfig"
         :loading="loading"
@@ -115,16 +114,10 @@
           field="requestId"
           :title="$t('system.log.operation.requestId')"
           align="center"
-          width="150"
+          width="200"
       />
-      <tiny-grid-column
-          field="resourceName"
-          :title="$t('system.log.operation.resourceName')"
-      />
-      <tiny-grid-column
-          :title="$t('system.log.operation.requestMethod')"
-          width="80"
-      >
+      <tiny-grid-column field="resourceName" :title="$t('system.log.operation.resourceName')"/>
+      <tiny-grid-column :title="$t('system.log.operation.requestMethod')" width="90">
         <template #default="data">
           <dict-tag
               :value="data.row.requestMethod"
@@ -132,42 +125,26 @@
           />
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-          show-overflow
-          :title="$t('system.log.operation.requestUrl')"
-      >
+      <tiny-grid-column show-overflow :title="$t('system.log.operation.requestUrl')">
         <template #default="data">
           {{ data.row.requestUrl }}
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-          field="userIp"
-          :title="$t('system.log.operation.userIp')"
-          width="120"
-      />
-      <tiny-grid-column
-          field="userLocation"
-          :title="$t('system.log.operation.userLocation')"
-          width="120"
-      />
+      <tiny-grid-column field="userIp" :title="$t('system.log.operation.userIp')" width="120"/>
+      <tiny-grid-column field="userLocation" :title="$t('system.log.operation.userLocation')" width="120"/>
       <tiny-grid-column
           field="userName"
           :title="$t('system.log.operation.userName')"
           align="center"
-          width="80"
+          width="110"
       />
-      <tiny-grid-column field="status" :title="$t('system.log.operation.status')" align="center" width="80">
+      <tiny-grid-column field="status" :title="$t('system.log.operation.status')" align="center" width="90">
         <template #default="data">
           <dict-tag :value="data.row.status" :options="proxy.$dict.getDictData('sys_operation_status')"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-          field="startTime"
-          :title="$t('system.log.operation.startTime')"
-          align="center"
-          width="150"
-      />
-      <tiny-grid-column field="duration" :title="$t('system.log.operation.duration')" align="center" width="80">
+      <tiny-grid-column field="startTime" :title="$t('system.log.operation.startTime')" align="center" width="170"/>
+      <tiny-grid-column field="duration" :title="$t('system.log.operation.duration')" align="center" width="90">
         <template #default="data"> {{ data.row.duration }} ms</template>
       </tiny-grid-column>
       <tiny-grid-column :title="$t('table.operations')" align="center" width="100">

@@ -57,7 +57,7 @@ import Footer from '@/components/footer/index.vue';
 import NavBar from '@/components/navbar/index.vue';
 import Theme from '@/components/theme/index.vue';
 import Menu from '@/components/menu/index.vue';
-import {DefaultTheme} from '@/components/theme/type';
+import {DefaultTheme} from '@/components/theme/default-theme';
 import PageLayout from './page-layout.vue';
 // 动态切换
 const appStore = useAppStore();
@@ -172,13 +172,6 @@ onMounted(() => {
   top: 8px !important;
 }
 
-// 路由子菜单选中后的样式
-:deep(.tiny-tree-node__children .tiny-tree-node__content) {
-  .tree-node-name {
-    margin-left: 28px !important;
-    padding-left: 6px !important;
-  }
-}
 
 :deep(.tiny-tree-node__children > .tree-node-body) {
   padding-left: 50px;

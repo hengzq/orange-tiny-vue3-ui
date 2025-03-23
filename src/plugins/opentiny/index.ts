@@ -1,7 +1,7 @@
 import type {App} from 'vue'
 
 import {
-    Container as TinyContainer, Layout as TinyLayout, Card as TinyCard,
+    Container as TinyContainer, Layout as TinyLayout, TinyCard,
     Breadcrumb as TinyBreadcrumb, BreadcrumbItem as TinyBreadcrumbItem,
     Drawer as TinyDrawer, Modal as TinyModal, Popover as TinyPopover, Tooltip as TinyTooltip, Floatbar as TinyFloatbar,
     TreeMenu as TinyTreeMenu, TinyTree,

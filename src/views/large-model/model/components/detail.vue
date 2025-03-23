@@ -8,9 +8,8 @@
   >
     <tiny-form
       ref="formDataRef"
-      label-position="left"
       :model="formData"
-      label-width="100px"
+      label-width="110px"
       validate-position="bottom"
       validate-type="text"
     >

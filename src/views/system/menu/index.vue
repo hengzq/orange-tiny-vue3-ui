@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -30,7 +30,6 @@
     <tiny-grid
         ref="gridTableRef"
         class="table-list"
-        max-height="88%"
         :data="tableData"
         :loading="loading"
         :tree-config="{ children: 'children' }"
@@ -98,12 +97,12 @@
           field="sort"
           :title="$t('attribute.sort')"
           align="center"
-          width="80"
+          width="90"
       />
       <tiny-grid-column
           field="updatedAt"
           :title="$t('attribute.updatedAt')"
-          width="150"
+          width="170"
       />
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"

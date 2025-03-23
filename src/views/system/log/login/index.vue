@@ -1,6 +1,6 @@
 <template>
   <div class="container-list">
-    <tiny-form :model="filterOptions" label-position="right" label-width="100px" class="filter-form">
+    <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.login.account')">
@@ -29,13 +29,13 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" refresh full-screen/>
       </template>
 
-      <tiny-grid-column field="requestId" :title="$t('system.log.login.requestId')" align="center" width="150"/>
+      <tiny-grid-column field="requestId" :title="$t('system.log.login.requestId')" align="center" width="180"/>
       <tiny-grid-column field="account" :title="$t('system.log.login.account')" align="center"/>
       <tiny-grid-column
           field="userName"
           :title="$t('system.log.login.userName')"
           align="center"
-          width="80"
+          width="110"
       />
       <tiny-grid-column
           field="userIp"
@@ -79,7 +79,7 @@
           field="loginTime"
           :title="$t('system.log.login.loginTime')"
           align="center"
-          width="150"
+          width="170"
       />
       <tiny-grid-column
           field="userAgent"

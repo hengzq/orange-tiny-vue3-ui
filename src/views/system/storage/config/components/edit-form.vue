@@ -7,7 +7,7 @@
   >
     <tiny-form
         ref="formDataRef" class="tiny-drawer-body-form" label-position="left" :rules="formDataRules" :model="formData"
-        label-width="100px" validate-position="bottom" validate-type="text">
+        label-width="110px" validate-position="bottom" validate-type="text">
       <tiny-form-item :label="$t('system.storage-config.name')" prop="name">
         <tiny-input v-model="formData.name" :placeholder="$t('system.storage-config.name.placeholder')"/>
       </tiny-form-item>

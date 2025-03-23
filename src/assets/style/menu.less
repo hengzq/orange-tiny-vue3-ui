@@ -18,18 +18,23 @@
   border-left: 2px solid transparent !important;
 }
 
-// 主标题点击后显示背景色
-:deep(
-    .tiny-tree-menu
-      .tiny-tree
-      .tiny-tree-node.is-current
-      > .tiny-tree-node__content
-      .tree-node-name
-      .tiny-svg
-  ) {
-    fill: var(--ti-tree-menu-node-current-color);
+:deep(.tiny-tree-menu .tiny-tree .tiny-tree-node .tiny-tree-node__content .tree-node) {
+  height: 35px;
+  line-height: 35px;
 }
+
+//// 主标题点击后显示背景色
+//:deep(
+//    .tiny-tree-menu
+//      .tiny-tree
+//      .tiny-tree-node.is-current
+//      > .tiny-tree-node__content
+//      .tree-node-name
+//      .tiny-svg
+//  ) {
+//    fill: var(--ti-tree-menu-node-current-color);
+//}
 :deep(.tiny-collapse-item__header) {
   background-color: var(--ti-common-color-bg-light-normal);
-  color: var(--ti-common-color-text-highlight); 
+  color: var(--ti-common-color-text-highlight);
 }

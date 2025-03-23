@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -110,7 +110,7 @@
           field="enabled"
           :title="$t('attribute.enabled.status')"
           align="center"
-          width="80"
+          width="90"
       >
         <template #default="scope">
           <dict-tag

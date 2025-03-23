@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -55,28 +55,9 @@
         <tiny-grid-toolbar
             :buttons="proxy.$hasPermission(toolbarButtons)"
             full-screen
-
         />
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <!--      <tiny-grid-column-->
-      <!--          field="platform"-->
-      <!--          :title="$t('large-model.model.platform')"-->
-      <!--      >-->
-      <!--        <template #default="scope">-->
-      <!--          <template v-for="(item, index) in platformList">-->
-      <!--            <tiny-tag-->
-      <!--                v-if="scope.row.platform == item.code"-->
-      <!--                :key="item.code"-->
-      <!--                :index="index"-->
-      <!--                effect="dark"-->
-      <!--            >-->
-      <!--              {{ item.name }}-->
-      <!--            </tiny-tag>-->
-      <!--          </template>-->
-      <!--        </template>-->
-      <!--      </tiny-grid-column>-->
-
       <tiny-grid-column field="name" :title="$t('large-model.session.name')"/>
       <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
         <template #default="scope">
@@ -112,7 +93,7 @@
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"
           align="center"
-          :width="proxy.$hasPermission(options).length * 60"
+          :width="proxy.$hasPermission(options).length * 70"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -224,7 +205,7 @@ const optionsClick = (label: string, data: SessionApi.SessionVO) => {
 const handleDelete = (data: SessionApi.SessionVO) => {
   proxy.$modal
       .confirm({
-        message: `确定要删除模型【${data.name}】吗?`,
+        message: `确定要删除会话【${data.name}】吗?`,
         maskClosable: true,
         title: '删除提示',
       })

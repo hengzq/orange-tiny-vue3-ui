@@ -27,9 +27,9 @@
       <li>
         <span @click="help">{{ $t('settings.navbar.help') }}</span>
       </li>
-      <li>
-        <span @click="setVisible">{{ $t('settings.title') }}</span>
-      </li>
+      <!--      <li>-->
+      <!--        <span @click="setVisible">{{ $t('settings.title') }}</span>-->
+      <!--      </li>-->
       <li class="navbar-user">
         <tiny-user-head type="icon" round min>
           <div class="user-image">

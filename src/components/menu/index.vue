@@ -27,6 +27,7 @@ const queryRouters = async () => {
   const userStore = useUserStore();
   treeDataFilter.value = listToTreeConverter(userStore.menus);
 };
+
 queryRouters();
 
 const currentChange = (data: any) => {
@@ -61,139 +62,12 @@ const currentChange = (data: any) => {
 
 .menu-title {
   display: flex;
-  gap: 10px;
   align-items: center;
   height: 20px;
 
   > svg {
-    width: 1.3em;
-    height: 1.3em;
+    width: 1.5em;
+    height: 1.5em;
   }
-}
-
-:deep(.tiny-tree-node__wrapper > .is-current > .tiny-tree-node__content) {
-  color: #000 !important;
-  background: none !important;
-  margin-left: 0 !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        > .tiny-tree-node__wrapper
-        > .is-current
-        > .tiny-tree-node__content
-    ) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-  margin-left: 0 !important;
-
-  &:hover {
-    background: var(--ti-tree-menu-node-hover-bg-color) !important;
-  }
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        .tiny-tree-node__wrapper
-        .is-current
-        .tiny-tree-node__content
-        .tree-node-name
-    ) {
-  border-left: 2px solid var(--ti-tree-menu-square-left-border-color, '#fff') !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        .tiny-tree-node__wrapper
-        .is-current
-        .tiny-tree-node__content
-        .tiny-tree-node__content-right
-    ) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        .tiny-tree-node__wrapper
-        .is-current
-        .tiny-tree-node__content
-        .tiny-tree-node__content-left
-        .tiny-tree-node__content-box
-    ) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        .tiny-tree-node__wrapper
-        .is-current
-        .tiny-tree-node__content
-        .tiny-tree-node__content-left
-        .tiny-tree-node__content-box:before
-    ) {
-  display: none !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-expanded
-        > .tiny-tree-node__children
-        .tiny-tree-node__wrapper
-        .is-current
-        .tiny-tree-node__content
-        .tiny-tree-node__content-left:before
-    ) {
-  display: none !important;
-}
-
-:deep(.tiny-tree-node__wrapper > .is-current > .tiny-tree-node__content) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-}
-
-:deep(
-      .tiny-tree-node__wrapper
-        > .is-current
-        > .tiny-tree-node__content
-        .tiny-tree-node__content-box
-    ) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-}
-
-:deep(.tiny-tree-node__content:hover) {
-  background-color: var(--ti-tree-menu-node-hover-bg-color) !important;
-}
-
-:deep(
-      .tiny-tree-menu__wrap
-        > .tiny-tree-node__wrapper
-        > .is-root
-        > .tiny-tree-node__content
-        > .tiny-tree-node__content-left
-        .tiny-tree-node__content-box
-        .tree-node-name
-    ) {
-  padding: 0 8px !important;
-}
-
-:deep(.tiny-tree-node > .tiny-tree-node__content) {
-  margin-left: 0 !important;
-}
-
-.tiny-tree-menu
-.tiny-tree
-.tiny-tree-node.is-current
-> .tiny-tree-node__content
-.tree-node-name
-.tiny-svg {
-  fill: var(--ti-base-icon-color);
 }
 </style>

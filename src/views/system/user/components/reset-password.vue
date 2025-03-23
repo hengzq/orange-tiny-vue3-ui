@@ -12,7 +12,7 @@
         label-position="left"
         :model="requestParams"
         :rules="formDataRules"
-        label-width="100px"
+        label-width="110px"
         validate-position="bottom"
         validate-type="text"
       >

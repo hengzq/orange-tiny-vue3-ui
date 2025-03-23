@@ -11,7 +11,7 @@
       label-position="left"
       :display-only="true"
       :model="formData"
-      label-width="100px"
+      label-width="110px"
     >
       <tiny-form-item :label="$t('system.log.operation.requestId')">
         <tiny-input v-model="formData.requestId" />

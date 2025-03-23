@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -39,7 +39,6 @@
     <tiny-grid
         ref="gridTableRef"
         class="table-list"
-        max-height="88%"
         :fetch-data="fetchTableData"
         :pager="pagerConfig"
         :loading="loading"
@@ -221,7 +220,6 @@ const toolbarButtonClickEvent = ({code, $grid}: any) => {
       break;
     }
     case 'batchDelete': {
-      debugger;
       break;
     }
     default:

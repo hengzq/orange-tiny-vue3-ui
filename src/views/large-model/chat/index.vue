@@ -9,7 +9,7 @@
             :rules="formDataRules"
             :model="formData"
             validate-position="bottom"
-            label-width="100px"
+            label-width="110px"
             validate-type="text"
         >
           <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">

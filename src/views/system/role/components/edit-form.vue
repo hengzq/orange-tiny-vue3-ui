@@ -11,7 +11,7 @@
       label-position="left"
       :rules="formDataRules"
       :model="formData"
-      label-width="100px"
+      label-width="110px"
       validate-position="bottom"
       validate-type="text"
     >

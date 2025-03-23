@@ -4,7 +4,7 @@
       <tiny-col :span="3">
         <tiny-form
             ref="formDataRef" class="tiny-drawer-body-form" label-position="top" :rules="formDataRules" :model="formData"
-            validate-position="bottom" label-width="100px" validate-type="text"
+            validate-position="bottom" label-width="110px" validate-type="text"
         >
           <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
             <tiny-select v-model="formData.platform" @change="changePlatform">
