@@ -1,6 +1,6 @@
 <template>
   <div class="container-list">
-    <tiny-form :model="filterOptions" label-position="right" label-width="100px" class="filter-form">
+    <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.knowledge.document.fileName')">
@@ -25,6 +25,11 @@
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="fileName" :title="$t('large-model.knowledge.document.fileName')"/>
+      <tiny-grid-column field="fileSize" :title="$t('large-model.knowledge.document.fileSize')" width="100">
+        <template #default="scope">
+          {{ formatFileSize(scope.row.fileSize) }}
+        </template>
+      </tiny-grid-column>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
       <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center"/>
       <tiny-grid-column
@@ -56,6 +61,8 @@
 </template>
 
 <script lang="ts" setup>
+import {formatFileSize} from '@/utils/ format';
+
 import * as KnowledgeDocumentApi from '@/api/large-model/knowledge-document';
 import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import ImportWebKnowledge from './components/import-web-knowledge.vue';

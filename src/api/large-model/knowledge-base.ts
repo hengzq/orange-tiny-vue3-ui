@@ -39,6 +39,7 @@ export interface KnowledgeVO {
     sort?: number;
     /* 备注 */
     description?: string;
+    vectorCollectionName?: string;
 }
 
 export interface KnowledgeListParam extends KnowledgeVO {

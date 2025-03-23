@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -36,12 +36,12 @@
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="name" :title="$t('large-model.knowledge.name')"/>
-      <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="80">
+      <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="90">
         <template #default="scope">
           <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="embeddingModelId" :title="$t('attribute.sort')" align="center">
+      <tiny-grid-column field="embeddingModelId" :title="$t('attribute.sort')" align="center" width="100">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
             <template v-for="(item, index) in modelItem.children">
@@ -54,8 +54,9 @@
       </tiny-grid-column>
 
       <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center"/>
+      <tiny-grid-column field="vectorCollectionName" :title="$t('large-model.knowledge.base.vectorCollectionName')" align="center"/>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
-      <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="260"/>
+      <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="150"/>
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"
@@ -190,7 +191,7 @@ const queryPlatformList = () => {
 
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'EMBEDDING',
+    modelType: 'EMBEDDING',
     enabled: true,
   }).then((res) => {
     const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
@@ -206,7 +207,7 @@ queryPlatformList()
 const handleDelete = (data: KnowledgeApi.KnowledgeVO) => {
   proxy.$modal
       .confirm({
-        message: `确定要删除模型【${data.name}】吗?`,
+        message: `确定要删除知识库【${data.name}】吗?`,
         maskClosable: true,
         title: '删除提示',
       })

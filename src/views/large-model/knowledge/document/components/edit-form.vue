@@ -7,7 +7,7 @@
       @close="onClose(false)"
   >
     <tiny-form
-        ref="formDataRef" label-position="left" :rules="formDataRules" :model="formData" label-width="120px" validate-position="bottom"
+        ref="formDataRef" label-position="left" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
         validate-type="text">
 
       <tiny-form-item :label="$t('large-model.knowledge.document.fileName')" prop="fileName">

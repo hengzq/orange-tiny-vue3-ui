@@ -1,13 +1,8 @@
 <template>
   <tiny-drawer
       :title="formData.fileName"
-      :visible="visible"
-      width="70%"
-      :show-footer="true"
-      @close="onClose(false)"
-  >
-    <tiny-card v-for="(item,index) in formData.documentSliceList" :key="index" type="text" title="内容区为默认插槽"
-               style="width: 100%;margin-bottom: 10px">
+      :visible="visible" width="70%" :show-footer="true" @close="onClose(false)">
+    <tiny-card v-for="(item,index) in formData.documentSliceList" :key="index" type="text" custom-class="slice-card">
       {{ item.content }}
     </tiny-card>
     <template #footer>
@@ -19,9 +14,7 @@
 
 <script lang="ts" setup>
 import * as KnowledgeDocumentApi from "@/api/large-model/knowledge-document";
-import {getCurrentInstance, Ref, ref} from 'vue';
-import * as PlatformApi from "@/api/large-model/platform";
-import * as ModelApi from "@/api/large-model/model";
+import {getCurrentInstance, ref} from 'vue';
 
 const emit = defineEmits(['ok']);
 const {proxy} = getCurrentInstance() as any;
@@ -33,43 +26,6 @@ const isModify = ref(false);
 
 const formData = ref<KnowledgeDocumentApi.KnowledgeDocumentVO>({});
 
-const formDataRules = {
-  name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
-};
-
-const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
-const queryPlatformList = () => {
-  PlatformApi.listPlatform({"modelType": "EMBEDDING"}).then((res) => {
-    platformList.value = res.data;
-    const defaultCode = platformList.value[0]?.code;
-    if (defaultCode) {
-      formData.value.platform = defaultCode;
-    }
-  });
-};
-queryPlatformList();
-const filterModelList: Ref<ModelApi.ModelVO[]> = ref([]);
-const changePlatform = (item: any) => {
-  filterModelList.value = modelList.value.filter((p) => p.platform === item);
-  if (formData.value.embeddingModel) {
-    formData.value.embeddingModel = '';
-  }
-};
-
-const modelList: Ref<ModelApi.ModelVO[]> = ref([]);
-const queryModelList = () => {
-  ModelApi.listModel({
-    type: 'EMBEDDING',
-    enabled: true,
-  }).then((res) => {
-    modelList.value = res.data;
-    if (formData.value.platform) {
-      changePlatform(formData.value.platform);
-      formData.value.embeddingModel = filterModelList.value[0].code;
-    }
-  });
-};
-queryModelList();
 
 const onSubmit = () => {
   proxy.$refs.formDataRef.validate((valid: boolean) => {
@@ -119,3 +75,12 @@ defineExpose({
   open,
 });
 </script>
+<style scoped>
+.slice-card {
+  padding: 10px;
+  background-color: #f0f0f0;
+  width: 100%;
+  color: snow;
+  margin-bottom: 10px;
+}
+</style>

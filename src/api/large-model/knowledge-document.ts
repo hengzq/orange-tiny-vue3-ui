@@ -2,7 +2,7 @@ import axios from 'axios';
 import {PageParam} from '@/api/global';
 import {FileInfo} from "@/api/system/storage/object";
 
-const BASE_URL = '/orange-ai/v1.0/knowledge-document';
+const BASE_URL = '/orange-ai/v1.0/knowledge-doc';
 
 export function addKnowledge(params: KnowledgeDocumentVO) {
     return axios.post(BASE_URL, params);
@@ -79,7 +79,8 @@ export interface SliceInfo {
 export interface KnowledgeDocumentSlice {
     /* 知识库ID */
     baseId?: string;
-    documentList?: DocumentInfo[]
+    sliceIdentifierList?: string[];
+    documentList?: DocumentInfo[];
 
 }
 

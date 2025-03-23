@@ -7,12 +7,12 @@
         v-if="active == 0" ref="webFormDataRef" label-position="left" label-width="80px"
         validate-position="bottom" validate-type="text">
       <tiny-form-item prop="url">
-        <tiny-file-upload :http-request="uploadHttpRequest" :file-list="fileList" :before-remove="beforeRemoveFile">
+        <tiny-file-upload :http-request="uploadHttpRequest" :file-list="fileList" list-type="saas" :before-remove="beforeRemoveFile">
           <template #trigger>
             <tiny-button>选取文件</tiny-button>
           </template>
           <template #tip>
-            <div class="tiny-upload__tip">只能上传 word 文件，且不超过 10MB</div>
+            <div class="tiny-upload__tip">支持格式：TXT、MarkDown、DOCX</div>
           </template>
         </tiny-file-upload>
       </tiny-form-item>
@@ -20,20 +20,28 @@
 
 
     <tiny-row v-if="active == 1">
-      <tiny-col :span="5">
+      <tiny-col :span="4" style="padding-right: 20px">
         <tiny-form
-            ref="formDataRef" label-position="left" :rules="formDataRules" :model="formData" validate-position="bottom" validate-type="text">
-          <tiny-form-item :label="$t('large-model.knowledge.document.fileName')" prop="fileName">
-            <tiny-input v-model="formData.fileName"/>
+            ref="formDataRef" label-position="left" :rules="formDataRules" label-width="110px" :model="formData" validate-position="bottom"
+            validate-type="text">
+          <tiny-form-item :label="$t('large-model.knowledge.document.sliceIdentifierList')" prop="fileName">
+            <tiny-select
+                v-model="formData.sliceIdentifierList" :placeholder="$t('large-model.knowledge.document.sliceIdentifierList.placeholder')"
+                multiple clearable :show-alloption="false">
+              <tiny-option
+                  v-for="item in proxy.$dict.getDictData('ai_knowledge_base_doc_slice_identifier')" :key="item.dictValue" :label="item.dictLabel"
+                  :value="item.dictValue"/>
+            </tiny-select>
           </tiny-form-item>
         </tiny-form>
       </tiny-col>
-      <tiny-col :span="7">
+      <tiny-col :span="8">
 
         <tiny-tabs v-model="activeName2" separator size="large">
-          <tiny-tab-item v-for="(item, index) in knowledgeDocumentSliceList" :key="index" :title="item.fileInfo.originalName"
-                         :name="item.fileInfo.originalName">
-            <tiny-card v-for="(segment,sIndex) in item.sliceList" :key="sIndex" type="text" title="sIndex" style="width: 100%;margin-bottom: 10px">
+          <tiny-tab-item
+              v-for="(item, index) in knowledgeDocumentSliceList" :key="index" :title="item.fileInfo.fileName"
+              :name="item.fileInfo.fileName">
+            <tiny-card v-for="(segment,sIndex) in item.sliceList" :key="sIndex" type="text" class="slice-card">
               {{ segment.content }}
             </tiny-card>
           </tiny-tab-item>
@@ -58,9 +66,10 @@
 import 'md-editor-v3/lib/style.css';
 
 import * as KnowledgeDocumentApi from "@/api/large-model/knowledge-document";
-import {getCurrentInstance, reactive, Ref, ref, toRaw} from 'vue';
+import {KnowledgeDocumentSlice} from "@/api/large-model/knowledge-document";
+import {getCurrentInstance, reactive, Ref, ref} from 'vue';
 import * as ObjectApi from "@/api/system/storage/object";
-import {DocumentInfo, KnowledgeDocumentSlice} from "@/api/large-model/knowledge-document";
+import {number} from "fp-ts";
 
 const emit = defineEmits(['ok']);
 const {proxy} = getCurrentInstance() as any;
@@ -79,13 +88,14 @@ const uploadHttpRequest = ({file}: { file: File }) => {
   const formData = new FormData();
   formData.append("file", file);
   ObjectApi.upload(formData).then((res) => {
-    const {originalName, fileName, size} = res.data;
+    const {fileName, filePath, fileSize} = res.data;
     fileList.value.push(
         {
-          'name': originalName,
+          'name': fileName,
           'fileName': fileName,
-          'originalName': originalName,
-          'size': size
+          'filePath': filePath,
+          'size': Number(fileSize),
+          'fileSize': Number(fileSize)
         }
     )
   })
@@ -107,13 +117,13 @@ const next = () => {
     "fileList": fileList.value
   }).then((res) => {
     knowledgeDocumentSliceList.value = res.data
-    activeName2.value = res.data[0].fileInfo.originalName
+    activeName2.value = res.data[0].fileInfo.fileName
   })
   // 下一步
   active.value += 1
 }
 
-const formData = ref<KnowledgeDocumentApi.AddTextToKnowledgeParam>({});
+const formData = ref<KnowledgeDocumentApi.KnowledgeDocumentSlice>({});
 const formDataRules = {
   url: [{required: true, message: '请输入网站URL', trigger: 'change'}],
 };
@@ -155,3 +165,12 @@ defineExpose({
   open,
 });
 </script>
+<style scoped>
+.slice-card {
+  padding: 10px;
+  background-color: #f0f0f0;
+  width: 100%;
+  color: snow;
+  margin-bottom: 10px;
+}
+</style>
