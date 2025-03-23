@@ -33,7 +33,8 @@ export type StorageObjectVO = {
 
 export interface FileInfo {
     name: string;
-    originalName?: string;
     fileName: string;
+    filePath?: string;
     size?: number;
+    fileSize?: number;
 }

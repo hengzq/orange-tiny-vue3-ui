@@ -1,11 +1,6 @@
 <template>
   <tiny-drawer
-      :title="title"
-      :visible="visible"
-      :show-footer="true"
-      width="85%"
-      @close="onClose(false)"
-  >
+      :title="title" :visible="visible" :show-footer="true" width="85%" @close="onClose(false)">
     <tiny-row>
       <tiny-col :span="5">
         <tiny-form
@@ -13,7 +8,7 @@
             label-position="left"
             :rules="formDataRules"
             :model="formData"
-            label-width="100px"
+            label-width="110px"
             validate-position="bottom"
             validate-type="text"
         >
@@ -23,17 +18,22 @@
           <tiny-form-item :label="$t('large-model.agent.modelId')" prop="modelId">
             <tiny-cascader v-model="formData.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
+          <tiny-form-item :label="$t('large-model.agent.baseIds')" prop="baseIds">
+            <tiny-select v-model="formData.baseIds" :placeholder="$t('large-model.agent.baseIds.placeholder')" multiple :show-alloption="false">
+              <tiny-option v-for="item in knowledgeBaseList" :key="item.id" :label="item.name" :value="item.id"/>
+            </tiny-select>
+          </tiny-form-item>
           <tiny-form-item :label="$t('large-model.agent.systemPrompt')" prop="systemPrompt">
-            <tiny-input type="textarea" v-model="formData.systemPrompt" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
-                        :placeholder="$t('large-model.agent.systemPrompt.placeholder')"/>
+            <tiny-input
+                v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
+                :placeholder="$t('large-model.agent.systemPrompt.placeholder')"/>
           </tiny-form-item>
         </tiny-form>
       </tiny-col>
       <tiny-col :span="7">
-        <tiny-card title="调试"  style="width: 100%">
+        <tiny-card title="调试" style="width: 100%">
           <dialog-index ref="dialogIndexRef" :agent-param="formData"></dialog-index>
         </tiny-card>
-
       </tiny-col>
     </tiny-row>
 
@@ -46,12 +46,11 @@
 </template>
 
 <script lang="ts" setup>
-import {MdEditor} from 'md-editor-v3';
-import 'md-editor-v3/lib/style.css';
 import * as PlatformApi from '@/api/large-model/platform';
 import * as AgentApi from '@/api/large-model/agent';
 import {computed, getCurrentInstance, Ref, ref, toRaw} from 'vue';
 import * as ModelApi from "@/api/large-model/model";
+import * as KnowledgeBaseApi from "@/api/large-model/knowledge-base";
 
 import DialogIndex from './dialog-index.vue';
 
@@ -66,7 +65,6 @@ const title = computed(() => {
 const formData = ref<AgentApi.AgentVO>({});
 
 const formDataRules = {
-
   name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
   modelId: [{required: true, message: '请选择模型', trigger: 'change'}],
 };
@@ -115,7 +113,7 @@ const queryPlatformList = () => {
 
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'CHAT',
+    modelType: 'CHAT',
     enabled: true,
   }).then((res) => {
     const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
@@ -126,6 +124,16 @@ const queryModelList = () => {
     modelList.value = modelList.value.filter(item => item.children && item.children.length > 0)
   });
 };
+
+//  查询知识库
+const knowledgeBaseList = ref<Array<KnowledgeBaseApi.KnowledgeVO>>([])
+const queryKnowledgeBaseList = () => {
+  KnowledgeBaseApi.listKnowledge({
+    enabled: true
+  }).then((res) => {
+    knowledgeBaseList.value = res.data
+  })
+}
 
 const resetForm = () => {
   formData.value = {};
@@ -142,6 +150,7 @@ const open = (id: string) => {
     });
   }
   queryPlatformList();
+  queryKnowledgeBaseList()
   visible.value = true;
 };
 

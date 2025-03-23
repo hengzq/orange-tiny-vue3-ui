@@ -3,7 +3,7 @@
     <tiny-form
         :model="filterOptions"
         label-position="right"
-        label-width="100px"
+        label-width="110px"
         class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
@@ -38,7 +38,6 @@
 
     <tiny-grid
         ref="gridTableRef"
-        max-height="88%"
         class="table-list"
         :fetch-data="fetchTableData"
         :pager="pagerConfig"
@@ -59,7 +58,7 @@
           field="enabled"
           :title="$t('attribute.enabled.status')"
           align="center"
-          width="80"
+          width="90"
       >
         <template #default="scope">
           <dict-tag
@@ -95,9 +94,8 @@
           field="updatedAt"
           :title="$t('attribute.updatedAt')"
           align="center"
-          width="150"
+          width="170"
       />
-
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"
@@ -105,7 +103,7 @@
           :width="
           proxy.$hasPermission(options).length == 1
             ? 80
-            : proxy.$hasPermission(options).length * 55
+            : proxy.$hasPermission(options).length * 60
         "
       >
         <template #default="scope">

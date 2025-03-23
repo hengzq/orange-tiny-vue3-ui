@@ -7,7 +7,7 @@
       :validate-on-rule-change="true"
       :label-align="true"
       label-position="top"
-      label-width="100px"
+      label-width="110px"
     >
       <tiny-form-item
         :label="$t('login.register.form.username')"

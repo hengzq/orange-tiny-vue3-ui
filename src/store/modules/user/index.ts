@@ -22,7 +22,7 @@ interface UserState extends UserApi.UserVO {
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    username: 'admin',
+    loginAccount: 'admin',
     rolePermissions: [],
     menus: [],
     menuPermissions: [],

@@ -1,6 +1,6 @@
 <template>
   <div class="container-list">
-    <tiny-form :model="filterOptions" label-position="right" label-width="100px" class="filter-form">
+    <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.agent.modelId')" prop="modelId">
@@ -40,6 +40,13 @@
               </tiny-tag>
             </template>
           </template>
+        </template>
+      </tiny-grid-column>
+      <tiny-grid-column field="modelId" :title="$t('large-model.agent.knowledgeBase')" align="center">
+        <template #default="scope">
+          <tiny-tag v-for="(item, index) in scope.row.baseList" :key="item.value" :index="index" style="margin-right: 10px">
+            {{ item.name }}
+          </tiny-tag>
         </template>
       </tiny-grid-column>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
@@ -173,7 +180,7 @@ const optionsClick = (label: string, data: AgentApi.AgentVO) => {
 const handleDelete = (data: AgentApi.AgentVO) => {
   proxy.$modal
       .confirm({
-        message: `确定要删除模型【${data.name}】吗?`,
+        message: `确定要删除智能体【${data.name}】吗?`,
         maskClosable: true,
         title: '删除提示',
       })
@@ -200,7 +207,7 @@ const queryPlatformList = () => {
 
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'CHAT',
+    modelType: 'CHAT',
     enabled: true,
   }).then((res) => {
     const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
@@ -232,12 +239,10 @@ const fetchTableData = reactive({
   },
 });
 
-async function getPageData(
-    params: AgentApi.AgentPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
-) {
+async function getPageData(params: AgentApi.AgentPageParam = {
+  pageNo: 1,
+  pageSize: 10,
+}) {
   const queryParams: AgentApi.AgentPageParam = {
     ...filterOptions.value,
     ...params,

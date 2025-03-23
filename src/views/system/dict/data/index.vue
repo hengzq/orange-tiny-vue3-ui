@@ -1,6 +1,6 @@
 <template>
   <div class="container-list">
-    <tiny-form :model="filterOptions" label-position="right" label-width="100px" class="filter-form">
+    <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-data.dictType')">
@@ -27,7 +27,6 @@
 
     <tiny-grid
         ref="gridTableRef"
-        max-height="88%"
         class="table-list"
         :fetch-data="fetchTableData"
         :pager="pagerConfig"
@@ -80,7 +79,7 @@
           field="createdAt"
           :title="$t('attribute.createdAt')"
           align="center"
-          width="150"
+          width="170"
       />
 
       <tiny-grid-column
