@@ -1,11 +1,10 @@
 import axios from 'axios';
 import {PageParam} from '@/api/global';
+import {ModelConfig} from "@/api/large-model/model";
 
 const BASE_URL = '/orange-ai/v1.0/agent';
 export const DEBUG_CONVERSATION_STREAM_URL =
     '/orange-ai/v1.0/agent/debug-conversation-stream';
-export const CONVERSATION_STREAM_URL =
-    '/orange-ai/v1.0/agent/conversation-stream';
 
 export function addAgent(params: AgentVO) {
     return axios.post(BASE_URL, params);
@@ -42,6 +41,7 @@ export interface AgentVO {
     tenantId?: string;
     id?: string;
     modelId?: string;
+    modelConfig?: ModelConfig;
     baseIds?: string[];
     name?: string;
     systemPrompt?: string;

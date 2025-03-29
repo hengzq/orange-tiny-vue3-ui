@@ -25,8 +25,8 @@
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.session.source')" prop="quantity">
-            <tiny-select v-model="filterOptions.source" :placeholder="$t('large-model.session.source.placeholder')" clearable>
+          <tiny-form-item :label="$t('large-model.session.sessionType')" prop="quantity">
+            <tiny-select v-model="filterOptions.source" :placeholder="$t('large-model.session.sessionType.placeholder')" clearable>
               <tiny-option
                   v-for="item in proxy.$dict.getDictData('ai_session_source')" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue"/>
@@ -58,7 +58,7 @@
         />
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('large-model.session.name')"/>
+      <tiny-grid-column field="name" :title="$t('large-model.session.name')" show-overflow/>
       <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
@@ -70,10 +70,10 @@
           </template>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="source" :title="$t('large-model.session.source')">
+      <tiny-grid-column field="source" :title="$t('large-model.session.sessionType')" width="150" align="center">
         <template #default="scope">
           <dict-tag
-              :value="scope.row.source"
+              :value="scope.row.sessionType"
               :options="proxy.$dict.getDictData('ai_session_source')"
           />
         </template>
@@ -82,13 +82,14 @@
           field="createdAt"
           :title="$t('attribute.createdAt')"
           align="center"
+          width="170"
       />
       <tiny-grid-column
           field="updatedAt"
           :title="$t('attribute.updatedAt')"
           align="center"
+          width="170"
       />
-
       <tiny-grid-column
           v-if="proxy.$hasPermission(options).length !== 0"
           :title="$t('table.operations')"

@@ -41,6 +41,11 @@ export interface ModelVO {
     description?: string;
 }
 
+export interface ModelConfig {
+    temperature?: number;
+}
+
+
 export interface ModelListParam extends ModelVO {
     nameLike?: string;
 }

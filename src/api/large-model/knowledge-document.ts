@@ -66,6 +66,8 @@ export interface KnowledgeDocumentVO {
     fileName?: string;
     /* 文件路径 */
     filePath?: string;
+    fileStatus?: string;
+
 }
 
 export interface SliceInfo {

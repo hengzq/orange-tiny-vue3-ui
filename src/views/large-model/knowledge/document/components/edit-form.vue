@@ -7,7 +7,7 @@
       @close="onClose(false)"
   >
     <tiny-form
-        ref="formDataRef" label-position="left" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
+        ref="formDataRef" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
         validate-type="text">
 
       <tiny-form-item :label="$t('large-model.knowledge.document.fileName')" prop="fileName">
@@ -68,7 +68,7 @@ const changePlatform = (item: any) => {
 const modelList: Ref<ModelApi.ModelVO[]> = ref([]);
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'EMBEDDING',
+    modelType: 'EMBEDDING',
     enabled: true,
   }).then((res) => {
     modelList.value = res.data;

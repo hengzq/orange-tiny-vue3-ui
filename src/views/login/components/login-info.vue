@@ -1,28 +1,28 @@
 <template>
   <div class="login-form-container">
     <tiny-form
-      ref="loginFormInfo"
-      :model="loginInfo"
-      class="login-form"
-      :rules="rules"
-      validate-type="text"
-      label-width="0"
-      size="medium"
+        ref="loginFormInfo"
+        :model="loginInfo"
+        class="login-form"
+        :rules="rules"
+        validate-type="text"
+        label-width="0"
+        size="medium"
     >
       <tiny-form-item prop="username" size="medium">
         <tiny-input
-          v-model="loginInfo.username"
-          :placeholder="$t('login.form.userName.placeholder')"
+            v-model="loginInfo.username"
+            :placeholder="$t('login.form.userName.placeholder')"
         >
         </tiny-input>
       </tiny-form-item>
 
       <tiny-form-item prop="password" size="medium">
         <tiny-input
-          v-model="loginInfo.password"
-          type="password"
-          show-password
-          :placeholder="$t('login.form.password.placeholder')"
+            v-model="loginInfo.password"
+            type="password"
+            show-password
+            :placeholder="$t('login.form.password.placeholder')"
         >
         </tiny-input>
       </tiny-form-item>
@@ -42,11 +42,11 @@
 
       <tiny-form-item size="medium">
         <tiny-button
-          type="primary"
-          class="login-form-btn"
-          :loading="loading"
-          @click="handleSubmit"
-          >{{ $t('login.form.login') }}
+            type="primary"
+            class="login-form-btn"
+            :loading="loading"
+            @click="handleSubmit"
+        >{{ $t('login.form.login') }}
         </tiny-button>
       </tiny-form-item>
     </tiny-form>
@@ -54,133 +54,132 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, inject, reactive, ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { Modal, Notify } from '@opentiny/vue';
-  import { useI18n } from 'vue-i18n';
-  import { useUserStore } from '@/store';
-  import useLoading from '@/hooks/loading';
-  import { encrypt } from '@/utils/jsencrypt';
+import {computed, inject, reactive, ref} from 'vue';
+import {useRouter} from 'vue-router';
+import {Modal, Notify} from '@opentiny/vue';
+import {useI18n} from 'vue-i18n';
+import {useUserStore} from '@/store';
+import useLoading from '@/hooks/loading';
+import {encrypt} from '@/utils/jsencrypt';
 
-  const router = useRouter();
-  const { t } = useI18n();
-  const { loading, setLoading } = useLoading();
-  const userStore = useUserStore();
-  const loginFormInfo = ref();
+const router = useRouter();
+const {t} = useI18n();
+const {loading, setLoading} = useLoading();
+const userStore = useUserStore();
+const loginFormInfo = ref();
 
-  const rules = computed(() => {
-    return {
-      username: [
-        {
-          required: true,
-          message: t('login.form.userName.errMsg'),
-          trigger: 'change',
-        },
-      ],
-      password: [
-        {
-          required: true,
-          message: t('login.form.password.errMsg'),
-          trigger: 'change',
-        },
-      ],
-    };
-  });
-
-  const loginInfo = reactive({
-    username: '',
-    password: '',
-    rememberPassword: false,
-  });
-
-  // 切换模式
-  const loginHandle: any = inject('loginHandle');
-  const typeChange = () => {
-    loginHandle(true);
+const rules = computed(() => {
+  return {
+    username: [
+      {
+        required: true,
+        message: t('login.form.userName.errMsg'),
+        trigger: 'change',
+      },
+    ],
+    password: [
+      {
+        required: true,
+        message: t('login.form.password.errMsg'),
+        trigger: 'change',
+      },
+    ],
   };
+});
 
-  function handleSubmit() {
-    loginFormInfo.value?.validate(async (valid: boolean) => {
-      if (!valid) {
-        return;
-      }
-      setLoading(true);
+const loginInfo = reactive({
+  username: '',
+  password: '',
+  rememberPassword: false,
+});
 
-      try {
-        await userStore.login({
-          loginAccount: loginInfo.username,
-          loginPassword: encrypt(loginInfo.password),
-        });
-        Modal.message({
-          message: t('login.form.login.success'),
-          status: 'success',
-        });
-        const { redirect, ...othersQuery } = router.currentRoute.value.query;
-        router.push({
-          name: (redirect as string) || 'Home',
-          query: {
-            ...othersQuery,
-          },
-        });
-      } catch (err) {
-        Notify({
-          type: 'error',
-          title: t('login.tip.right'),
-          message: t('login.tip.info'),
-          position: 'top-right',
-          duration: 2000,
-          customClass: 'my-custom-cls',
-        });
-      } finally {
-        setLoading(false);
-      }
-    });
-  }
+// 切换模式
+const loginHandle: any = inject('loginHandle');
+const typeChange = () => {
+  loginHandle(true);
+};
+
+function handleSubmit() {
+  loginFormInfo.value?.validate(async (valid: boolean) => {
+    if (!valid) {
+      return;
+    }
+    setLoading(true);
+    try {
+      await userStore.login({
+        loginAccount: loginInfo.username,
+        loginPassword: encrypt(loginInfo.password),
+      });
+      Modal.message({
+        message: t('login.form.login.success'),
+        status: 'success',
+      });
+      const {redirect, ...othersQuery} = router.currentRoute.value.query;
+      await router.push({
+        path: (redirect as string) || `${import.meta.env.VITE_CONTEXT}large-model/chat`,
+        query: {
+          ...othersQuery,
+        },
+      });
+    } catch (err) {
+      Notify({
+        type: 'error',
+        title: t('login.tip.right'),
+        message: t('login.tip.info'),
+        position: 'top-right',
+        duration: 2000,
+        customClass: 'my-custom-cls',
+      });
+    } finally {
+      setLoading(false);
+    }
+  });
+}
 </script>
 
 <style lang="less" scoped>
-  .login-form-container {
-    margin-top: 5%;
+.login-form-container {
+  margin-top: 5%;
+}
+
+.login-form {
+  margin-left: 6%;
+
+  .tiny-form-item {
+    margin-bottom: 20px;
   }
 
-  .login-form {
-    margin-left: 6%;
+  &-container {
+    width: 320px;
+  }
 
-    .tiny-form-item {
-      margin-bottom: 20px;
-    }
+  &-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 12px;
+  }
+
+  &-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.divide-line {
+  margin: 0 5px;
+}
+
+// responsive
+@media (max-width: @screen-ms) {
+  .login-form {
+    margin-left: 5%;
 
     &-container {
-      width: 320px;
-    }
-
-    &-options {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      font-size: 12px;
-    }
-
-    &-btn {
-      display: block;
-      width: 100%;
-      max-width: 100%;
+      width: 240px;
     }
   }
-
-  .divide-line {
-    margin: 0 5px;
-  }
-
-  // responsive
-  @media (max-width: @screen-ms) {
-    .login-form {
-      margin-left: 5%;
-
-      &-container {
-        width: 240px;
-      }
-    }
-  }
+}
 </style>

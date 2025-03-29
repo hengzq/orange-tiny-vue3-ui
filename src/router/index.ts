@@ -17,7 +17,8 @@ const router = createRouter({
         },
         {
             path: '/' + import.meta.env.VITE_CONTEXT,
-            redirect: `${import.meta.env.VITE_CONTEXT}board/home`,
+            redirect: `${import.meta.env.VITE_CONTEXT}large-model/chat`,
+            // redirect: `${import.meta.env.VITE_CONTEXT}board/home`,
         },
         // 线上地址
         {

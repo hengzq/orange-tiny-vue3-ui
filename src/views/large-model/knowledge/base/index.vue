@@ -130,7 +130,7 @@ const handleFormReset = () => {
 
 const toolbarButtons = reactive<any[]>([
   {
-    permission: 'orange-ai:model:add',
+    permission: 'orange-ai:knowledge:add',
     code: 'insert',
     name: '新增',
   },
@@ -151,11 +151,11 @@ const options = ref<any[]>([
     label: 'opt.view',
   },
   {
-    permission: 'orange-ai:model:update',
+    permission: 'orange-ai:knowledge:update',
     label: 'opt.edit',
   },
   {
-    permission: 'orange-ai:model:delete',
+    permission: 'orange-ai:knowledge:delete',
     label: 'opt.delete',
   },
 ]);

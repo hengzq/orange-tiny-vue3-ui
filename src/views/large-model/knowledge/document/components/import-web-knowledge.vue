@@ -4,7 +4,7 @@
     <tiny-steps line vertical style="padding-bottom: 30px" :data="data" :active="active" @click="advancedClick"></tiny-steps>
 
     <tiny-form
-        v-if="active == 0" ref="webFormDataRef" label-position="left" :rules="webFormDataRules" :model="webFormData" label-width="80px"
+        v-if="active == 0" ref="webFormDataRef"  :rules="webFormDataRules" :model="webFormData" label-width="80px"
         validate-position="bottom" validate-type="text">
       <tiny-form-item :label="$t('large-model.knowledge.document.webUrl')" prop="url">
         <tiny-input v-model="webFormData.url" :placeholder="$t('large-model.knowledge.document.webUrl.placeholder')"/>
@@ -12,7 +12,7 @@
     </tiny-form>
 
     <tiny-form
-        v-if="active == 1" ref="formDataRef" label-position="left" :rules="formDataRules" :model="formData" label-width="0"
+        v-if="active == 1" ref="formDataRef"  :rules="formDataRules" :model="formData" label-width="0"
         validate-position="bottom" validate-type="text">
       <tiny-form-item prop="fileName">
         <tiny-input v-model="formData.fileName"/>

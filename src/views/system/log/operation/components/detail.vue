@@ -8,7 +8,7 @@
   >
     <tiny-form
       class="tiny-drawer-body-form"
-      label-position="left"
+
       :display-only="true"
       :model="formData"
       label-width="110px"

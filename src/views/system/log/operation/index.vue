@@ -116,7 +116,7 @@
           align="center"
           width="200"
       />
-      <tiny-grid-column field="resourceName" :title="$t('system.log.operation.resourceName')"/>
+      <tiny-grid-column field="resourceName" :title="$t('system.log.operation.resourceName')" show-overflow/>
       <tiny-grid-column :title="$t('system.log.operation.requestMethod')" width="90">
         <template #default="data">
           <dict-tag
@@ -251,10 +251,10 @@ const handleFormReset = () => {
 };
 
 const toolbarButtons = reactive([
-  {
-    code: 'clear',
-    name: '清空',
-  },
+  // {
+  //   code: 'clear',
+  //   name: '清空',
+  // },
   {
     code: 'export',
     name: '导出',

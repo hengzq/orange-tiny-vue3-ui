@@ -30,12 +30,11 @@
           <tiny-grid
               ref="gridTableRef"
               :data="tableData"
-              max-height="90%"
               :show-header="false"
               highlight-current-row
               @current-change="handleCurrentChange"
           >
-            <tiny-grid-column field="name"/>
+            <tiny-grid-column field="name" show-overflow/>
             <tiny-grid-column v-if="proxy.$hasPermission(options).length !== 0" :title="$t('table.operations')" align="center" width="60">
               <template #default="scope">
                 <tiny-action-menu :max-show-num="0" :options="options" @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
@@ -123,7 +122,7 @@ const queryChatSession = (
     selectedFirst = false,
 ) => {
   const queryParams = {
-    'source': 'CHAT_EXPERIENCE',
+    'sessionType': 'CHAT_EXPERIENCE',
     ...params,
   };
   SessionApi.listSession(queryParams).then((res) => {

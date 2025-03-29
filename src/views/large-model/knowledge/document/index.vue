@@ -30,6 +30,15 @@
           {{ formatFileSize(scope.row.fileSize) }}
         </template>
       </tiny-grid-column>
+      <tiny-grid-column field="fileStatus" :title="$t('large-model.knowledge.document.fileStatus')" align="center" width="120">
+        <template #default="scope">
+          <icon-loading-shadow v-if="['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(scope.row.fileStatus)"
+                               style="fill: blue;  margin-right: 6px"/>
+          <icon-operationfaild-l v-else-if="['PARSE_FAILED','EMB_FAILED'].includes(scope.row.fileStatus)" style="fill: red; margin-right: 6px"/>
+          <icon-successful v-else style="fill: green; margin-right: 6px"/>
+          <dict-tag :value="scope.row.fileStatus" :options="proxy.$dict.getDictData('ai_knowledge_doc_status')"/>
+        </template>
+      </tiny-grid-column>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
       <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center"/>
       <tiny-grid-column
@@ -55,22 +64,26 @@
   </div>
 
   <edit-form ref="editFormRef" @ok="handleFormQuery"></edit-form>
-  <segment-index ref="segmentIndexRef" @ok="handleFormQuery"></segment-index>
+  <slice-index ref="segmentIndexRef" @ok="handleFormQuery"></slice-index>
   <import-web-knowledge ref="importWebKnowledgeRef" @ok="handleFormQuery"></import-web-knowledge>
   <import-file-knowledge ref="importFileKnowledgeRef" @ok="handleFormQuery"></import-file-knowledge>
 </template>
 
 <script lang="ts" setup>
-import {formatFileSize} from '@/utils/ format';
+import {formatFileSize} from '@/utils/format';
+import {IconSuccessful, IconLoadingShadow, IconOperationfaildL} from '@opentiny/vue-icon'
 
 import * as KnowledgeDocumentApi from '@/api/large-model/knowledge-document';
-import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
+import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
 import ImportWebKnowledge from './components/import-web-knowledge.vue';
 import ImportFileKnowledge from './components/import-file-knowledge.vue';
 import EditForm from './components/edit-form.vue';
-import SegmentIndex from './components/segment-index.vue';
+import SliceIndex from './components/slice-index.vue';
 
 const {proxy} = getCurrentInstance() as any;
+const iconLoadingShadow = IconLoadingShadow();
+const iconSuccessful = IconSuccessful();
+const iconOperationfaildL = IconOperationfaildL();
 
 const pagerConfig = reactive({
   attrs: {
@@ -107,12 +120,12 @@ const handleFormReset = () => {
 
 const toolbarButtons = reactive<any[]>([
   {
-    permission: 'orange-ai:model:add',
+    permission: 'orange-ai:knowledge-doc:add-text-to-knowledge',
     code: 'import-web-knowledge',
     name: '从网页导入',
   },
   {
-    permission: 'orange-ai:model:add',
+    permission: 'orange-ai:knowledge-doc:batch-add-document-and-slice',
     code: 'import-file-knowledge',
     name: '本地文档导入',
   },
@@ -139,7 +152,7 @@ const options = ref<any[]>([
     label: 'large-model.knowledge.document.segment',
   },
   {
-    permission: 'orange-ai:model:delete',
+    permission: 'orange-ai:knowledge-doc:delete',
     label: 'opt.delete',
   },
 ]);
@@ -191,6 +204,8 @@ const fetchTableData = reactive({
   },
 });
 
+const refreshTimer = ref();
+
 async function getPageData(
     params: KnowledgeDocumentApi.KnowledgeDocumentPageParam = {
       pageNo: 1,
@@ -203,8 +218,19 @@ async function getPageData(
   };
   state.loading = true;
   try {
+    if (refreshTimer.value) {
+      clearTimeout(refreshTimer.value)
+      refreshTimer.value = null
+    }
     const {data} = await KnowledgeDocumentApi.pageKnowledgeDocument(queryParams);
     const {records, total} = data;
+    const loadingFileStatus = records.filter((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus && ['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(item.fileStatus))
+        .map((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus) as string[];
+    if (loadingFileStatus.length > 0) {
+      refreshTimer.value = setTimeout(() => {
+        handleFormQuery()
+      }, 5000)
+    }
     return {
       result: records,
       page: {total},
@@ -213,4 +239,6 @@ async function getPageData(
     state.loading = false;
   }
 }
+
+
 </script>

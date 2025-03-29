@@ -9,7 +9,7 @@
       <tiny-form
           ref="formDataRef"
           class="tiny-drawer-body-form"
-          label-position="left"
+
           :rules="formDataRules"
           :model="formData"
           label-width="110px"

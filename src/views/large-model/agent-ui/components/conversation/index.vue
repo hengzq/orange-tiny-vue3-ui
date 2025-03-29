@@ -24,6 +24,7 @@
 import SessionMessageIndex from '@/components/session-message/index.vue';
 import {getToken} from "@/utils/auth";
 import * as AgentApi from "@/api/large-model/agent";
+import * as ChatApi from "@/api/large-model/chat";
 import {fetchEventSource} from "@microsoft/fetch-event-source";
 import {MdEditor} from "md-editor-v3";
 import {defineProps, PropType, Ref, ref} from "vue";
@@ -74,12 +75,13 @@ const sendMessageStream = async () => {
   });
   const conversationParam = {
     ...formData.value,
-    agentId: props.agent.id
+    agentId: props.agent.id,
+    'sessionType': 'AGENT'
   };
   formData.value.prompt = '';
   let refreshed = false;
   await fetchEventSource(
-      `${VITE_API_BASE_URL}${AgentApi.CONVERSATION_STREAM_URL}`,
+      `${VITE_API_BASE_URL}${ChatApi.COMPLETIONS_URL}`,
       {
         method: 'POST',
         headers: {

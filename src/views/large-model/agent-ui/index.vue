@@ -13,7 +13,7 @@
           <tiny-button type="primary" class="session-btn" @click="addSession"> 新建对话</tiny-button>
           <tiny-grid ref="gridTableRef" :data="sessionList"
                      :show-header="false" max-height="100%" highlight-current-row @current-change="handleCurrentChange">
-            <tiny-grid-column field="name"/>
+            <tiny-grid-column field="name" show-overflow/>
           </tiny-grid>
         </tiny-layout>
       </template>

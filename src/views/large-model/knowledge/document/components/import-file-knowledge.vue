@@ -4,7 +4,7 @@
     <tiny-steps line vertical style="padding-bottom: 30px" :data="stepData" :active="active"></tiny-steps>
 
     <tiny-form
-        v-if="active == 0" ref="webFormDataRef" label-position="left" label-width="80px"
+        v-if="active == 0" ref="webFormDataRef" label-width="80px"
         validate-position="bottom" validate-type="text">
       <tiny-form-item prop="url">
         <tiny-file-upload :http-request="uploadHttpRequest" :file-list="fileList" list-type="saas" :before-remove="beforeRemoveFile">
@@ -22,7 +22,7 @@
     <tiny-row v-if="active == 1">
       <tiny-col :span="4" style="padding-right: 20px">
         <tiny-form
-            ref="formDataRef" label-position="left" :rules="formDataRules" label-width="110px" :model="formData" validate-position="bottom"
+            ref="formDataRef" :rules="formDataRules" label-width="110px" :model="formData" validate-position="bottom"
             validate-type="text">
           <tiny-form-item :label="$t('large-model.knowledge.document.sliceIdentifierList')" prop="fileName">
             <tiny-select
@@ -33,10 +33,12 @@
                   :value="item.dictValue"/>
             </tiny-select>
           </tiny-form-item>
+          <tiny-form-item align="right">
+            <tiny-button type="primary" plain @click="splitDocument"> 生成预览</tiny-button>
+          </tiny-form-item>
         </tiny-form>
       </tiny-col>
       <tiny-col :span="8">
-
         <tiny-tabs v-model="activeName2" separator size="large">
           <tiny-tab-item
               v-for="(item, index) in knowledgeDocumentSliceList" :key="index" :title="item.fileInfo.fileName"
@@ -45,10 +47,7 @@
               {{ segment.content }}
             </tiny-card>
           </tiny-tab-item>
-
         </tiny-tabs>
-
-
       </tiny-col>
     </tiny-row>
 
@@ -69,7 +68,6 @@ import * as KnowledgeDocumentApi from "@/api/large-model/knowledge-document";
 import {KnowledgeDocumentSlice} from "@/api/large-model/knowledge-document";
 import {getCurrentInstance, reactive, Ref, ref} from 'vue';
 import * as ObjectApi from "@/api/system/storage/object";
-import {number} from "fp-ts";
 
 const emit = defineEmits(['ok']);
 const {proxy} = getCurrentInstance() as any;
@@ -113,15 +111,20 @@ const activeName2 = ref('')
 
 const knowledgeDocumentSliceList: Ref<KnowledgeDocumentApi.DocumentInfo[]> = ref([])
 const next = () => {
+  splitDocument()
+  // 下一步
+  active.value += 1
+}
+
+const splitDocument = () => {
   KnowledgeDocumentApi.knowledgeDocumentSplit({
     "fileList": fileList.value
   }).then((res) => {
     knowledgeDocumentSliceList.value = res.data
     activeName2.value = res.data[0].fileInfo.fileName
   })
-  // 下一步
-  active.value += 1
 }
+
 
 const formData = ref<KnowledgeDocumentApi.KnowledgeDocumentSlice>({});
 const formDataRules = {

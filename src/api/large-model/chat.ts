@@ -2,6 +2,10 @@ const BASE_URL = '/orange-ai/v1.0/text-to-image';
 
 export const CONVERSATION_STREAM_URL =
   '/orange-ai/v1.0/chat/conversation-stream';
+
+export const COMPLETIONS_URL =
+    '/orange-ai/v1.0/chat/completions';
+// /orange-ai/v1.0/chat/completions
 //
 // export function generateImage(params: TextToImageVO) {
 //   return axios.post(BASE_URL.concat('/generate'), params);

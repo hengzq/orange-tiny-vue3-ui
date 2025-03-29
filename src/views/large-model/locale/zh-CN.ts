@@ -13,6 +13,7 @@ export default {
     'large-model.model.description': '模型描述',
     'large-model.model.description.placeholder': '请输入模型信息',
     'large-model.model.llm': '大模型',
+    'large-model.model.config.temperature': '温度系数',
 
     'large-model.image.prompt': '图片描述(Prompt)',
     'large-model.image.prompt.placeholder': '请输入图片描述',
@@ -42,6 +43,7 @@ export default {
     'large-model.knowledge.document.slice': '文档切片 ',
     'large-model.knowledge.document.sliceIdentifierList': '分段标识符 ',
     'large-model.knowledge.document.sliceIdentifierList.placeholder': '请选择分段标识符 ',
+    'large-model.knowledge.document.fileStatus': '文件状态 ',
 
     'large-model.agent.opt.demonstration': '演示',
 
@@ -59,8 +61,8 @@ export default {
     'large-model.session.opt.messages': '会话记录',
 
     'large-model.session.modelId': '会话模型',
-    'large-model.session.source': '会话来源',
-    'large-model.session.source.placeholder': '请选择会话来源',
+    'large-model.session.sessionType': '会话来源',
+    'large-model.session.sessionType.placeholder': '请选择会话来源',
     'large-model.session.name': '会话名称',
     'large-model.session.name.placeholder': '请输入会话名称',
 };

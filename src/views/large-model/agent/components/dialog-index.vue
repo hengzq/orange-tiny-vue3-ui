@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="  border: 1px solid #e6e6e6;">
     <session-message-index :message-list="chatList" :show-tool="false" class="session-message"/>
     <div class="footer">
       <md-editor
@@ -152,7 +152,7 @@ defineExpose({});
   border-radius: 20px;
   background-color: #ffffff;
   padding: 0 15px 10px 0;
-
+  margin-bottom: 10px;
   .editor {
     height: calc(100% - 30px);
     border-radius: 20px;
@@ -162,10 +162,11 @@ defineExpose({});
   .tools {
     display: flex;
     justify-content: flex-end;
-    height: 35px;
-    line-height: 35px;
+    height: 30px;
+    line-height: 30px;
 
     .btn-send {
+      width: 30px;
       display: grid;
       place-items: center;
       background-color: #356bfd;
