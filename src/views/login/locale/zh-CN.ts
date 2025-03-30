@@ -9,8 +9,8 @@ export default {
   'login.form.mailpassword2.errMsg': '确认密码不能为空',
   'login.form.login.errMsg': '登录出错，轻刷新重试',
   'login.form.login.success': '欢迎使用',
-  'login.form.userName.placeholder': '账号:orange',
-  'login.form.password.placeholder': '密码:hengzq.cn',
+  'login.form.userName.placeholder': '请输入账号',
+  'login.form.password.placeholder': '请输入密码',
   'login.form.mailName.placeholder': "邮箱名：123{'@'}example.com",
   'login.form.mailpassword.placeholder': '密码：admin',
   'login.form.registerMail.placeholder': '注册邮箱：',
@@ -28,9 +28,9 @@ export default {
   'login.form.passwordInput': '密码:',
   'login.form.confirmPassword': '确认密码:',
   'login.form.checkUsername':
-    "字母、数字、下划线、短线、点号{'@'}字母、数字、短线",
+      "字母、数字、下划线、短线、点号{'@'}字母、数字、短线",
   'login.form.checkPassword':
-    '最少八个字符，至少包含一个大写字母，一个小写字母和一个数字',
+      '最少八个字符，至少包含一个大写字母，一个小写字母和一个数字',
   // 'login.form.confirmPassword': '密码输入不一致',
 
   'login.register.form.username': '登录账号',
@@ -47,7 +47,7 @@ export default {
   'login.banner.slogan3': '接入可视化增强工具AUX',
   'login.banner.subSlogan3': '实现灵活的区块式开发',
   'login.icon.language': '语言',
-  'login.tip.info': '用户名：orange，密码：hengzq.cn',
+  'login.tip.info': '用户名：admin，密码：hengzq.cn',
   'login.tip.mail': "用户名：orange{'@'}example.com，密码：hengzq.cn",
   'login.tip.right': '请输入正确的用户名密码',
   'login.main.text': 'Orange Cloud 中后台前端解决方案',
