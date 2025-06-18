@@ -42,8 +42,8 @@
           <tiny-tooltip type="info" content="点赞" placement="top">
             <tiny-button type="text" @click="toRate(item, 'THUMBS_UP')">
               <svg-icon
-                  name="system-good" width="18" height="18"
-                  :color="
+                name="system-good" width="18" height="18"
+                :color="
                     item.rating === 'THUMBS_UP'
                       ? 'var(--ti-button-primary-normal-border-color)'
                       : '#3f3f3f'
@@ -54,8 +54,8 @@
           <tiny-tooltip type="info" content="点踩" placement="top">
             <tiny-button type="text" @click="toRate(item, 'THUMBS_DOWN')">
               <svg-icon
-                  name="system-bad" width="18" height="18"
-                  :color="
+                name="system-bad" width="18" height="18"
+                :color="
                     item.rating === 'THUMBS_DOWN'
                       ? 'var(--ti-button-primary-normal-border-color)'
                       : '#3f3f3f'
@@ -117,14 +117,14 @@ const props = defineProps({
   flex-direction: row;
 
   .md-editor {
-    background-color: #f7f8fc;
+    background-color: var(--tv-color-bg);
     border-radius: 10px;
   }
 }
 
 .answer {
   .answer-content {
-    background-color: #f7f8fc;
+    background-color: var(--tv-color-bg);
     border-radius: 10px;
     padding-right: 10px;
   }
@@ -139,7 +139,7 @@ const props = defineProps({
   }
 
   .md-editor {
-    background-color: #f7f8fc;
+    background-color: var(--tv-color-bg);
     border-radius: 10px;
   }
 

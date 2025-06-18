@@ -1,31 +1,31 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-type.name')">
             <tiny-input
-                v-model="filterOptions.nameLike"
-                clearable
-                :placeholder="$t('system.dict-type.name.placeholder')"
+              v-model="filterOptions.nameLike"
+              clearable
+              :placeholder="$t('system.dict-type.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-type.dictType')">
             <tiny-input
-                v-model="filterOptions.dictType"
-                clearable
-                :placeholder="$t('system.dict-type.dictType.placeholder')"
+              v-model="filterOptions.dictType"
+              clearable
+              :placeholder="$t('system.dict-type.dictType.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
+        <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery">
             {{ $t('opt.search') }}
           </tiny-button>
@@ -37,70 +37,70 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar
-            :buttons="proxy.$hasPermission(toolbarButtons)"
-            refresh
-            full-screen
+          :buttons="proxy.$hasPermission(toolbarButtons)"
+          refresh
+          full-screen
         />
       </template>
       <tiny-grid-column field="name" :title="$t('system.dict-type.name')"/>
       <tiny-grid-column field="dictType" :title="$t('system.dict-type.dictType')"/>
       <tiny-grid-column
-          field="enabled"
-          :title="$t('attribute.enabled.status')"
-          align="center"
-          width="90"
+        field="enabled"
+        :title="$t('attribute.enabled.status')"
+        align="center"
+        width="90"
       >
         <template #default="scope">
           <dict-tag
-              :value="scope.row.enabled"
-              :options="
+            :value="scope.row.enabled"
+            :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)
             "
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="preset"
-          :title="$t('attribute.preset.status')"
-          align="center"
-          width="80"
+        field="preset"
+        :title="$t('attribute.preset.status')"
+        align="center"
+        width="80"
       >
         <template #default="scope">
           <dict-tag
-              :value="scope.row.preset"
-              :options="
+            :value="scope.row.preset"
+            :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_PRESET_STATUS)
             "
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="description"
-          show-overflow
-          :title="$t('attribute.description')"
-          width="260"
+        field="description"
+        show-overflow
+        :title="$t('attribute.description')"
+        width="260"
       />
       <tiny-grid-column
-          field="updatedAt"
-          :title="$t('attribute.updatedAt')"
-          align="center"
-          width="170"
+        field="updatedAt"
+        :title="$t('attribute.updatedAt')"
+        align="center"
+        width="170"
       />
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          :width="
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        :width="
           proxy.$hasPermission(options).length == 1
             ? 80
             : proxy.$hasPermission(options).length * 60
@@ -108,17 +108,17 @@
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="3"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -173,10 +173,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: DictTypeApi.DictTypePageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: DictTypeApi.DictTypePageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: DictTypeApi.DictTypePageParam = {
     ...filterOptions.value,
@@ -235,19 +235,19 @@ const optionsClick = (label: string, data: DictTypeApi.DictTypeVO) => {
 
 const handleDelete = (data: DictTypeApi.DictTypeVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除字典类型【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          DictTypeApi.deleteDictTypeById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({message: '删除成功', status: 'success'});
-          });
-        }
-      });
+    .confirm({
+      message: `确定要删除字典类型【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        DictTypeApi.deleteDictTypeById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({message: '删除成功', status: 'success'});
+        });
+      }
+    });
 };
 
 const handleFormQuery = () => {

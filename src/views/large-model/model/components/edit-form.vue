@@ -1,92 +1,89 @@
 <template>
   <tiny-drawer
-      :title="title"
-      :visible="visible"
-      :show-footer="true"
-      width="65%"
-      @close="onClose(false)"
+    :title="title"
+    :visible="visible"
+    :show-footer="true"
+    width="65%"
+    @close="onClose(false)"
   >
     <tiny-form
-        ref="formDataRef"
-        :rules="formDataRules"
-        :model="formData"
-        label-width="145px"
-        validate-position="bottom"
-        validate-type="text"
+      ref="formDataRef"
+      :rules="formDataRules"
+      :model="formData"
+      label-width="145px"
+      validate-position="bottom"
+      validate-type="text"
     >
       <tiny-row>
         <tiny-col :span="6">
+
+          <tiny-form-item :label="$t('large-model.model.name')" prop="name">
+            <tiny-input
+              v-model="formData.name"
+              :placeholder="$t('large-model.model.name.placeholder')"
+            ></tiny-input>
+          </tiny-form-item>
+
+        </tiny-col>
+        <tiny-col :span="6">
+
           <tiny-form-item
-              :label="$t('large-model.model.platform')"
-              prop="platform"
+            :label="$t('large-model.model.platform')"
+            prop="platform"
           >
             <tiny-select
-                v-model="formData.platform"
-                :disabled="isModify"
-                @change="changePlatform"
+              v-model="formData.platform"
+              :disabled="isModify"
+              @change="changePlatform"
             >
               <tiny-option
-                  v-for="item in platformList"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
+                v-for="item in platformList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code"
               >
               </tiny-option>
             </tiny-select>
           </tiny-form-item>
+
         </tiny-col>
+      </tiny-row>
+
+      <tiny-row>
         <tiny-col :span="6">
           <tiny-form-item :label="$t('large-model.model.type')" prop="modelType">
             <tiny-select v-model="formData.modelType" :disabled="isModify" @change="changeModelType">
               <tiny-option
-                  v-for="item in modelTypeList"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
+                v-for="item in modelTypeList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code"
               >
               </tiny-option>
             </tiny-select>
           </tiny-form-item>
         </tiny-col>
-      </tiny-row>
-
-      <tiny-row>
         <tiny-col :span="6">
           <tiny-form-item :label="$t('large-model.model.modelName')" prop="modelName">
             <tiny-select v-model="formData.modelName" :disabled="isModify">
-              <tiny-option
-                  v-for="item in modelList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-              >
-              </tiny-option>
+              <tiny-option v-for="item in modelList" :key="item" :label="item" :value="item"/>
             </tiny-select>
-
-          </tiny-form-item>
-        </tiny-col>
-        <tiny-col :span="6">
-          <tiny-form-item :label="$t('large-model.model.name')" prop="name">
-            <tiny-input
-                v-model="formData.name"
-                :placeholder="$t('large-model.model.name.placeholder')"
-            ></tiny-input>
           </tiny-form-item>
         </tiny-col>
       </tiny-row>
       <tiny-row>
         <tiny-col :span="6">
           <tiny-form-item
-              :label="$t('attribute.enabled.status')"
-              prop="enabled"
+            :label="$t('attribute.enabled.status')"
+            prop="enabled"
           >
             <tiny-radio
-                v-for="(item, index) in proxy.$dict.getDictData(
+              v-for="(item, index) in proxy.$dict.getDictData(
                 proxy.$dict.SYS_DATA_ENABLE_STATUS,
               )"
-                :key="index"
-                v-model="formData.enabled"
-                :label="item.dictValue == 'true'"
+              :key="index"
+              v-model="formData.enabled"
+              :label="item.dictValue == 'true'"
             >
               {{ item.dictLabel }}
             </tiny-radio>
@@ -99,18 +96,22 @@
         </tiny-col>
       </tiny-row>
       <tiny-row>
-        <tiny-col :span="6">
-          <tiny-form-item :label="$t('large-model.model.apiKey')" prop="apiKey">
-            <tiny-input v-model="formData.apiKey" :placeholder="$t('large-model.model.apiKey.placeholder')"/>
+        <tiny-col v-if="formData.platform && ['OLLAMA'].includes(formData.platform)" :span="6">
+          <tiny-form-item :label="$t('large-model.model.baseUrl')" prop="baseUrl">
+            <tiny-input v-model="formData.baseUrl" :placeholder="$t('large-model.model.baseUrl.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="6">
-
+        <tiny-col v-if="formData.platform && ['ALI_BAI_LIAN','DEEP_SEEK','ZHI_PU'].includes(formData.platform)" :span="6">
+          <tiny-form-item :label="$t('large-model.model.apiKey')" prop="apiKey">
+            <tiny-input
+              v-model="formData.apiKey" type="password" :placeholder="$t('large-model.model.apiKey.placeholder')" show-password
+              :disabled="isModify"/>
+          </tiny-form-item>
         </tiny-col>
       </tiny-row>
       <tiny-form-item
-          :label="$t('large-model.model.description')"
-          prop="description"
+        :label="$t('large-model.model.description')"
+        prop="description"
       >
         <md-editor v-model="formData.description" :preview="false"/>
       </tiny-form-item>
@@ -146,6 +147,8 @@ const formDataRules = {
   modelType: [{required: true, message: '模型类型不能为空', trigger: 'change'}],
   name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
   modelName: [{required: true, message: '模型编码不能为空', trigger: 'change'}],
+  apiKey: [{required: true, message: 'ApiKey 不能为空.', trigger: 'change'}],
+  baseUrl: [{required: true, message: '基础URL不能为空.', trigger: 'change'}],
 };
 
 const onSubmit = () => {
@@ -153,22 +156,22 @@ const onSubmit = () => {
     if (valid) {
       if (formData.value.id) {
         ModelApi.updateModelById(formData.value.id, toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '修改成功', status: 'success'});
-              onClose(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '修改成功', status: 'success'});
+            onClose(true);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         ModelApi.addModel(toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '创建成功', status: 'success'});
-              onClose(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '创建成功', status: 'success'});
+            onClose(true);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     }
   });
@@ -193,7 +196,7 @@ const queryPlatformList = () => {
 
 const changePlatform = (item: any) => {
   modelTypeList.value =
-      platformList.value.filter((p) => p.code === item)[0].modelTypes || [];
+    platformList.value.filter((p) => p.code === item)[0].modelTypes || [];
   if (formData.value.type && !isModify.value) {
     formData.value.type = '';
   }

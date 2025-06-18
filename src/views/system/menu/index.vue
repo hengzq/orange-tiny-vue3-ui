@@ -1,22 +1,22 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.menu.name')">
             <tiny-input
-                v-model="filterOptions.nameLike"
-                clearable
-                :placeholder="$t('system.menu.name.placeholder')"
+              v-model="filterOptions.nameLike"
+              clearable
+              :placeholder="$t('system.menu.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8">
+        <tiny-col :span="8" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery">
             {{ $t('opt.search') }}
           </tiny-button>
@@ -28,65 +28,65 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :data="tableData"
-        :loading="loading"
-        :tree-config="{ children: 'children' }"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :data="tableData"
+      :loading="loading"
+      :tree-config="{ children: 'children' }"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
       <tiny-grid-column
-          field="name"
-          :title="$t('system.menu.name')"
+        field="name"
+        :title="$t('system.menu.name')"
       />
       <tiny-grid-column
-          field="icon"
-          :title="$t('system.menu.icon')"
-          align="center"
-          width="80"
+        field="icon"
+        :title="$t('system.menu.icon')"
+        align="center"
+        width="80"
       >
         <template #default="data">
           <svg-icon :name="data.row.icon"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="permission"
-          :title="$t('system.menu.permission')"
+        field="permission"
+        :title="$t('system.menu.permission')"
       />
       <tiny-grid-column
-          field="path"
-          :title="$t('system.menu.path')"
-          show-overflow
+        field="path"
+        :title="$t('system.menu.path')"
+        show-overflow
       />
       <tiny-grid-column
-          field="preset"
-          :title="$t('attribute.preset.status')"
-          align="center"
-          width="80"
+        field="preset"
+        :title="$t('attribute.preset.status')"
+        align="center"
+        width="80"
       >
         <template #default="scope">
           <dict-tag
-              :value="scope.row.preset"
-              :options="
+            :value="scope.row.preset"
+            :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_PRESET_STATUS)
             "
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="hidden"
-          :title="$t('system.menu.hidden')"
-          align="center"
+        field="hidden"
+        :title="$t('system.menu.hidden')"
+        align="center"
       >
         <template #default="scope">
           <dict-tag
-              :value="scope.row.hidden"
-              :options="
+            :value="scope.row.hidden"
+            :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_HIDDEN_STATUS)
             "
           />
@@ -94,35 +94,35 @@
       </tiny-grid-column>
 
       <tiny-grid-column
-          field="sort"
-          :title="$t('attribute.sort')"
-          align="center"
-          width="90"
+        field="sort"
+        :title="$t('attribute.sort')"
+        align="center"
+        width="90"
       />
       <tiny-grid-column
-          field="updatedAt"
-          :title="$t('attribute.updatedAt')"
-          width="170"
+        field="updatedAt"
+        :title="$t('attribute.updatedAt')"
+        width="170"
       />
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          width="165"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        width="165"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="3"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -213,19 +213,19 @@ const optionsClick = (label: string, data: MenuApi.MenuVO) => {
 
 const handleDelete = (data: MenuApi.MenuVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除菜单【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          MenuApi.deleteMenuById(data.id).then(() => {
-            getAllData();
-            proxy.$modal.message({message: '删除成功', status: 'success'});
-          });
-        }
-      });
+    .confirm({
+      message: `确定要删除菜单【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        MenuApi.deleteMenuById(data.id).then(() => {
+          getAllData();
+          proxy.$modal.message({message: '删除成功', status: 'success'});
+        });
+      }
+    });
 };
 
 const handleFormQuery = () => {

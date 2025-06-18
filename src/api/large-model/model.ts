@@ -37,6 +37,7 @@ export interface ModelVO {
     modelName?: string;
     enabled?: boolean;
     sort?: number;
+    baseUrl?: string;
     apiKey?: string;
     description?: string;
 }

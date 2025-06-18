@@ -1,10 +1,11 @@
-const BASE_URL = '/orange-ai/v1.0/text-to-image';
+const BASE_URL = '/orange-ai/v1.0/chat';
 
 export const CONVERSATION_STREAM_URL =
-  '/orange-ai/v1.0/chat/conversation-stream';
+    '/orange-ai/v1.0/chat/conversation-stream';
 
 export const COMPLETIONS_URL =
     '/orange-ai/v1.0/chat/completions';
+export const AGENT_CONVERSATION_STREAM = BASE_URL.concat('/agent-conversation-stream');
 // /orange-ai/v1.0/chat/completions
 //
 // export function generateImage(params: TextToImageVO) {
@@ -19,8 +20,8 @@ export const COMPLETIONS_URL =
 //   return axios.post(BASE_URL.concat('/list'), params);
 // }
 
-export interface ConversationParam  {
-  modelId?: string;
-  prompt?: string;
-  sessionId?: string;
+export interface ConversationParam {
+    modelId?: string;
+    prompt?: string;
+    sessionId?: string;
 };

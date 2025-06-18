@@ -4,10 +4,12 @@ export default {
     'large-model.model.platform.placeholder': '请选择大模型供应商',
     'large-model.model.type': '模型类型',
     'large-model.model.type.placeholder': '请选择模型类型',
-    'large-model.model.name': '自定义模型名称',
+    'large-model.model.name': '模型名称',
     'large-model.model.name.placeholder': '请输入模型名称',
-    'large-model.model.modelName': '模型名称',
-    'large-model.model.modelName.placeholder': '请输入模型编码',
+    'large-model.model.modelName': '基础模型',
+    'large-model.model.modelName.placeholder': '请选择基础模型',
+    'large-model.model.baseUrl': 'API URL',
+    'large-model.model.baseUrl.placeholder': 'http://localhost:11434',
     'large-model.model.apiKey': 'API KEY',
     'large-model.model.apiKey.placeholder': '请输入API KEY',
     'large-model.model.description': '模型描述',
@@ -65,4 +67,12 @@ export default {
     'large-model.session.sessionType.placeholder': '请选择会话来源',
     'large-model.session.name': '会话名称',
     'large-model.session.name.placeholder': '请输入会话名称',
+
+
+    'large-model.mcp-server.name': '服务名称',
+    'large-model.mcp-server.name.placeholder': '请输入服务名称',
+    'large-model.mcp-server.transportProtocol': '传输协议',
+
+    'large-model.mcp-server.connectionUrl': '连接地址',
+    'large-model.mcp-server.connectionUrl.placeholder': '请输入服务连接地址',
 };

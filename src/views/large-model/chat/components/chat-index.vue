@@ -1,9 +1,9 @@
 <template>
   <div class="chat-container">
     <div class="content">
-      <tiny-card v-if="sessionMessageList.length == 0" auto-width="100%">
+      <div v-if="sessionMessageList.length == 0">
         <h1>欢迎体验AI 聊天大模型</h1>
-        <p style="font-size: 13px; text-indent: 2em">
+        <p style=" text-indent: 2em;line-height: 25px;">
           在这里，您可以亲身体验来自阿里、智谱、OpenAI等顶尖供应商的聊天大模型在实际业务场景中的效果。
           我们的平台支持快速接入和便捷测试，让您轻松对比不同模型的表现，找到最适合您需求的解决方案。
         </p>
@@ -13,18 +13,18 @@
           </h4>
           <h4>2.请避免输入有违公序良俗的问题，模型可能无法回答不合适的问题.</h4>
         </tiny-alert>
-      </tiny-card>
+      </div>
       <session-message-index :message-list="sessionMessageList" :show-tool="false" class="session-message"/>
     </div>
 
     <div class="footer">
       <md-editor
-          v-model="formData.prompt"
-          :toolbars="toolbars"
-          :footers="footers"
-          :preview="false"
-          class="editor"
-          @keyup.enter="sendMessageStream"
+        v-model="formData.prompt"
+        :toolbars="toolbars"
+        :footers="footers"
+        :preview="false"
+        class="editor"
+        @keyup.enter="sendMessageStream"
       />
       <div class="tools">
         <tiny-button type="text" @click="sendMessageStream" class="btn-send">
@@ -103,33 +103,38 @@ const sendMessageStream = async () => {
   formData.value.prompt = '';
   let refreshed = false;
   await fetchEventSource(
-      `${VITE_API_BASE_URL}${ChatApi.CONVERSATION_STREAM_URL}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getToken()}`,
-        },
-        body: JSON.stringify(conversationParam),
-        openWhenHidden: true,
-        onmessage(event) {
-          if (!props.conversationParam.sessionId && !refreshed) {
-            refreshed = true;
-            emit('refresh', {}, true);
-          }
-          const {data} = JSON.parse(event.data);
-          let last = sessionMessageList.value[sessionMessageList.value.length - 1];
-          last.content += data.content;
-          last.generating = data.event !== 'FINISHED';
-          last.id = data.id
-        },
-        onclose() {
-          console.log('close stream.');
-        },
-        onerror(err) {
-          console.log(err);
-        },
+    `${VITE_API_BASE_URL}${ChatApi.CONVERSATION_STREAM_URL}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`,
       },
+      body: JSON.stringify(conversationParam),
+      openWhenHidden: true,
+      onmessage(event) {
+        if (!props.conversationParam.sessionId && !refreshed) {
+          refreshed = true;
+          emit('refresh', {}, true);
+        }
+        const {code, msg, data} = JSON.parse(event.data);
+        let last = sessionMessageList.value[sessionMessageList.value.length - 1];
+        if (code !== '200') {
+          last.content += msg;
+          last.generating = false;
+          return
+        }
+        last.content += data.content;
+        last.generating = data.event !== 'FINISHED';
+        last.id = data.id
+      },
+      onclose() {
+        console.log('close stream.');
+      },
+      onerror(err) {
+        console.log(err);
+      },
+    },
   );
 };
 
@@ -148,10 +153,10 @@ const toRate = (item: SessionMessageApi.SessionMessageVO, rating?: string) => {
     rating,
   } as SessionMessageApi.SessionMessageVO;
   SessionMessageApi.rateSessionMessageById(item.id, param)
-      .then((res) => {
-        proxy.$modal.message({message: '感谢支持', status: 'success'});
-        item.rating = rating;
-      })
+    .then((res) => {
+      proxy.$modal.message({message: '感谢支持', status: 'success'});
+      item.rating = rating;
+    })
 };
 
 const addChatSession = () => {
@@ -169,9 +174,12 @@ defineExpose({
   min-width: 30px !important;
 }
 
+
 .chat-container {
   width: 98%;
   margin: auto;
+  height: calc(100vh - 150px);
+  background-color: #ffffff;
 }
 
 .content {

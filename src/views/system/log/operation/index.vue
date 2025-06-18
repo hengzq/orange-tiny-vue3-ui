@@ -1,18 +1,18 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="80px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="80px"
+      class="filter-form"
     >
       <tiny-row>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.resourceName')">
             <tiny-input
-                v-model="filterOptions.resourceNameLike"
-                clearable
-                :placeholder="$t('system.log.operation.resourceName.placeholder')"
+              v-model="filterOptions.resourceNameLike"
+              clearable
+              :placeholder="$t('system.log.operation.resourceName.placeholder')"
             />
           </tiny-form-item>
         </tiny-col>
@@ -20,29 +20,29 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.operationTime')">
             <tiny-date-picker
-                v-model="operationTime"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="['00:00:00', '23:59:59']"
-                type="datetimerange"
-                clearable
-                value-format="yyyy-MM-dd HH:mm:ss"
-                @change="handleChange"
+              v-model="operationTime"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']"
+              type="datetimerange"
+              clearable
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="handleChange"
             ></tiny-date-picker>
           </tiny-form-item>
         </tiny-col>
         <tiny-col v-if="unfold" :span="4">
           <tiny-form-item :label="$t('system.log.operation.status')">
             <tiny-select
-                v-model="filterOptions.status"
-                :placeholder="$t('system.log.operation.status.placeholder')"
-                clearable
+              v-model="filterOptions.status"
+              :placeholder="$t('system.log.operation.status.placeholder')"
+              clearable
             >
               <tiny-option
-                  v-for="item in proxy.$dict.getDictData('sys_operation_status')"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue"
+                v-for="item in proxy.$dict.getDictData('sys_operation_status')"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
               >
               </tiny-option>
             </tiny-select>
@@ -57,8 +57,8 @@
           </tiny-button>
           <tiny-button type="text" style="color: #4e5969" @click="() => {unfold = true;}">
             <svg-icon
-                name="system-chevron-down"
-                style="vertical-align: middle"
+              name="system-chevron-down"
+              style="vertical-align: middle"
             />
             展开
           </tiny-button>
@@ -68,9 +68,9 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.requestId')">
             <tiny-input
-                v-model="filterOptions.requestId"
-                clearable
-                :placeholder="$t('system.log.operation.requestId.placeholder')"
+              v-model="filterOptions.requestId"
+              clearable
+              :placeholder="$t('system.log.operation.requestId.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
@@ -82,10 +82,10 @@
             {{ $t('opt.reset') }}
           </tiny-button>
           <tiny-button
-              v-if="unfold"
-              type="text"
-              style="color: #4e5969"
-              @click="
+            v-if="unfold"
+            type="text"
+            style="color: #4e5969"
+            @click="
               () => {
                 unfold = false;
               }
@@ -99,29 +99,29 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen refresh/>
       </template>
       <tiny-grid-column
-          field="requestId"
-          :title="$t('system.log.operation.requestId')"
-          align="center"
-          width="200"
+        field="requestId"
+        :title="$t('system.log.operation.requestId')"
+        align="center"
+        width="200"
       />
       <tiny-grid-column field="resourceName" :title="$t('system.log.operation.resourceName')" show-overflow/>
       <tiny-grid-column :title="$t('system.log.operation.requestMethod')" width="90">
         <template #default="data">
           <dict-tag
-              :value="data.row.requestMethod"
-              :options="proxy.$dict.getDictData('sys_request_method')"
+            :value="data.row.requestMethod"
+            :options="proxy.$dict.getDictData('sys_request_method')"
           />
         </template>
       </tiny-grid-column>
@@ -133,10 +133,10 @@
       <tiny-grid-column field="userIp" :title="$t('system.log.operation.userIp')" width="120"/>
       <tiny-grid-column field="userLocation" :title="$t('system.log.operation.userLocation')" width="120"/>
       <tiny-grid-column
-          field="userName"
-          :title="$t('system.log.operation.userName')"
-          align="center"
-          width="110"
+        field="userName"
+        :title="$t('system.log.operation.userName')"
+        align="center"
+        width="110"
       />
       <tiny-grid-column field="status" :title="$t('system.log.operation.status')" align="center" width="90">
         <template #default="data">
@@ -203,10 +203,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: OperationLogApi.OperationLogPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: OperationLogApi.OperationLogPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: OperationLogApi.OperationLogPageParam = {
     ...filterOptions.value,
@@ -278,19 +278,19 @@ const toolbarButtonClickEvent = ({code}: any) => {
 
 const handleClear = () => {
   proxy.$modal
-      .confirm({
-        message: `确定清空所有操作日志吗？`,
-        maskClosable: true,
-        title: '系统提示',
-      })
-      .then((res: string) => {
-        if (res === 'confirm') {
-          // SystemRequest.recordOperation.clear().then(() => {
-          //   handleFormQuery()
-          //   proxy.$modal.message({ message: '清空成功', status: 'success' });
-          // })
-        }
-      });
+    .confirm({
+      message: `确定清空所有操作日志吗？`,
+      maskClosable: true,
+      title: '系统提示',
+    })
+    .then((res: string) => {
+      if (res === 'confirm') {
+        // SystemRequest.recordOperation.clear().then(() => {
+        //   handleFormQuery()
+        //   proxy.$modal.message({ message: '清空成功', status: 'success' });
+        // })
+      }
+    });
 };
 </script>
 

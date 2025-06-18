@@ -31,8 +31,8 @@
     </div>
     <div v-if="disTheme">
       <tiny-modal
-          v-model="disTheme" :lock-scroll="true" show-header show-footer :title="$t('theme.title.main')" mask-closable="true" height="922"
-          width="748">
+        v-model="disTheme" :lock-scroll="true" show-header show-footer :title="$t('theme.title.main')" mask-closable="true" height="922"
+        width="748">
         <template #default>
           <Theme/>
         </template>
@@ -44,12 +44,8 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, watch, onMounted} from 'vue';
-import {
-  Container as TinyContainer,
-  Layout as TinyLayout,
-  Modal as tinyModal,
-} from '@opentiny/vue';
+import {onMounted, ref, watch} from 'vue';
+import {Container as TinyContainer, Layout as TinyLayout, Modal as tinyModal,} from '@opentiny/vue';
 import TinyThemeTool from '@opentiny/vue-theme/theme-tool.js';
 import {useAppStore} from '@/store';
 // eslint-disable-next-line import/extensions
@@ -115,20 +111,10 @@ onMounted(() => {
   height: 100%;
 }
 
-.layout-navbar {
-  position: fixed;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  height: 60px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-}
-
 .menu-wrapper {
   width: inherit;
   height: 92vh;
-  margin-top: v-bind(top);
+  //margin-top: v-bind(top);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -144,19 +130,17 @@ onMounted(() => {
 
 .layout :deep(.tiny-container .tiny-container__aside) {
   z-index: 100;
-  background: #fff;
-  border-left: 1px solid #ccc;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+  border-left: 1px solid var(--o-border-line-1, #e8e8e8);
 }
 
 .layout :deep(.tiny-container .tiny-container__main) {
   //color: #ccc;
-  background-color: #f7f8fc;
+  background-color: var(--tv-color-bg);
 }
 
 .layout :deep(.layout-content) {
   height: 100%;
-  padding: 20px 20px 0;
+  padding: 15px 15px 0;
   overflow: hidden;
 }
 

@@ -3,12 +3,12 @@
     <session-message-index :message-list="sessionMessageList" :show-tool="false" class="session-message"/>
     <div class="dialog">
       <md-editor
-          v-model="formData.prompt"
-          :toolbars="toolbars"
-          :footers="footers"
-          :preview="false"
-          class="editor"
-          @keyup.enter="sendMessageStream"
+        v-model="formData.prompt"
+        :toolbars="toolbars"
+        :footers="footers"
+        :preview="false"
+        class="editor"
+        @keyup.enter="sendMessageStream"
       />
       <div class="tools">
         <tiny-button type="text" @click="sendMessageStream" class="btn-send">
@@ -55,6 +55,7 @@ const queryHistoryChatList = (sessId: string) => {
       sessionMessageList.value = res.data;
     });
   }
+  formData.value.sessionId = sessId
 };
 
 const formData = ref<AgentApi.ConversationParam>({});
@@ -81,43 +82,49 @@ const sendMessageStream = async () => {
   formData.value.prompt = '';
   let refreshed = false;
   await fetchEventSource(
-      `${VITE_API_BASE_URL}${ChatApi.COMPLETIONS_URL}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getToken()}`,
-        },
-        body: JSON.stringify(conversationParam),
-        openWhenHidden: true,
-        onmessage(event) {
-          // 刷新会话列表
-          if (!refreshed) {
-            refreshed = true;
-            emit('refresh', {});
-          }
-          const {data} = JSON.parse(event.data);
-          let last = sessionMessageList.value[sessionMessageList.value.length - 1];
-          last.content += data.content;
-          last.generating = data.event !== 'FINISHED';
-          formData.value.sessionId = data.sessionId
-        },
-        onclose() {
-          console.log('close stream.');
-        },
-        onerror(err) {
-          console.log(err);
-        },
+    `${VITE_API_BASE_URL}${ChatApi.AGENT_CONVERSATION_STREAM}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`,
       },
+      body: JSON.stringify(conversationParam),
+      openWhenHidden: true,
+      onmessage(event) {
+        // 刷新会话列表
+        if (!refreshed) {
+          refreshed = true;
+          emit('refresh', {});
+        }
+        const {code, msg, data} = JSON.parse(event.data);
+        let last = sessionMessageList.value[sessionMessageList.value.length - 1];
+        if (code !== '200') {
+          last.content += msg;
+          last.generating = false;
+          return
+        }
+        last.content += data.content;
+        last.generating = data.event !== 'FINISHED';
+        formData.value.sessionId = data.sessionId
+      },
+      onclose() {
+        console.log('close stream.');
+      },
+      onerror(err) {
+        console.log(err);
+      },
+    },
   );
 };
 
-const addSeeion = () => {
+const addSession = () => {
   sessionMessageList.value = []
+  formData.value = {}
 }
 
 defineExpose({
-  addSeeion,
+  addSession,
   queryHistoryChatList,
 });
 </script>

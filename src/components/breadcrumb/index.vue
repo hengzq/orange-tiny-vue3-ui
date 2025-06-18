@@ -1,5 +1,5 @@
 <template>
-  <tiny-breadcrumb class="container-breadcrumb">
+  <tiny-breadcrumb separator=">"  class="container-breadcrumb">
     <tiny-breadcrumb-item v-for="item in items" :key="item">
       {{ $t(item) }}
     </tiny-breadcrumb-item>

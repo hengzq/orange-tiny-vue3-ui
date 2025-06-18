@@ -5,9 +5,9 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-data.dictType')">
             <tiny-select
-                v-model="filterOptions.dictType"
-                :placeholder="$t('system.dict-data.dictType.placeholder')"
-                clearable
+              v-model="filterOptions.dictType"
+              :placeholder="$t('system.dict-data.dictType.placeholder')"
+              clearable
             >
               <tiny-option v-for="item in dictTypeOptions" :key="item.dictType" :label="item.name" :value="item.dictType"/>
             </tiny-select>
@@ -18,7 +18,7 @@
             <tiny-input v-model="filterOptions.dictLabelLike" clearable :placeholder="$t('system.dict-data.dictLabel.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
+        <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
@@ -26,13 +26,13 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" refresh full-screen/>
@@ -54,53 +54,53 @@
       <tiny-grid-column field="status" :title="$t('attribute.status')" align="center" width="80">
         <template #default="scope">
           <dict-tag
-              :value="scope.row.enabled"
-              :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"
+            :value="scope.row.enabled"
+            :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="presetFlag"
-          :title="$t('attribute.preset.status')"
-          align="center"
-          width="80"
+        field="presetFlag"
+        :title="$t('attribute.preset.status')"
+        align="center"
+        width="80"
       >
         <template #default="scope">
           <dict-tag :value="scope.row.preset" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_PRESET_STATUS)"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="description"
-          show-overflow
-          :title="$t('attribute.description')"
-          width="260"
+        field="description"
+        show-overflow
+        :title="$t('attribute.description')"
+        width="260"
       />
       <tiny-grid-column
-          field="createdAt"
-          :title="$t('attribute.createdAt')"
-          align="center"
-          width="170"
+        field="createdAt"
+        :title="$t('attribute.createdAt')"
+        align="center"
+        width="170"
       />
 
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          width="100"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        width="100"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="3"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
                   (data: any) => optionsClick(data.itemData.label, scope.row)
                 "
           >
             <template #item="{ data }">
                   <span
-                      v-if="data.label == 'opt.delete'"
-                      style="color: var(--button-delete-color)"
+                    v-if="data.label == 'opt.delete'"
+                    style="color: var(--button-delete-color)"
                   >
                     {{ $t(data.label) }}
                   </span>
@@ -166,10 +166,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: DictDataApi.DictDataPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: DictDataApi.DictDataPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: DictDataApi.DictDataPageParam = {
     ...filterOptions.value,
@@ -218,19 +218,19 @@ const optionsClick = (label: string, data: DictDataApi.DictDataVO) => {
 
 const handleDelete = (data: DictDataApi.DictDataVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除字典【${data.dictLabel}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          DictDataApi.deleteDictDataById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({message: '删除成功', status: 'success'});
-          });
-        }
-      });
+    .confirm({
+      message: `确定要删除字典【${data.dictLabel}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        DictDataApi.deleteDictDataById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({message: '删除成功', status: 'success'});
+        });
+      }
+    });
 };
 
 const handleFormQuery = () => {

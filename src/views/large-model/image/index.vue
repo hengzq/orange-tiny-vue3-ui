@@ -11,9 +11,9 @@
               <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
             </tiny-select>
           </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelCode">
-            <tiny-select v-model="formData.modelCode">
-              <tiny-option v-for="item in filterModelList" :key="item.code" :label="item.name" :value="item.code"/>
+          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
+            <tiny-select v-model="formData.modelId">
+              <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
             </tiny-select>
           </tiny-form-item>
           <tiny-form-item :label="$t('large-model.image.prompt')" prop="prompt">
@@ -117,7 +117,7 @@ const changePlatform = (item: any) => {
 const modelList: Ref<ModelApi.ModelVO[]> = ref([]);
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'TEXT_TO_IMAGE',
+    modelType: 'TEXT_TO_IMAGE',
     enabled: true,
   }).then((res) => {
     modelList.value = res.data;

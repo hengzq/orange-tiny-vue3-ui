@@ -16,7 +16,7 @@
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8">
+        <tiny-col :span="8"  class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery">
             {{ $t('opt.search') }}
           </tiny-button>

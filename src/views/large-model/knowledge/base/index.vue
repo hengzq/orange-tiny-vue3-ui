@@ -1,35 +1,40 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
-      <tiny-row :flex="true" justify="center">
-        <tiny-col :span="4">
+      <tiny-row :flex="true">
+        <tiny-col :span="7">
           <tiny-form-item :label="$t('large-model.knowledge.base.embeddingModelId')" prop="embeddingModelId">
             <tiny-cascader v-model="filterOptions.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
+        <tiny-col :span="7">
           <tiny-form-item :label="$t('large-model.knowledge.name')">
             <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8">
+        <tiny-col :span="7">
+          <tiny-form-item :label="$t('large-model.knowledge.name')">
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
+          </tiny-form-item>
+        </tiny-col>
+        <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
@@ -58,24 +63,24 @@
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
       <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="150"/>
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          :width="proxy.$hasPermission(options).length * 50"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        :width="proxy.$hasPermission(options).length * 50"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="3"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -206,22 +211,22 @@ queryPlatformList()
 
 const handleDelete = (data: KnowledgeApi.KnowledgeVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除知识库【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          KnowledgeApi.deleteKnowledgeById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除知识库【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        KnowledgeApi.deleteKnowledgeById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 
 const fetchTableData = reactive({
@@ -235,10 +240,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: KnowledgeApi.KnowledgePageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: KnowledgeApi.KnowledgePageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: KnowledgeApi.KnowledgePageParam = {
     ...filterOptions.value,

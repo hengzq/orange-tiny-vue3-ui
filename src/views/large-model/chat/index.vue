@@ -2,7 +2,8 @@
   <div class="container-list">
     <tiny-row>
       <tiny-col :span="3">
-        <tiny-form
+        <div class="left-form">
+          <tiny-form
             ref="formDataRef"
             class="tiny-drawer-body-form"
             label-position="top"
@@ -11,40 +12,42 @@
             validate-position="bottom"
             label-width="110px"
             validate-type="text"
-        >
-          <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
-            <tiny-select v-model="formData.platform" @change="changePlatform">
-              <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
-            </tiny-select>
-          </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
-            <tiny-select v-model="formData.modelId">
-              <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
-            </tiny-select>
-          </tiny-form-item>
-        </tiny-form>
-
-        <tiny-divider content-position="center">对话记录</tiny-divider>
-        <div class="chat-session">
-          <tiny-button class="chat-session-add" type="primary" @click="addChatSession">新加对话</tiny-button>
-          <tiny-grid
-              ref="gridTableRef"
-              :data="tableData"
-              :show-header="false"
-              highlight-current-row
-              @current-change="handleCurrentChange"
           >
-            <tiny-grid-column field="name" show-overflow/>
-            <tiny-grid-column v-if="proxy.$hasPermission(options).length !== 0" :title="$t('table.operations')" align="center" width="60">
-              <template #default="scope">
-                <tiny-action-menu :max-show-num="0" :options="options" @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
-                  <template #item="{ data }">
-                    <span> {{ $t(data.label) }} </span>
-                  </template>
-                </tiny-action-menu>
-              </template>
-            </tiny-grid-column>
-          </tiny-grid>
+            <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
+              <tiny-select v-model="formData.platform" @change="changePlatform">
+                <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
+              </tiny-select>
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
+              <tiny-select v-model="formData.modelId">
+                <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
+              </tiny-select>
+            </tiny-form-item>
+          </tiny-form>
+
+          <!--          <tiny-divider content-position="center">对话记录</tiny-divider>-->
+          <!--          <div class="chat-session">-->
+          <!--            <tiny-button class="chat-session-add" type="primary" @click="addChatSession">新加对话</tiny-button>-->
+          <!--            <tiny-grid-->
+          <!--              ref="gridTableRef"-->
+          <!--              :data="tableData"-->
+          <!--              :show-header="false"-->
+          <!--              highlight-current-row-->
+          <!--              max-height="100%"-->
+          <!--              @current-change="handleCurrentChange"-->
+          <!--            >-->
+          <!--              <tiny-grid-column field="name" show-overflow/>-->
+          <!--              <tiny-grid-column v-if="proxy.$hasPermission(options).length !== 0" :title="$t('table.operations')" align="center" width="60">-->
+          <!--                <template #default="scope">-->
+          <!--                  <tiny-action-menu :max-show-num="0" :options="options" @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">-->
+          <!--                    <template #item="{ data }">-->
+          <!--                      <span> {{ $t(data.label) }} </span>-->
+          <!--                    </template>-->
+          <!--                  </tiny-action-menu>-->
+          <!--                </template>-->
+          <!--              </tiny-grid-column>-->
+          <!--            </tiny-grid>-->
+          <!--          </div>-->
         </div>
       </tiny-col>
       <tiny-col :span="9">
@@ -118,8 +121,8 @@ const addChatSession = () => {
 const gridTableRef = ref('gridTableRef');
 const tableData: Ref<SessionApi.SessionVO[]> = ref([]);
 const queryChatSession = (
-    params: SessionApi.SessionListParam = {},
-    selectedFirst = false,
+  params: SessionApi.SessionListParam = {},
+  selectedFirst = false,
 ) => {
   const queryParams = {
     'sessionType': 'CHAT_EXPERIENCE',
@@ -163,22 +166,22 @@ const optionsClick = (label: string, data: SessionApi.SessionVO) => {
 
 const handleDelete = (data: SessionApi.SessionVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除回话【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          SessionApi.deleteSessionById(data.id).then(() => {
-            queryChatSession();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除回话【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        SessionApi.deleteSessionById(data.id).then(() => {
+          queryChatSession();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 const handleCurrentChange = ({row}) => {
   formData.value.sessionId = row.id;
@@ -195,9 +198,18 @@ const submitValidate = (callback: (arg?: boolean) => void,) => {
 </script>
 
 <style lang="less" scoped>
+:deep(.tiny-col) {
+  padding: 0;
+}
+
+.left-form {
+  background-color: #fff;
+  padding: 10px;
+  height: calc(100vh - 150px)
+}
+
 .chat-session {
   display: flex;
-  justify-content: center;
   flex-direction: column;
 }
 

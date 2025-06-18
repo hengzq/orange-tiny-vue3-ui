@@ -8,7 +8,7 @@
           </tiny-form-item>
         </tiny-col>
 
-        <tiny-col :span="8">
+        <tiny-col :span="8" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
@@ -16,14 +16,14 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        max-height="88%"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      max-height="88%"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" refresh full-screen/>
@@ -32,65 +32,65 @@
       <tiny-grid-column field="requestId" :title="$t('system.log.login.requestId')" align="center" width="180"/>
       <tiny-grid-column field="account" :title="$t('system.log.login.account')" align="center"/>
       <tiny-grid-column
-          field="userName"
-          :title="$t('system.log.login.userName')"
-          align="center"
-          width="110"
+        field="userName"
+        :title="$t('system.log.login.userName')"
+        align="center"
+        width="110"
       />
       <tiny-grid-column
-          field="userIp"
-          :title="$t('system.log.login.userIp')"
-          align="center"
-          width="120"
+        field="userIp"
+        :title="$t('system.log.login.userIp')"
+        align="center"
+        width="120"
       />
       <tiny-grid-column
-          field="userLocation"
-          :title="$t('system.log.operation.userLocation')"
-          align="center"
-          width="120"
+        field="userLocation"
+        :title="$t('system.log.operation.userLocation')"
+        align="center"
+        width="120"
       />
       <tiny-grid-column
-          field="status"
-          :title="$t('attribute.status')"
-          align="center"
-          width="80"
+        field="status"
+        :title="$t('attribute.status')"
+        align="center"
+        width="80"
       >
         <template #default="data">
           <dict-tag
-              :value="data.row.status"
-              :options="proxy.$dict.getDictData('sys_operation_status')"
+            :value="data.row.status"
+            :options="proxy.$dict.getDictData('sys_operation_status')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="type"
-          :title="$t('system.log.login.type')"
-          align="center"
-          width="80"
+        field="type"
+        :title="$t('system.log.login.type')"
+        align="center"
+        width="80"
       >
         <template #default="data">
           <dict-tag
-              :value="data.row.type"
-              :options="proxy.$dict.getDictData('sys_log_login_type')"
+            :value="data.row.type"
+            :options="proxy.$dict.getDictData('sys_log_login_type')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="loginTime"
-          :title="$t('system.log.login.loginTime')"
-          align="center"
-          width="170"
+        field="loginTime"
+        :title="$t('system.log.login.loginTime')"
+        align="center"
+        width="170"
       />
       <tiny-grid-column
-          field="userAgent"
-          show-overflow
-          :title="$t('system.log.login.userAgent')"
+        field="userAgent"
+        show-overflow
+        :title="$t('system.log.login.userAgent')"
       />
 
       <tiny-grid-column
-          :title="$t('table.operations')"
-          align="center"
-          width="100"
+        :title="$t('table.operations')"
+        align="center"
+        width="100"
       >
         <template #default="data">
           <tiny-button type="text" @click="handleDetail(data.row)">
@@ -144,10 +144,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: LoginLogApi.LoginLogPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: LoginLogApi.LoginLogPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: LoginLogApi.LoginLogPageParam = {
     ...filterOptions.value,
@@ -202,19 +202,19 @@ const toolbarButtonClickEvent = ({code}: any) => {
 
 const handleClear = () => {
   proxy.$modal
-      .confirm({
-        message: `确定清空所有登录日志吗？`,
-        maskClosable: true,
-        title: '系统提示',
-      })
-      .then((res: string) => {
-        if (res === 'confirm') {
-          // SystemRequest.recordLogin.clear().then(() => {
-          //   handleFormQuery();
-          //   proxy.$modal.message({ message: '清空成功', status: 'success' });
-          // });
-        }
-      });
+    .confirm({
+      message: `确定清空所有登录日志吗？`,
+      maskClosable: true,
+      title: '系统提示',
+    })
+    .then((res: string) => {
+      if (res === 'confirm') {
+        // SystemRequest.recordLogin.clear().then(() => {
+        //   handleFormQuery();
+        //   proxy.$modal.message({ message: '清空成功', status: 'success' });
+        // });
+      }
+    });
 };
 </script>
 

@@ -44,6 +44,12 @@ export default {
             id: 'Session',
             label: 'Session',
             component: () => import('@/views/large-model/session/index.vue'),
+        },
+        {
+            path: 'mcp-server',
+            id: 'McpServer',
+            label: 'McpServer',
+            component: () => import('@/views/large-model/mcp/server/index.vue'),
         }
     ],
 };

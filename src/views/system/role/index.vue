@@ -1,31 +1,31 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.role.name')">
             <tiny-input
-                v-model="filterOptions.nameLike"
-                clearable
-                :placeholder="$t('system.role.name.placeholder')"
+              v-model="filterOptions.nameLike"
+              clearable
+              :placeholder="$t('system.role.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.role.permission')">
             <tiny-input
-                v-model="filterOptions.permissionLike"
-                clearable
-                :placeholder="$t('system.role.permission.placeholder')"
+              v-model="filterOptions.permissionLike"
+              clearable
+              :placeholder="$t('system.role.permission.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
+        <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery">
             {{ $t('opt.search') }}
           </tiny-button>
@@ -37,84 +37,84 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar
-            :buttons="proxy.$hasPermission(toolbarButtons)"
-            refresh
-            full-screen
+          :buttons="proxy.$hasPermission(toolbarButtons)"
+          refresh
+          full-screen
         />
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
-          field="name"
-          :title="$t('system.role.name')"
-          align="center"
+        field="name"
+        :title="$t('system.role.name')"
+        align="center"
       />
       <tiny-grid-column
-          field="permission"
-          :title="$t('system.role.permission')"
-          align="center"
+        field="permission"
+        :title="$t('system.role.permission')"
+        align="center"
       />
       <tiny-grid-column
-          field="enabled"
-          :title="$t('attribute.enabled.status')"
-          align="center"
-          width="90"
+        field="enabled"
+        :title="$t('attribute.enabled.status')"
+        align="center"
+        width="90"
       >
         <template #default="scope">
           <dict-tag
-              :value="scope.row.enabled"
-              :options="
+            :value="scope.row.enabled"
+            :options="
               proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)
             "
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="sort"
-          :title="$t('attribute.sort')"
-          align="center"
+        field="sort"
+        :title="$t('attribute.sort')"
+        align="center"
       />
       <tiny-grid-column
-          field="updatedAt"
-          :title="$t('attribute.updatedAt')"
-          align="center"
-          width="170"
+        field="updatedAt"
+        :title="$t('attribute.updatedAt')"
+        align="center"
+        width="170"
       />
       <tiny-grid-column
-          field="remark"
-          show-overflow
-          :title="$t('attribute.remark')"
-          width="260"
+        field="remark"
+        show-overflow
+        :title="$t('attribute.remark')"
+        width="260"
       />
 
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          :width="proxy.$hasPermission(options).length * 55"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        :width="proxy.$hasPermission(options).length * 55"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="3"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -172,10 +172,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: RoleApi.RolePageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: RoleApi.RolePageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: RoleApi.RolePageParam = {
     ...filterOptions.value,
@@ -230,19 +230,19 @@ const optionsClick = (label: string, data: RoleApi.RoleVO) => {
 
 const handleDelete = (data: RoleApi.RoleVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除角色【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          RoleApi.deleteRoleById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({message: '删除成功', status: 'success'});
-          });
-        }
-      });
+    .confirm({
+      message: `确定要删除角色【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        RoleApi.deleteRoleById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({message: '删除成功', status: 'success'});
+        });
+      }
+    });
 };
 
 const handleFormQuery = () => {

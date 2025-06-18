@@ -1,17 +1,17 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import {
   loginMail as userLoginMail,
   updateUserInfo,
   LoginDataMail,
 } from '@/api/user';
-import { setToken, clearToken } from '@/utils/auth';
-import { removeRouteListener } from '@/utils/route-listener';
+import {setToken, clearToken} from '@/utils/auth';
+import {removeRouteListener} from '@/utils/route-listener';
 import * as AuthApi from '@/api/system/auth';
 import * as PermissionApi from '@/api/system/permission';
 import * as UserApi from '@/api/system/user';
-import { MenuVO } from '@/api/system/menu';
+import {MenuVO} from '@/api/system/menu';
 
-import { UserInfo } from './types';
+import {UserInfo} from './types';
 
 interface UserState extends UserApi.UserVO {
   rolePermissions: string[];
@@ -48,7 +48,7 @@ const useUserStore = defineStore('user', {
 
     async info() {
       const res = await PermissionApi.getUserInfo();
-      const { roles } = res.data;
+      const {roles} = res.data;
       const userInfo = {
         // rolePermissions: roles.map((item: RoleVO) => item.permission),
         ...res.data,
@@ -65,7 +65,7 @@ const useUserStore = defineStore('user', {
     async login(loginForm: AuthApi.LoginParam) {
       try {
         const res = await AuthApi.login(loginForm);
-        const { token } = res.data;
+        const {token} = res.data;
         setToken(token);
       } catch (err) {
         clearToken();

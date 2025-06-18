@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tiny-container :aside-width="asideWidth" :header-height="headerHeight">
+    <tiny-container :aside-width="asideWidth" :header-height="headerHeight" pattern="fashion">
       <template #header>
         <tiny-layout>
           <div class="layout-navbar">
@@ -17,7 +17,7 @@
           </tiny-grid>
         </tiny-layout>
       </template>
-      <tiny-layout>
+      <tiny-layout class="layout-main">
         <conversation-index ref="conversationIndexRef" :agent="agent" @refresh="querySession" style="width: 80%;margin: auto;"/>
       </tiny-layout>
     </tiny-container>
@@ -66,7 +66,7 @@ const handleCurrentChange = ({row}: { row: SessionApi.SessionVO }) => {
 };
 
 const addSession = () => {
-  conversationIndexRef.value.addSeeion();
+  conversationIndexRef.value.addSession();
 };
 
 
@@ -75,18 +75,9 @@ const addSession = () => {
 
 <style scoped lang="less">
 
-.layout-navbar {
-  position: fixed;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  height: 60px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-}
-
 :deep(.tiny-container__aside) {
   background-color: #fff;
+  //border-left: 1px solid var(--o-border-line-1, #e8e8e8);
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -98,6 +89,11 @@ const addSession = () => {
     width: 100%;
     margin-bottom: 20px;
   }
+}
+
+.layout-main {
+  //background-color: var(--tv-color-bg);
+  height: 100%;
 }
 
 :deep(.tiny-grid .tiny-grid-body__column, .tiny-grid .tiny-grid-footer__column, .tiny-grid .tiny-grid-header__column) {

@@ -1,31 +1,31 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.user.name')">
             <tiny-input
-                v-model="filterOptions.nameLike"
-                clearable
-                :placeholder="$t('system.user.name.placeholder')"
+              v-model="filterOptions.nameLike"
+              clearable
+              :placeholder="$t('system.user.name.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.user.loginAccount')" prop="id">
             <tiny-input
-                v-model="filterOptions.loginAccountLike"
-                clearable
-                :placeholder="$t('system.user.loginAccount.placeholder')"
+              v-model="filterOptions.loginAccountLike"
+              clearable
+              :placeholder="$t('system.user.loginAccount.placeholder')"
             ></tiny-input>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
+        <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery">
             {{ $t('opt.search') }}
           </tiny-button>
@@ -37,70 +37,70 @@
     </tiny-form>
 
     <tiny-grid
-        ref="gridTableRef"
-        class="table-list"
-        :fetch-data="fetchTableData"
-        :pager="pagerConfig"
-        :loading="loading"
-        :auto-resize="true"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      ref="gridTableRef"
+      class="table-list"
+      :fetch-data="fetchTableData"
+      :pager="pagerConfig"
+      :loading="loading"
+      :auto-resize="true"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar
-            :buttons="proxy.$hasPermission(toolbarButtons)"
-            refresh
-            full-screen
+          :buttons="proxy.$hasPermission(toolbarButtons)"
+          refresh
+          full-screen
         />
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
-          field="name"
-          :title="$t('system.user.name')"
-          align="center"
+        field="name"
+        :title="$t('system.user.name')"
+        align="center"
       />
       <tiny-grid-column
-          field="loginAccount"
-          :title="$t('system.user.loginAccount')"
-          align="center"
+        field="loginAccount"
+        :title="$t('system.user.loginAccount')"
+        align="center"
       />
       <tiny-grid-column field="email" :title="$t('system.user.email')"/>
       <tiny-grid-column
-          field="gender"
-          :title="$t('system.user.gender')"
-          align="center"
-          width="80"
+        field="gender"
+        :title="$t('system.user.gender')"
+        align="center"
+        width="80"
       >
         <template #default="data">
           <dict-tag
-              :value="data.row.gender"
-              :options="proxy.$dict.getDictData('sys_user_gender')"
+            :value="data.row.gender"
+            :options="proxy.$dict.getDictData('sys_user_gender')"
           />
         </template>
       </tiny-grid-column>
       <tiny-grid-column
-          field="phone"
-          :title="$t('system.user.phone')"
-          align="center"
+        field="phone"
+        :title="$t('system.user.phone')"
+        align="center"
       />
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          width="200"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        width="200"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="2"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="2"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -159,10 +159,10 @@ const fetchTableData = reactive({
 });
 
 async function getPageData(
-    params: UserApi.UserPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: UserApi.UserPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: UserApi.UserPageParam = {
     ...filterOptions.value,
@@ -228,22 +228,22 @@ const optionsClick = (label: string, data: UserApi.UserVO) => {
 
 const handleDelete = (data: UserApi.UserVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除用户【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          UserApi.deleteUserById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除用户【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        UserApi.deleteUserById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 
 const handleFormQuery = () => {
@@ -292,22 +292,22 @@ const handleBatchDelete = (data: UserApi.UserVO[]) => {
     return;
   }
   proxy.$modal
-      .confirm({
-        message: `确定要批量删除用户吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (res === 'confirm') {
-          UserApi.deleteUserByIds(ids).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({
-              message: '批量删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要批量删除用户吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (res === 'confirm') {
+        UserApi.deleteUserByIds(ids).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '批量删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 </script>
 

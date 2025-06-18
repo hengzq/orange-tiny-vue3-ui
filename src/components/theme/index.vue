@@ -10,7 +10,7 @@
               <span>{{ $t(item.content) }}</span>
               <div class="theme-tip">
                 <Yes
-                    :class="
+                  :class="
                     item.color === appStore.themelist
                       ? 'theme-list-yes'
                       : 'theme-list-no'
@@ -122,32 +122,32 @@ watch(appStore.$state, (newValue, oldValue) => {
 
 // 自定义监听
 watch(
-    appStore.$state,
-    (newValue, oldValue) => {
-      // eslint-disable-next-line default-case
-      switch (newValue.themelist) {
-        case 'default':
-          appStore.updateSettings({theme: 'light'});
-          theme.changeTheme(DefaultTheme);
-          break;
-        case 'peaches':
-          appStore.updateSettings({theme: 'light'});
-          theme.changeTheme(PeachesTheme);
-          break;
-        case 'violet':
-          appStore.updateSettings({theme: 'light'});
-          theme.changeTheme(VioletTheme);
-          break;
-        case 'deepness':
-          appStore.updateSettings({theme: 'light'});
-          theme.changeTheme(DeepnessTheme);
-          break;
-        case 'dark':
-          appStore.updateSettings({theme: 'dark'});
-          break;
-      }
-    },
-    {immediate: true}
+  appStore.$state,
+  (newValue, oldValue) => {
+    // eslint-disable-next-line default-case
+    switch (newValue.themelist) {
+      case 'default':
+        appStore.updateSettings({theme: 'light'});
+        theme.changeTheme(DefaultTheme);
+        break;
+      case 'peaches':
+        appStore.updateSettings({theme: 'light'});
+        theme.changeTheme(PeachesTheme);
+        break;
+      case 'violet':
+        appStore.updateSettings({theme: 'light'});
+        theme.changeTheme(VioletTheme);
+        break;
+      case 'deepness':
+        appStore.updateSettings({theme: 'light'});
+        theme.changeTheme(DeepnessTheme);
+        break;
+      case 'dark':
+        appStore.updateSettings({theme: 'dark'});
+        break;
+    }
+  },
+  {immediate: true}
 );
 </script>
 

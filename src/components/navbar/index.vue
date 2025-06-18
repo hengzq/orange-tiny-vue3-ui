@@ -3,10 +3,13 @@
     <div class="left-side">
       <div style="display: flex; align-items: center">
         <img src="/favicon.ico" class="logo" alt="logo" @click="jumpUrl"/>
-        <h5 @click="jumpUrl">Orange Cloud</h5>
+        <h5 @click="jumpUrl">Orange 系统管理平台</h5>
+        <div class="divider"></div>
+        <!--                <img class="vue-icon" alt="logo" src="@/assets/images/pro.png" />-->
+        <h4 style="width: 60px;">V1.4.0</h4>
         <!--        <div class="divider"></div>-->
-        <!--        <img class="vue-icon" alt="logo" src="@/assets/images/pro.png" />-->
-        <!--        <h4>TinyPro of Vue</h4>-->
+
+        <!--        <breadcrumb :items="items"/>-->
       </div>
     </div>
     <ul class="right-side">
@@ -74,6 +77,11 @@ const changeLan = () => {
   lan.value = !lan.value;
 };
 
+const items = [
+  "测试",
+  "测试1"
+]
+
 // 帮助中心
 const help = () => {
   window.open('http://hengzq.cn', '_blank');
@@ -99,7 +107,7 @@ const switchUser = (e: number) => {
       logout();
       break;
     default:
-      // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console
   }
 };
 
