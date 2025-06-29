@@ -101,7 +101,7 @@
             <tiny-input v-model="formData.baseUrl" :placeholder="$t('large-model.model.baseUrl.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col v-if="formData.platform && ['ALI_BAI_LIAN','DEEP_SEEK','ZHI_PU'].includes(formData.platform)" :span="6">
+        <tiny-col v-if="formData.platform && ['ALI_BAI_LIAN','DEEP_SEEK','ZHI_PU','MINI_MAX'].includes(formData.platform)" :span="6">
           <tiny-form-item :label="$t('large-model.model.apiKey')" prop="apiKey">
             <tiny-input
               v-model="formData.apiKey" type="password" :placeholder="$t('large-model.model.apiKey.placeholder')" show-password

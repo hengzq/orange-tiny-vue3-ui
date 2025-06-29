@@ -16,6 +16,8 @@ export default {
     'large-model.model.description.placeholder': '请输入模型信息',
     'large-model.model.llm': '大模型',
     'large-model.model.config.temperature': '温度系数',
+    'large-model.model.systemPrompt': '系统提示词',
+    'large-model.model.systemPrompt.placeholder': '请在这里编辑系统提示词，包括角色设定、任务目标、具备的能力及回复的要求与限制等，好的提示词会直接影响智能体效果。',
 
     'large-model.image.prompt': '图片描述(Prompt)',
     'large-model.image.prompt.placeholder': '请输入图片描述',

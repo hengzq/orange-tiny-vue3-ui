@@ -22,7 +22,7 @@ export interface OperationLogVO {
   /** 租户id */
   tenantId?: number;
   /** 主键 */
-  id?: number;
+  id?: string;
   /** 请求ID */
   requestId?: string;
   /** 资源id */

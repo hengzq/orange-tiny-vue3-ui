@@ -242,10 +242,6 @@ defineExpose({
   }
 }
 
-:deep(.md-editor-preview-wrapper) {
-  padding: 0 20px !important;
-}
-
 :deep(.md-editor-preview) {
   font-size: 13px !important;
 }

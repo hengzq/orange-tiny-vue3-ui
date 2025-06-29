@@ -3,7 +3,7 @@
     <template v-for="(item, index) in messageList" :key="index">
       <!--   用户问题   -->
       <div v-if="item.role === 'USER'" class="item question">
-        <md-preview v-model="item.content" style="width: fit-content;"/>
+        <md-preview v-model="item.content"/>
         <tiny-user-head type="icon" round min style="display: flex;align-items: center; padding-left: 10px">
           <div class="user-avatar">
             <img src="@/assets/images/avatar.png" alt="user"/>
@@ -111,7 +111,6 @@ const props = defineProps({
   }
 }
 
-
 .question {
   justify-content: flex-end;
   flex-direction: row;
@@ -119,6 +118,7 @@ const props = defineProps({
   .md-editor {
     background-color: var(--tv-color-bg);
     border-radius: 10px;
+    width: fit-content;
   }
 }
 
@@ -127,6 +127,7 @@ const props = defineProps({
     background-color: var(--tv-color-bg);
     border-radius: 10px;
     padding-right: 10px;
+    width:  calc(100% - 80px);
   }
 
   .loading-answer-content {

@@ -1,29 +1,26 @@
 <template>
   <tiny-drawer
-      :title="formData.fileName" :visible="visible" width="70%" :show-footer="true" @close="onClose(false)">
+    :title="formData.fileName" :visible="visible" width="70%" :show-footer="false" @close="onClose(false)">
     <!--    <div v-for="(item,index) in formData.documentSliceList" :key="index" style=" margin-bottom: 10px; padding: 10px">-->
     <!--      &lt;!&ndash;      <div style="display: flex;justify-content:flex-end; margin-bottom: 10px;">&ndash;&gt;-->
     <!--      &lt;!&ndash;        <tiny-button type="primary" size="small" :icon="IconEditor"></tiny-button>&ndash;&gt;-->
     <!--      &lt;!&ndash;        <tiny-button type="danger" size="small" :icon="IconDeleteL"></tiny-button>&ndash;&gt;-->
     <!--      &lt;!&ndash;      </div>&ndash;&gt;-->
     <div style="display: flex;flex-wrap: wrap">
-
       <div v-for="(item,index) in sliceList" :key="index" class="slice-item">
-        <div class="content">
-          {{ item.content }}
-        </div>
+        <div class="content"> {{ item.content }}</div>
         <div class="tool">
           <div>
             {{ formatFileSize(item.content?.length || 0) }}
           </div>
           <!--          <tiny-button type="text" size="small" @click="handleEdit(item)">查看详情</tiny-button>-->
           <tiny-action-menu
-              :options="proxy.$hasPermission(options)" mode="card" :max-show-num="0"
-              @item-click=" (data: any) => optionsClick(data.itemData.label, item) ">
+            :options="proxy.$hasPermission(options)" mode="card" :max-show-num="0"
+            @item-click=" (data: any) => optionsClick(data.itemData.label, item) ">
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -35,13 +32,13 @@
     </div>
 
     <tiny-pager
-        :current-page="pagerConfig.currentPage"
-        :page-size="pagerConfig.pageSize"
-        :page-sizes="pagerConfig.pageSizes"
-        :total="pagerConfig.total"
-        :layout="pagerConfig.layout"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
+      :current-page="pagerConfig.currentPage"
+      :page-size="pagerConfig.pageSize"
+      :page-sizes="pagerConfig.pageSizes"
+      :total="pagerConfig.total"
+      :layout="pagerConfig.layout"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     />
 
 
@@ -101,8 +98,8 @@ const options = ref([
 ])
 
 const optionsClick = (
-    label: string,
-    data: KnowledgeDocumentApi.KnowledgeDocumentVO,
+  label: string,
+  data: KnowledgeDocumentApi.KnowledgeDocumentVO,
 ) => {
   switch (label) {
     case 'opt.edit': {
@@ -120,22 +117,22 @@ const optionsClick = (
 
 const handleDelete = (data: KnowledgeDocumentApi.KnowledgeDocumentVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除切片?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          KnowledgeDocSliceApi.deleteKnowledgeDocSliceById(data.id).then(() => {
-            // handleFormQuery();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除切片?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        KnowledgeDocSliceApi.deleteKnowledgeDocSliceById(data.id).then(() => {
+          // handleFormQuery();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 
 const editFormRef = ref()

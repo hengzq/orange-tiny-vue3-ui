@@ -11,6 +11,10 @@ export function deleteSessionById(id: string) {
     return axios.delete(BASE_URL.concat(`/${id}`));
 }
 
+export function deleteSessionByIds(params: string[]) {
+    return axios.post(BASE_URL.concat(`/batch-delete`), { ids: params });
+}
+
 export function updateSessionById(id: string, params: SessionVO) {
     return axios.put(BASE_URL.concat(`/${id}`), params);
 }

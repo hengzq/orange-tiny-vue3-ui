@@ -10,15 +10,12 @@
       ref="formDataRef"
       :rules="formDataRules"
       :model="formData"
-      label-width="145px"
+      label-width="90px"
       validate-position="bottom"
       validate-type="text"
     >
       <tiny-form-item :label="$t('large-model.mcp-server.name')" prop="name">
-        <tiny-input
-          v-model="formData.name"
-          :placeholder="$t('large-model.mcp-server.name.placeholder')"
-        ></tiny-input>
+        <tiny-input v-model="formData.name" :placeholder="$t('large-model.mcp-server.name.placeholder')"/>
       </tiny-form-item>
       <tiny-form-item :label="$t('large-model.mcp-server.transportProtocol')" prop="transportProtocol">
         <tiny-radio
@@ -31,12 +28,9 @@
         </tiny-radio>
       </tiny-form-item>
       <tiny-form-item :label="$t('large-model.mcp-server.connectionUrl')" prop="connectionUrl">
-        <tiny-input v-model="formData.baseUrl" :placeholder="$t('large-model.mcp-server.connectionUrl.placeholder')"/>
+        <tiny-input v-model="formData.connectionUrl" :placeholder="$t('large-model.mcp-server.connectionUrl.placeholder')"/>
       </tiny-form-item>
-      <tiny-form-item
-        :label="$t('large-model.model.description')"
-        prop="description"
-      >
+      <tiny-form-item :label="$t('large-model.model.description')" prop="description">
         <md-editor v-model="formData.description" :preview="false"/>
       </tiny-form-item>
     </tiny-form>
@@ -62,7 +56,7 @@ const title = computed(() => {
   return isModify.value ? '修改模型' : '新增模型';
 });
 
-const formData = ref<McpServerApi.ModelVO>({});
+const formData = ref<McpServerApi.McpServerVO>({});
 
 const formDataRules = {
   platform: [
@@ -117,20 +111,8 @@ const queryPlatformList = () => {
   });
 };
 
-const changeModelType = () => {
-  if (!formData.value.platform || !formData.value.modelType) {
-    return;
-  }
-  PlatformApi.listModel(formData.value.platform, formData.value.modelType).then((res) => {
-    modelList.value = res.data;
-  })
-}
-
 const resetForm = () => {
-  formData.value = {
-    enabled: true,
-    sort: 1,
-  };
+  formData.value = {};
   proxy.$refs.formDataRef.resetFields();
 };
 

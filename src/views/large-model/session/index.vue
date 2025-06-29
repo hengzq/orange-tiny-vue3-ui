@@ -1,38 +1,26 @@
 <template>
   <div class="container-list">
-    <tiny-form
-      :model="filterOptions"
-      label-position="right"
-      label-width="110px"
-      class="filter-form"
-    >
+    <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item
-            :label="$t('large-model.session.modelId')"
-            prop="modelId"
-          >
-            <tiny-cascader v-model="filterOptions.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"></tiny-cascader>
+          <tiny-form-item :label="$t('large-model.session.modelId')" prop="modelId">
+            <tiny-cascader v-model="filterOptions.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.session.name')">
-            <tiny-input
-              v-model="filterOptions.name"
-              clearable
-              :placeholder="$t('large-model.session.name.placeholder')"
-            ></tiny-input>
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.session.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.session.sessionType')" prop="quantity">
-            <tiny-select v-model="filterOptions.source" :placeholder="$t('large-model.session.sessionType.placeholder')" clearable>
-              <tiny-option
-                v-for="item in proxy.$dict.getDictData('ai_session_source')" :key="item.dictValue" :label="item.dictLabel"
-                :value="item.dictValue"/>
-            </tiny-select>
-          </tiny-form-item>
-        </tiny-col>
+        <!--        <tiny-col :span="4">-->
+        <!--          <tiny-form-item :label="$t('large-model.session.sessionType')" prop="quantity">-->
+        <!--            <tiny-select v-model="filterOptions.source" :placeholder="$t('large-model.session.sessionType.placeholder')" clearable>-->
+        <!--              <tiny-option-->
+        <!--                v-for="item in proxy.$dict.getDictData('ai_session_source')" :key="item.dictValue" :label="item.dictLabel"-->
+        <!--                :value="item.dictValue"/>-->
+        <!--            </tiny-select>-->
+        <!--          </tiny-form-item>-->
+        <!--        </tiny-col>-->
         <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
@@ -45,13 +33,11 @@
       :fetch-data="fetchTableData"
       :pager="pagerConfig"
       :loading="loading"
+      @cell-click="cellClickEvent"
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
-        <tiny-grid-toolbar
-          :buttons="proxy.$hasPermission(toolbarButtons)"
-          full-screen
-        />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="name" :title="$t('large-model.session.name')" show-overflow/>
@@ -68,24 +54,11 @@
       </tiny-grid-column>
       <tiny-grid-column field="source" :title="$t('large-model.session.sessionType')" width="150" align="center">
         <template #default="scope">
-          <dict-tag
-            :value="scope.row.sessionType"
-            :options="proxy.$dict.getDictData('ai_session_source')"
-          />
+          <dict-tag :value="scope.row.sessionType" :options="proxy.$dict.getDictData('ai_session_source')"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="createdAt"
-        :title="$t('attribute.createdAt')"
-        align="center"
-        width="170"
-      />
-      <tiny-grid-column
-        field="updatedAt"
-        :title="$t('attribute.updatedAt')"
-        align="center"
-        width="170"
-      />
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
+      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center" width="170"/>
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
@@ -102,12 +75,7 @@
             "
           >
             <template #item="{ data }">
-              <span
-                v-if="data.label == 'opt.delete'"
-                style="color: var(--button-delete-color)"
-              >
-                {{ $t(data.label) }}
-              </span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">   {{ $t(data.label) }}   </span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>
@@ -124,7 +92,7 @@ import * as PlatformApi from '@/api/large-model/platform';
 import * as SessionApi from '@/api/large-model/session';
 import * as ModelApi from "@/api/large-model/model";
 
-import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
+import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import Detail from './components/detail.vue';
 
 const {proxy} = getCurrentInstance() as any;
@@ -159,20 +127,56 @@ const handleFormReset = () => {
 };
 
 const toolbarButtons = reactive<any[]>([
-  // {
-  //   permission: 'orange-ai:model:add',
-  //   code: 'batch-delete',
-  //   name: '批量删除',
-  // },
+  {
+    permission: 'orange-ai:model:add',
+    code: 'batchDelete',
+    name: '批量删除',
+  },
 ]);
-const toolbarButtonClickEvent = ({code}: any) => {
+const toolbarButtonClickEvent = ({code, $grid}: any) => {
+  const data = $grid.getSelectRecords();
   switch (code) {
-    case 'batch-delete': {
+    case 'batchDelete': {
+      handleBatchDelete(data);
       break;
     }
     default:
       console.log('code is error.');
   }
+};
+
+const cellClickEvent = ({row, column}) => {
+  if (column.property === 'name') {
+    detailRef.value.open(row.id);
+  }
+}
+
+const handleBatchDelete = (data: SessionApi.SessionVO[]) => {
+  let ids: string[] = data.map((item) => item.id) as string[];
+  if (ids.length === 0) {
+    proxy.$modal.message({
+      message: '请选择需要删除的用户',
+      status: 'warning',
+    });
+    return;
+  }
+  proxy.$modal
+    .confirm({
+      message: `确定要批量删除回话吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (res === 'confirm') {
+        SessionApi.deleteSessionByIds(ids).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '批量删除成功',
+            status: 'success',
+          });
+        });
+      }
+    });
 };
 const options = ref<any[]>([
   {
@@ -218,15 +222,6 @@ const handleDelete = (data: SessionApi.SessionVO) => {
       }
     });
 };
-const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
-const allSessionTypeList: Ref<SessionApi.SessionTypeVO[]> = ref([]);
-
-const modelTypeList: Ref<SessionApi.SessionTypeVO[]> = ref([]);
-const changePlatform = (item: any) => {
-  modelTypeList.value =
-    platformList.value.filter((p) => p.code === item)[0].modelTypes || [];
-};
-
 
 const modelList = ref([])
 const queryPlatformList = () => {
@@ -238,12 +233,12 @@ const queryPlatformList = () => {
 
 const queryModelList = () => {
   ModelApi.listModel({
-    type: 'CHAT',
+    modelType: 'CHAT',
     enabled: true,
   }).then((res) => {
     const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
     modelList.value.forEach(item => {
-      item.children = models.filter(model => model.platform === item.value)
+      item.children = models.filter((model: ModelApi.ModelVO) => model.platform === item.value)
     })
   });
 };

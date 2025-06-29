@@ -1,27 +1,27 @@
 <template>
   <div class="container-list">
-    <tiny-form
-      :model="filterOptions"
-      label-width="130px"
-      class="filter-form"
-    >
+    <tiny-form :model="filterOptions" label-width="130px" class="filter-form">
       <tiny-row :flex="true">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.mcp-server.name')">
-            <tiny-input
-              v-model="filterOptions.name"
-              clearable
-              :placeholder="$t('large-model.mcp-server.name.placeholder')"
-            ></tiny-input>
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.mcp-server.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+        <tiny-col :span="4">
+          <tiny-form-item :label="$t('large-model.mcp-server.transportProtocol')" prop="platform">
+            <tiny-select v-model="filterOptions.transportProtocol">
+              <tiny-option
+                v-for="(item) in proxy.$dict.getDictData('ai_mcp_server_transport_protocol')"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+              />
+            </tiny-select>
+          </tiny-form-item>
+        </tiny-col>
+        <tiny-col :span="4" class="search-btn">
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>
@@ -34,15 +34,12 @@
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
-        <tiny-grid-toolbar
-          :buttons="proxy.$hasPermission(toolbarButtons)"
-          full-screen
-        />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="name" :title="$t('large-model.mcp-server.name')"/>
       <tiny-grid-column field="transportProtocol" :title="$t('large-model.mcp-server.transportProtocol')"/>
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
 
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
@@ -60,12 +57,7 @@
             "
           >
             <template #item="{ data }">
-              <span
-                v-if="data.label == 'opt.delete'"
-                style="color: var(--button-delete-color)"
-              >
-                {{ $t(data.label) }}
-              </span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">   {{ $t(data.label) }}   </span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>

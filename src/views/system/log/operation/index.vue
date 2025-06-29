@@ -31,35 +31,24 @@
             ></tiny-date-picker>
           </tiny-form-item>
         </tiny-col>
+
         <tiny-col v-if="unfold" :span="4">
           <tiny-form-item :label="$t('system.log.operation.status')">
-            <tiny-select
-              v-model="filterOptions.status"
-              :placeholder="$t('system.log.operation.status.placeholder')"
-              clearable
-            >
+            <tiny-select v-model="filterOptions.status" :placeholder="$t('system.log.operation.status.placeholder')" clearable>
               <tiny-option
                 v-for="item in proxy.$dict.getDictData('sys_operation_status')"
                 :key="item.dictValue"
                 :label="item.dictLabel"
                 :value="item.dictValue"
-              >
-              </tiny-option>
+              />
             </tiny-select>
           </tiny-form-item>
         </tiny-col>
         <tiny-col v-if="!unfold" :span="4" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
           <tiny-button type="text" style="color: #4e5969" @click="() => {unfold = true;}">
-            <svg-icon
-              name="system-chevron-down"
-              style="vertical-align: middle"
-            />
+            <svg-icon name="system-chevron-down" style="vertical-align: middle"/>
             展开
           </tiny-button>
         </tiny-col>
@@ -67,20 +56,12 @@
       <tiny-row v-if="unfold">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.log.operation.requestId')">
-            <tiny-input
-              v-model="filterOptions.requestId"
-              clearable
-              :placeholder="$t('system.log.operation.requestId.placeholder')"
-            ></tiny-input>
+            <tiny-input v-model="filterOptions.requestId" clearable :placeholder="$t('system.log.operation.requestId.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="8" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
           <tiny-button
             v-if="unfold"
             type="text"
@@ -105,24 +86,18 @@
       :pager="pagerConfig"
       :loading="loading"
       :auto-resize="true"
+      @cell-click="cellClickEvent"
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen refresh/>
       </template>
-      <tiny-grid-column
-        field="requestId"
-        :title="$t('system.log.operation.requestId')"
-        align="center"
-        width="200"
-      />
+      <tiny-grid-column type="selection" width="60"/>
+      <tiny-grid-column field="requestId" :title="$t('system.log.operation.requestId')" align="center" width="200"/>
       <tiny-grid-column field="resourceName" :title="$t('system.log.operation.resourceName')" show-overflow/>
       <tiny-grid-column :title="$t('system.log.operation.requestMethod')" width="90">
         <template #default="data">
-          <dict-tag
-            :value="data.row.requestMethod"
-            :options="proxy.$dict.getDictData('sys_request_method')"
-          />
+          <dict-tag :value="data.row.requestMethod" :options="proxy.$dict.getDictData('sys_request_method')"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column show-overflow :title="$t('system.log.operation.requestUrl')">
@@ -132,12 +107,7 @@
       </tiny-grid-column>
       <tiny-grid-column field="userIp" :title="$t('system.log.operation.userIp')" width="120"/>
       <tiny-grid-column field="userLocation" :title="$t('system.log.operation.userLocation')" width="120"/>
-      <tiny-grid-column
-        field="userName"
-        :title="$t('system.log.operation.userName')"
-        align="center"
-        width="110"
-      />
+      <tiny-grid-column field="userName" :title="$t('system.log.operation.userName')" align="center" width="110"/>
       <tiny-grid-column field="status" :title="$t('system.log.operation.status')" align="center" width="90">
         <template #default="data">
           <dict-tag :value="data.row.status" :options="proxy.$dict.getDictData('sys_operation_status')"/>
@@ -224,6 +194,12 @@ async function getPageData(
     state.loading = false;
   }
 }
+
+const cellClickEvent = ({row}: { row: OperationLogApi.OperationLogVO }) => {
+  if (row.id) {
+    handleDetail(row.id);
+  }
+};
 
 const handleDetail = (id: string) => {
   detailsRef.value.open(id);

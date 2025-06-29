@@ -1,5 +1,5 @@
 <template>
-  <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="60%" @close="onClose(false)">
+  <tiny-drawer :title="title" :visible="visible" :show-footer="false" width="50%" @close="onClose(false)">
     <session-message-index :message-list="sessionMessageList" :show-tool="false"/>
     <template #footer>
       <tiny-button @click="onClose(false)">取消</tiny-button>

@@ -23,7 +23,16 @@
                 <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
               </tiny-select>
             </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.model.systemPrompt')" prop="systemPrompt">
+              <tiny-input
+                v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
+                :placeholder="$t('large-model.agent.systemPrompt.placeholder')"/>
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.model.config.temperature')">
+              <tiny-slider v-model="formData.temperature" :show-input="true" :min="0" :max="1" :step="0.01" unit=""></tiny-slider>
+            </tiny-form-item>
           </tiny-form>
+
 
           <!--          <tiny-divider content-position="center">对话记录</tiny-divider>-->
           <!--          <div class="chat-session">-->
@@ -77,7 +86,9 @@ const formDataRules = {
   ],
 };
 
-const formData = ref<ChatApi.ConversationParam>({});
+const formData = ref<ChatApi.ConversationParam>({
+  temperature: 0.85,
+});
 const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
 const queryPlatformList = () => {
   PlatformApi.listPlatform().then((res) => {
@@ -204,7 +215,7 @@ const submitValidate = (callback: (arg?: boolean) => void,) => {
 
 .left-form {
   background-color: #fff;
-  padding: 10px;
+  padding: 15px;
   height: calc(100vh - 150px)
 }
 

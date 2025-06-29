@@ -7,17 +7,12 @@
       class="filter-form"
     >
       <tiny-row :flex="true">
-        <tiny-col :span="7">
+        <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.knowledge.base.embeddingModelId')" prop="embeddingModelId">
             <tiny-cascader v-model="filterOptions.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="7">
-          <tiny-form-item :label="$t('large-model.knowledge.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
-          </tiny-form-item>
-        </tiny-col>
-        <tiny-col :span="7">
+        <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.knowledge.name')">
             <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
           </tiny-form-item>
@@ -46,7 +41,7 @@
           <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="embeddingModelId" :title="$t('attribute.sort')" align="center" width="100">
+      <tiny-grid-column field="embeddingModelId" :title="$t('large-model.knowledge.base.embeddingModelId')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
             <template v-for="(item, index) in modelItem.children">
@@ -58,7 +53,7 @@
         </template>
       </tiny-grid-column>
 
-      <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center"/>
+      <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center" width="100"/>
       <tiny-grid-column field="vectorCollectionName" :title="$t('large-model.knowledge.base.vectorCollectionName')" align="center"/>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
       <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="150"/>
@@ -78,12 +73,7 @@
             "
           >
             <template #item="{ data }">
-              <span
-                v-if="data.label == 'opt.delete'"
-                style="color: var(--button-delete-color)"
-              >
-                {{ $t(data.label) }}
-              </span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">   {{ $t(data.label) }}   </span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>

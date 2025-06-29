@@ -23,75 +23,31 @@
       :pager="pagerConfig"
       :loading="loading"
       :auto-resize="true"
+      @cell-click="cellClickEvent"
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" refresh full-screen/>
       </template>
-
+      <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="requestId" :title="$t('system.log.login.requestId')" align="center" width="180"/>
       <tiny-grid-column field="account" :title="$t('system.log.login.account')" align="center"/>
-      <tiny-grid-column
-        field="userName"
-        :title="$t('system.log.login.userName')"
-        align="center"
-        width="110"
-      />
-      <tiny-grid-column
-        field="userIp"
-        :title="$t('system.log.login.userIp')"
-        align="center"
-        width="120"
-      />
-      <tiny-grid-column
-        field="userLocation"
-        :title="$t('system.log.operation.userLocation')"
-        align="center"
-        width="120"
-      />
-      <tiny-grid-column
-        field="status"
-        :title="$t('attribute.status')"
-        align="center"
-        width="80"
-      >
+      <tiny-grid-column field="userName" :title="$t('system.log.login.userName')" align="center" width="110"/>
+      <tiny-grid-column field="userIp" :title="$t('system.log.login.userIp')" align="center" width="120"/>
+      <tiny-grid-column field="userLocation" :title="$t('system.log.operation.userLocation')" align="center" width="120"/>
+      <tiny-grid-column field="status" :title="$t('attribute.status')" align="center" width="80">
         <template #default="data">
-          <dict-tag
-            :value="data.row.status"
-            :options="proxy.$dict.getDictData('sys_operation_status')"
-          />
+          <dict-tag :value="data.row.status" :options="proxy.$dict.getDictData('sys_operation_status')"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="type"
-        :title="$t('system.log.login.type')"
-        align="center"
-        width="80"
-      >
+      <tiny-grid-column field="type" :title="$t('system.log.login.type')" align="center" width="80">
         <template #default="data">
-          <dict-tag
-            :value="data.row.type"
-            :options="proxy.$dict.getDictData('sys_log_login_type')"
-          />
+          <dict-tag :value="data.row.type" :options="proxy.$dict.getDictData('sys_log_login_type')"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="loginTime"
-        :title="$t('system.log.login.loginTime')"
-        align="center"
-        width="170"
-      />
-      <tiny-grid-column
-        field="userAgent"
-        show-overflow
-        :title="$t('system.log.login.userAgent')"
-      />
-
-      <tiny-grid-column
-        :title="$t('table.operations')"
-        align="center"
-        width="100"
-      >
+      <tiny-grid-column field="loginTime" :title="$t('system.log.login.loginTime')" align="center" width="170"/>
+      <tiny-grid-column field="userAgent" show-overflow :title="$t('system.log.login.userAgent')"/>
+      <tiny-grid-column :title="$t('table.operations')" align="center" width="100">
         <template #default="data">
           <tiny-button type="text" @click="handleDetail(data.row)">
             {{ $t('opt.detail') }}
@@ -198,6 +154,10 @@ const toolbarButtonClickEvent = ({code}: any) => {
     default:
       console.log('code is error.');
   }
+};
+
+const cellClickEvent = ({row}: { row: LoginLogApi.LoginLogVO }) => {
+  handleDetail(row);
 };
 
 const handleClear = () => {

@@ -1,10 +1,10 @@
 const BASE_URL = '/orange-ai/v1.0/chat';
 
 export const CONVERSATION_STREAM_URL =
-    '/orange-ai/v1.0/chat/conversation-stream';
+  '/orange-ai/v1.0/chat/conversation-stream';
 
 export const COMPLETIONS_URL =
-    '/orange-ai/v1.0/chat/completions';
+  '/orange-ai/v1.0/chat/completions';
 export const AGENT_CONVERSATION_STREAM = BASE_URL.concat('/agent-conversation-stream');
 // /orange-ai/v1.0/chat/completions
 //
@@ -21,7 +21,9 @@ export const AGENT_CONVERSATION_STREAM = BASE_URL.concat('/agent-conversation-st
 // }
 
 export interface ConversationParam {
-    modelId?: string;
-    prompt?: string;
-    sessionId?: string;
+  modelId?: string;
+  prompt?: string;
+  systemPrompt?: string;
+  sessionId?: string;
+  temperature?: number;
 };

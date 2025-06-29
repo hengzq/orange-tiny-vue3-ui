@@ -14,6 +14,7 @@
           <h4>2.请避免输入有违公序良俗的问题，模型可能无法回答不合适的问题.</h4>
         </tiny-alert>
       </tiny-card>
+
       <template v-for="(item, index) in chatList" v-else :key="index">
         <div v-if="item.role === 'USER'" class="item question">
           <md-preview v-model="item.content" style="width: fit-content"/>

@@ -16,6 +16,7 @@ export default {
   'attribute.sort': '显示顺序',
   'attribute.status': '状态',
   'attribute.enabled.status': '启用状态',
+  'attribute.enabled.status.placeholder': '请选择状态',
   'attribute.preset.status': '预置',
   
   'attribute.remark': '备注',

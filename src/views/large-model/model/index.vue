@@ -1,58 +1,63 @@
 <template>
   <div class="container-list">
-    <tiny-form
-      :model="filterOptions"
-      label-width="130px"
-      class="filter-form"
-    >
+    <tiny-form :model="filterOptions" label-width="130px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item
-            :label="$t('large-model.model.platform')"
-            prop="platform"
-          >
-            <tiny-select
-              v-model="filterOptions.platform"
-              @change="changePlatform"
-            >
-              <tiny-option
-                v-for="item in platformList"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-              >
-              </tiny-option>
-            </tiny-select>
-          </tiny-form-item>
-        </tiny-col>
-        <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.model.type')" prop="type">
-            <tiny-select v-model="filterOptions.type">
-              <tiny-option
-                v-for="item in modelTypeList"
-                :key="item.code"
-                :label="item.name"
-                :value="item.code"
-              >
-              </tiny-option>
-            </tiny-select>
-          </tiny-form-item>
-        </tiny-col>
-        <tiny-col :span="4">
           <tiny-form-item :label="$t('large-model.model.name')">
-            <tiny-input
-              v-model="filterOptions.nameLike"
-              clearable
-              :placeholder="$t('large-model.model.name.placeholder')"
-            ></tiny-input>
+            <tiny-input v-model="filterOptions.nameLike" clearable :placeholder="$t('large-model.model.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="4" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
+
+        <tiny-col :span="4">
+          <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
+            <tiny-select v-model="filterOptions.platform" @change="changePlatform">
+              <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
+            </tiny-select>
+          </tiny-form-item>
+        </tiny-col>
+
+        <tiny-col v-if="unfold" :span="4">
+          <tiny-form-item :label="$t('large-model.model.type')" prop="type">
+            <tiny-select v-model="filterOptions.modelType">
+              <tiny-option v-for="item in modelTypeList" :key="item.code" :label="item.name" :value="item.code"/>
+            </tiny-select>
+          </tiny-form-item>
+        </tiny-col>
+
+        <tiny-col v-if="!unfold" :span="4" class="search-btn">
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
+          <tiny-button type="text" style="color: #4e5969" @click="() => {unfold = true;}">
+            <svg-icon name="system-chevron-down" style="vertical-align: middle"/>
+            展开
           </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
+        </tiny-col>
+      </tiny-row>
+      <tiny-row v-if="unfold">
+        <tiny-col :span="4">
+          <tiny-form-item :label="$t('attribute.enabled.status')">
+            <tiny-select v-model="filterOptions.enabled" :placeholder="$t('attribute.enabled.status.placeholder')" clearable>
+              <tiny-option
+                v-for="item in proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+              />
+            </tiny-select>
+          </tiny-form-item>
+        </tiny-col>
+
+        <tiny-col :span="8" class="search-btn">
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
+          <tiny-button v-if="unfold" type="text" style="color: #4e5969" @click="
+              () => {
+                unfold = false;
+              }
+            "
+          >
+            <svg-icon name="system-chevron-up" style="vertical-align: middle"/>
+            收起
           </tiny-button>
         </tiny-col>
       </tiny-row>
@@ -80,13 +85,12 @@
         <template #default="scope">
 
           <template v-for="(item, index) in platformList">
-            <tiny-tag
-              v-if="scope.row.platform == item.code"
-              :key="item.code"
-              :index="index"
-            >
+            <tiny-tag v-if="scope.row.platform == item.code" :key="item.code" :index="index">
               <svg-icon v-if="item.code == 'ALI_BAI_LIAN'" name="logo-qwen"/>
               <svg-icon v-else-if="item.code == 'OLLAMA'" name="logo-ollama"/>
+              <svg-icon v-else-if="item.code == 'ZHI_PU'" name="logo-zhipuai"/>
+              <svg-icon v-else-if="item.code == 'DEEP_SEEK'" name="logo-deepseek"/>
+              <svg-icon v-else-if="item.code == 'MINI_MAX'" name="logo-minimax"/>
               {{ item.name }}
             </tiny-tag>
           </template>
@@ -95,45 +99,18 @@
       <tiny-grid-column field="modelType" :title="$t('large-model.model.type')">
         <template #default="scope">
           <template v-for="(item, index) in allModelTypeList">
-            <tiny-tag
-              v-if="scope.row.modelType == item.code"
-              :key="item.code"
-              :index="index"
-            >
-              {{ item.name }}
-            </tiny-tag>
+            <tiny-tag v-if="scope.row.modelType == item.code" :key="item.code" :index="index"> {{ item.name }}</tiny-tag>
           </template>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="modelName"
-        :title="$t('large-model.model.modelName')"
-      />
-      <tiny-grid-column
-        field="enabled"
-        :title="$t('attribute.enabled.status')"
-        align="center"
-        width="90"
-      >
+      <tiny-grid-column field="modelName" :title="$t('large-model.model.modelName')"/>
+      <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="90">
         <template #default="scope">
-          <dict-tag
-            :value="scope.row.enabled"
-            :options="
-              proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)
-            "
-          />
+          <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column
-        field="sort"
-        :title="$t('attribute.sort')"
-        align="center"
-      />
-      <tiny-grid-column
-        field="createdAt"
-        :title="$t('attribute.createdAt')"
-        align="center"
-      />
+      <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center"/>
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
 
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
@@ -177,6 +154,8 @@ import EditForm from './components/edit-form.vue';
 import Detail from './components/detail.vue';
 
 const {proxy} = getCurrentInstance() as any;
+
+const unfold = ref(false);
 
 const pagerConfig = reactive({
   attrs: {

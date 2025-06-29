@@ -2,38 +2,40 @@
   <div class="container-list">
     <tiny-row>
       <tiny-col :span="3">
-        <tiny-form
+        <div class="left-form">
+          <tiny-form
             ref="formDataRef" class="tiny-drawer-body-form" label-position="top" :rules="formDataRules" :model="formData"
             validate-position="bottom" label-width="110px" validate-type="text"
-        >
-          <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
-            <tiny-select v-model="formData.platform" @change="changePlatform">
-              <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
-            </tiny-select>
-          </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
-            <tiny-select v-model="formData.modelId">
-              <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
-            </tiny-select>
-          </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.image.prompt')" prop="prompt">
-            <tiny-input
+          >
+            <tiny-form-item :label="$t('large-model.model.platform')" prop="platform">
+              <tiny-select v-model="formData.platform" @change="changePlatform">
+                <tiny-option v-for="item in platformList" :key="item.code" :label="item.name" :value="item.code"/>
+              </tiny-select>
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.model.llm')" prop="modelId">
+              <tiny-select v-model="formData.modelId">
+                <tiny-option v-for="item in filterModelList" :key="item.id" :label="item.name" :value="item.id"/>
+              </tiny-select>
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.image.prompt')" prop="prompt">
+              <tiny-input
                 v-model="formData.prompt" :placeholder="$t('large-model.image.prompt.placeholder')"
                 type="textarea" :maxlength="500" :rows="5" show-word-limit/>
-          </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.image.quantity')" prop="quantity">
-            <tiny-numeric v-model="formData.quantity" :min="1" :max="4" circulate></tiny-numeric>
-          </tiny-form-item>
-          <tiny-form-item :label="$t('large-model.image.resolution')" prop="quantity">
-            <tiny-select v-model="formData.resolution" :placeholder="$t('large-model.image.resolution.placeholder')" clearable>
-              <tiny-option
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.image.quantity')" prop="quantity">
+              <tiny-numeric v-model="formData.quantity" :min="1" :max="4" circulate></tiny-numeric>
+            </tiny-form-item>
+            <tiny-form-item :label="$t('large-model.image.resolution')" prop="quantity">
+              <tiny-select v-model="formData.resolution" :placeholder="$t('large-model.image.resolution.placeholder')" clearable>
+                <tiny-option
                   v-for="item in proxy.$dict.getDictData('ai_image_resolution')" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue"/>
-            </tiny-select>
-          </tiny-form-item>
-        </tiny-form>
+              </tiny-select>
+            </tiny-form-item>
+          </tiny-form>
 
-        <tiny-button type="primary" style="height: 38px;width: 100%" @click="onSubmit">生成图片</tiny-button>
+          <tiny-button type="primary" style="height: 38px;width: 100%" @click="onSubmit">生成图片</tiny-button>
+        </div>
       </tiny-col>
       <tiny-col :span="9">
         <div class="image-list">
@@ -45,8 +47,8 @@
               {{ item.prompt }}
             </div>
             <tiny-image
-                v-for="(url, ind) in item.urls" :key="ind" class="image-item" :src="url" :preview-src-list="item.urls"
-                :z-index="3000"/>
+              v-for="(url, ind) in item.urls" :key="ind" class="image-item" :src="url" :preview-src-list="item.urls"
+              :z-index="3000"/>
           </div>
         </div>
       </tiny-col>
@@ -56,11 +58,10 @@
 
 <script lang="ts" setup>
 import * as TextToImageApi from '@/api/large-model/text-to-image';
-import {getCurrentInstance, Ref, ref, toRaw} from 'vue';
+import {getCurrentInstance, Ref, ref} from 'vue';
 import * as PlatformApi from '@/api/large-model/platform';
 import * as ModelApi from '@/api/large-model/model';
 import {getToken} from "@/utils/auth";
-import {number} from "fp-ts";
 
 const {proxy} = getCurrentInstance() as any;
 
@@ -87,9 +88,9 @@ const onSubmit = () => {
         height: Number(resolution?.split("*")[1])
       }
       TextToImageApi.generateImage(params)
-          .then((res) => {
-            getPageData();
-          })
+        .then((res) => {
+          getPageData();
+        })
     }
   });
 };
@@ -160,5 +161,16 @@ getPageData();
     border-radius: 10px;
   }
 }
+
+:deep(.tiny-col) {
+  padding: 0;
+}
+
+.left-form {
+  background-color: #fff;
+  padding: 15px;
+  height: calc(100vh - 150px)
+}
+
 
 </style>

@@ -8,53 +8,45 @@
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="8">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>
     <tiny-grid
-        ref="gridTableRef" class="table-list" :fetch-data="fetchTableData" :pager="pagerConfig" :loading="loading"
-        @toolbar-button-click="toolbarButtonClickEvent">
+      ref="gridTableRef" class="table-list" :fetch-data="fetchTableData" :pager="pagerConfig" :loading="loading"
+      @cell-click="cellClickEvent" @toolbar-button-click="toolbarButtonClickEvent">
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="fileName" :title="$t('large-model.knowledge.document.fileName')"/>
       <tiny-grid-column field="fileSize" :title="$t('large-model.knowledge.document.fileSize')" width="100">
-        <template #default="scope">
-          {{ formatFileSize(scope.row.fileSize) }}
-        </template>
+        <template #default="scope"> {{ formatFileSize(scope.row.fileSize) }}</template>
       </tiny-grid-column>
       <tiny-grid-column field="fileStatus" :title="$t('large-model.knowledge.document.fileStatus')" align="center" width="120">
         <template #default="scope">
-          <icon-loading-shadow v-if="['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(scope.row.fileStatus)"
-                               style="fill: blue;  margin-right: 6px"/>
-          <icon-operationfaild-l v-else-if="['PARSE_FAILED','EMB_FAILED'].includes(scope.row.fileStatus)" style="fill: red; margin-right: 6px"/>
-          <icon-successful v-else style="fill: green; margin-right: 6px"/>
+          <!--          <icon-loading-shadow v-if="['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(scope.row.fileStatus)"-->
+          <!--                               style="fill: blue;  margin-right: 6px"/>-->
+          <!--          <icon-operationfaild-l v-else-if="['PARSE_FAILED','EMB_FAILED'].includes(scope.row.fileStatus)" style="fill: red; margin-right: 6px"/>-->
+          <!--          <icon-successful v-else style="fill: green; margin-right: 6px"/>-->
           <dict-tag :value="scope.row.fileStatus" :options="proxy.$dict.getDictData('ai_knowledge_doc_status')"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
-      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center"/>
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
+      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center" width="170"/>
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          :width="proxy.$hasPermission(options).length * 80"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        :width="proxy.$hasPermission(options).length * 80"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="3" :spacing="8" :options="proxy.$hasPermission(options)"
-              @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
+            :max-show-num="3" :spacing="8" :options="proxy.$hasPermission(options)"
+            @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
             <template #item="{ data }">
-              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">
-                {{ $t(data.label) }}
-              </span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">{{ $t(data.label) }}</span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>
@@ -71,10 +63,10 @@
 
 <script lang="ts" setup>
 import {formatFileSize} from '@/utils/format';
-import {IconSuccessful, IconLoadingShadow, IconOperationfaildL} from '@opentiny/vue-icon'
+import {IconLoadingShadow, IconOperationfaildL, IconSuccessful} from '@opentiny/vue-icon'
 
 import * as KnowledgeDocumentApi from '@/api/large-model/knowledge-document';
-import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
+import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import ImportWebKnowledge from './components/import-web-knowledge.vue';
 import ImportFileKnowledge from './components/import-file-knowledge.vue';
 import EditForm from './components/edit-form.vue';
@@ -147,6 +139,13 @@ const toolbarButtonClickEvent = ({code}: any) => {
       console.log('code is error.');
   }
 };
+
+const cellClickEvent = ({row, column}) => {
+  if (column.property === "fileName") {
+    segmentIndexRef.value.open(row.id);
+  }
+}
+
 const options = ref<any[]>([
   {
     label: 'large-model.knowledge.document.segment',
@@ -176,22 +175,22 @@ const optionsClick = (label: string, data: KnowledgeDocumentApi.KnowledgeDocumen
 
 const handleDelete = (data: KnowledgeDocumentApi.KnowledgeDocumentVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除模型【${data.fileName}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          KnowledgeDocumentApi.deleteKnowledgeDocumentById(data.id).then(() => {
-            handleFormQuery();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除模型【${data.fileName}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        KnowledgeDocumentApi.deleteKnowledgeDocumentById(data.id).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 
 const fetchTableData = reactive({
@@ -207,10 +206,10 @@ const fetchTableData = reactive({
 const refreshTimer = ref();
 
 async function getPageData(
-    params: KnowledgeDocumentApi.KnowledgeDocumentPageParam = {
-      pageNo: 1,
-      pageSize: 10,
-    },
+  params: KnowledgeDocumentApi.KnowledgeDocumentPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
 ) {
   const queryParams: KnowledgeDocumentApi.KnowledgeDocumentPageParam = {
     ...filterOptions.value,
@@ -224,8 +223,8 @@ async function getPageData(
     }
     const {data} = await KnowledgeDocumentApi.pageKnowledgeDocument(queryParams);
     const {records, total} = data;
-    const loadingFileStatus = records.filter((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus && ['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(item.fileStatus))
-        .map((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus) as string[];
+    const loadingFileStatus = records.filter((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus && ['PARSING', 'EMB_PENDING', 'EMB_PROCESSING'].includes(item.fileStatus))
+      .map((item: KnowledgeDocumentApi.KnowledgeDocumentVO) => item.fileStatus) as string[];
     if (loadingFileStatus.length > 0) {
       refreshTimer.value = setTimeout(() => {
         handleFormQuery()

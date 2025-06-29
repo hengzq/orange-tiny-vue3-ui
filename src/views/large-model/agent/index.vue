@@ -49,7 +49,7 @@
           </tiny-tag>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
 
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
@@ -67,12 +67,7 @@
             "
           >
             <template #item="{ data }">
-              <span
-                v-if="data.label == 'opt.delete'"
-                style="color: var(--button-delete-color)"
-              >
-                {{ $t(data.label) }}
-              </span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">   {{ $t(data.label) }}   </span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>
