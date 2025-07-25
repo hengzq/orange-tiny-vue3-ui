@@ -1,31 +1,32 @@
 <template>
-  <div>
-    <session-message-index :message-list="sessionMessageList" :show-tool="false" class="session-message"/>
-    <div class="dialog">
-      <md-editor
-        v-model="formData.prompt"
-        :toolbars="toolbars"
-        :footers="footers"
-        :preview="false"
-        class="editor"
-        @keyup.enter="sendMessageStream"
-      />
-      <div class="tools">
-        <tiny-button type="text" @click="sendMessageStream" class="btn-send">
-          <svg-icon name="system-send" width="18" height="18" color="#ffffff"/>
+  <div class="s-chat-container">
+    <div class="title">
+      <div class="left">
+        <h5> 调试与预览</h5>
+      </div>
+      <div class="right">
+        <tiny-button class="right-btn" @click="clearSession">
+          <svg-icon name="system-trash" :width="18" :height="18"/>
         </tiny-button>
       </div>
+    </div>
+    <div class="dialog">
+      <chat-index
+        ref="chatIndexRef"
+        :message-list="sessionMessageList"
+        @send="handleSubmit"
+        @refresh="queryHistoryChatList"/>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import SessionMessageIndex from '@/components/session-message/index.vue';
+import ChatIndex from '@/components/chat/index.vue'
+
 import {getToken} from "@/utils/auth";
-import * as AgentApi from "@/api/large-model/agent";
-import * as ChatApi from "@/api/large-model/chat";
+import * as AppApi from "@/api/large-model/app";
+import * as ChatApi from '@/api/large-model/chat';
 import {fetchEventSource} from "@microsoft/fetch-event-source";
-import {MdEditor} from "md-editor-v3";
 import {defineProps, PropType, Ref, ref} from "vue";
 import * as SessionMessageApi from "@/api/large-model/session-message";
 
@@ -34,15 +35,11 @@ const emit = defineEmits(['refresh']);
 const {VITE_API_BASE_URL} = import.meta.env || {};
 
 const props = defineProps({
-  agent: {
-    type: Object as PropType<AgentApi.AgentVO>,
+  app: {
+    type: Object as PropType<AppApi.AppVO>,
     required: true
   }
 });
-
-const toolbars: any[] = [];
-const footers: any[] = [];
-
 
 const sessionMessageList: Ref<SessionMessageApi.SessionMessageVO[]> = ref([])
 
@@ -57,7 +54,12 @@ const queryHistoryChatList = (sessId: string) => {
   formData.value.sessionId = sessId
 };
 
-const formData = ref<AgentApi.ConversationParam>({});
+const formData = ref<ChatApi.ConversationParam>({});
+const handleSubmit = (prompt: string) => {
+  formData.value.prompt = prompt;
+  sendMessageStream()
+};
+const chatSender = ref()
 const sendMessageStream = async () => {
   if (!formData.value.prompt) {
     return;
@@ -75,13 +77,13 @@ const sendMessageStream = async () => {
   });
   const conversationParam = {
     ...formData.value,
-    agentId: props.agent.id,
-    'sessionType': 'AGENT'
+    appId: props.app?.id,
+    'sessionType': 'AGENT_DEBUG'
   };
   formData.value.prompt = '';
   let refreshed = false;
   await fetchEventSource(
-    `${VITE_API_BASE_URL}${ChatApi.AGENT_CONVERSATION_STREAM}`,
+    `${VITE_API_BASE_URL}${AppApi.CONVERSATION_STREAM}`,
     {
       method: 'POST',
       headers: {
@@ -115,56 +117,61 @@ const sendMessageStream = async () => {
       },
     },
   );
+  chatSender.value.replyComplete()
 };
 
-const addSession = () => {
+const clearSession = () => {
   sessionMessageList.value = []
   formData.value = {}
 }
 
-defineExpose({
-  addSession,
-  queryHistoryChatList,
-});
 </script>
 
 
 <style lang="less" scoped>
-
-.session-message {
-  height: calc(100vh - 280px);
-}
-
 :deep(.tiny-button) {
-  min-width: 30px !important;
+  min-width: 20px;
+  border: none;
+  background-color: transparent;
+  padding: 10px;
 }
 
-.dialog {
-  margin: 0 20px;
-  border: 1px solid #e6e6e6;
-  border-radius: 20px;
+:deep(.tiny-button:hover) {
+  min-width: 20px !important;
+  border: none;
+  background-color: #f3f4f7;
+}
+
+.s-chat-container {
+  width: 100%;
+  height: 100%;
   background-color: #ffffff;
-  padding: 0 15px 10px 0;
 
-  .editor {
-    height: calc(100% - 30px);
-    border-radius: 20px;
-    border: none;
-  }
-
-  .tools {
+  .title {
+    padding: 10px;
     display: flex;
-    justify-content: flex-end;
-    height: 35px;
-    line-height: 35px;
+    justify-content: space-between;
+    line-height: 32px;
+    background-color: #cdd0dc26;
+    border-bottom: 1px solid #26244c0d;
 
-    .btn-send {
-      display: grid;
-      place-items: center;
-      background-color: #356bfd;
-      border: 1px solid;
-      border-radius: 10%;
+    h5 {
+      margin: 0;
+      color: var(--ti-base-common-title-color);
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: 0.55px;
     }
   }
+
+  .dialog {
+    height: calc(100% - 50px);
+    margin: 0 20px;
+    padding-bottom: 10px;
+  }
+}
+
+.right-btn {
+  color: #26244ca6 !important;
 }
 </style>

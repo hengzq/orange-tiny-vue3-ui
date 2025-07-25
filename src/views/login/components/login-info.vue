@@ -1,30 +1,20 @@
 <template>
   <div class="login-form-container">
     <tiny-form
-        ref="loginFormInfo"
-        :model="loginInfo"
-        class="login-form"
-        :rules="rules"
-        validate-type="text"
-        label-width="0"
-        size="medium"
+      ref="loginFormInfo"
+      :model="loginInfo"
+      class="login-form"
+      :rules="rules"
+      validate-type="text"
+      label-width="0"
+      size="medium"
     >
       <tiny-form-item prop="username" size="medium">
-        <tiny-input
-            v-model="loginInfo.username"
-            :placeholder="$t('login.form.userName.placeholder')"
-        >
-        </tiny-input>
+        <tiny-input v-model="loginInfo.username" :placeholder="$t('login.form.userName.placeholder')"/>
       </tiny-form-item>
 
       <tiny-form-item prop="password" size="medium">
-        <tiny-input
-            v-model="loginInfo.password"
-            type="password"
-            show-password
-            :placeholder="$t('login.form.password.placeholder')"
-        >
-        </tiny-input>
+        <tiny-input v-model="loginInfo.password" type="password" show-password :placeholder="$t('login.form.password.placeholder')"/>
       </tiny-form-item>
 
       <div class="login-form-options">
@@ -41,13 +31,7 @@
       </div>
 
       <tiny-form-item size="medium">
-        <tiny-button
-            type="primary"
-            class="login-form-btn"
-            :loading="loading"
-            @click="handleSubmit"
-        >{{ $t('login.form.login') }}
-        </tiny-button>
+        <tiny-button type="primary" class="login-form-btn" :loading="loading" @click="handleSubmit">{{ $t('login.form.login') }}</tiny-button>
       </tiny-form-item>
     </tiny-form>
   </div>

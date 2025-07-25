@@ -48,7 +48,6 @@ const useUserStore = defineStore('user', {
 
     async info() {
       const res = await PermissionApi.getUserInfo();
-      const {roles} = res.data;
       const userInfo = {
         // rolePermissions: roles.map((item: RoleVO) => item.permission),
         ...res.data,

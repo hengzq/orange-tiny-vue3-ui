@@ -5,9 +5,12 @@ export interface TreeNode {
 }
 
 export const listToTreeConverter = (data: TreeNode[]) => {
+  //  创建副本，避免修改原始数据
+  const copyData = data.map(item => ({...item}));
+
   const result: object[] = [];
-  data.forEach((item) => {
-    const parent = data.find((i) => i.id === item.parentId);
+  copyData.forEach((item) => {
+    const parent = copyData.find((i) => i.id === item.parentId);
     if (!parent) {
       result.push(item);
       return;

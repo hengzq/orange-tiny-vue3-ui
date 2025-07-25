@@ -3,15 +3,24 @@
     <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.agent.modelId')" prop="modelId">
+          <tiny-form-item :label="$t('llm.session.modelId')" prop="modelId">
             <tiny-cascader v-model="filterOptions.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.agent.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.agent.name.placeholder')"/>
+          <tiny-form-item :label="$t('llm.session.name')">
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('llm.session.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
+        <!--        <tiny-col :span="4">-->
+        <!--          <tiny-form-item :label="$t('llm.session.sessionType')" prop="quantity">-->
+        <!--            <tiny-select v-model="filterOptions.source" :placeholder="$t('llm.session.sessionType.placeholder')" clearable>-->
+        <!--              <tiny-option-->
+        <!--                v-for="item in proxy.$dict.getDictData('ai_session_source')" :key="item.dictValue" :label="item.dictLabel"-->
+        <!--                :value="item.dictValue"/>-->
+        <!--            </tiny-select>-->
+        <!--          </tiny-form-item>-->
+        <!--        </tiny-col>-->
         <tiny-col :span="4" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
@@ -24,13 +33,14 @@
       :fetch-data="fetchTableData"
       :pager="pagerConfig"
       :loading="loading"
+      @cell-click="cellClickEvent"
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('large-model.agent.name')"/>
+      <tiny-grid-column field="name" :title="$t('llm.session.name')" show-overflow/>
       <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
@@ -42,20 +52,18 @@
           </template>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="modelId" :title="$t('large-model.agent.knowledgeBase')" align="center">
+      <tiny-grid-column field="source" :title="$t('llm.session.sessionType')" width="150" align="center">
         <template #default="scope">
-          <tiny-tag v-for="(item, index) in scope.row.baseList" :key="item.value" :index="index" style="margin-right: 10px">
-            {{ item.name }}
-          </tiny-tag>
+          <dict-tag :value="scope.row.sessionType" :options="proxy.$dict.getDictData('ai_session_source')"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
-
+      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center" width="170"/>
       <tiny-grid-column
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        :width="proxy.$hasPermission(options).length * 50"
+        :width="proxy.$hasPermission(options).length * 70"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -76,20 +84,28 @@
     </tiny-grid>
   </div>
 
-  <edit-form ref="editFormRef" @ok="handleFormQuery"></edit-form>
+  <detail ref="detailRef"/>
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
 import * as PlatformApi from '@/api/large-model/platform';
-import * as AgentApi from '@/api/large-model/agent';
+import * as SessionApi from '@/api/large-model/session';
 import * as ModelApi from "@/api/large-model/model";
+import * as AppApi from "@/api/large-model/app";
 
-import {getCurrentInstance, reactive, Ref, ref, toRefs} from 'vue';
-import EditForm from './components/edit-form.vue';
-
+import {defineProps, getCurrentInstance, PropType, reactive, ref, toRefs} from 'vue';
+import Detail from './components/detail.vue';
 
 const {proxy} = getCurrentInstance() as any;
+
+
+const props = defineProps({
+  app: {
+    type: Object as PropType<AppApi.AppDetailVO>,
+    required: true
+  }
+});
+
 
 const pagerConfig = reactive({
   attrs: {
@@ -104,10 +120,10 @@ const pagerConfig = reactive({
 
 const state = reactive<{
   loading: boolean;
-  filterOptions: AgentApi.AgentPageParam;
+  filterOptions: SessionApi.SessionPageParam;
 }>({
   loading: false,
-  filterOptions: {} as AgentApi.AgentPageParam,
+  filterOptions: {} as SessionApi.SessionPageParam,
 });
 const {loading, filterOptions} = toRefs(state);
 const gridTableRef = ref();
@@ -116,51 +132,76 @@ const handleFormQuery = () => {
   gridTableRef?.value.handleFetch('reload', null);
 };
 const handleFormReset = () => {
-  state.filterOptions = {} as AgentApi.AgentPageParam;
+  state.filterOptions = {} as SessionApi.SessionPageParam;
   handleFormQuery();
 };
 
 const toolbarButtons = reactive<any[]>([
   {
-    permission: 'orange-ai:agent:add',
-    code: 'insert',
-    name: '新增',
+    permission: 'orange-ai:model:add',
+    code: 'batchDelete',
+    name: '批量删除',
   },
 ]);
-const editFormRef = ref();
-const toolbarButtonClickEvent = ({code}: any) => {
+const toolbarButtonClickEvent = ({code, $grid}: any) => {
+  const data = $grid.getSelectRecords();
   switch (code) {
-    case 'insert': {
-      editFormRef.value.open();
+    case 'batchDelete': {
+      handleBatchDelete(data);
       break;
     }
     default:
       console.log('code is error.');
   }
 };
+
+const cellClickEvent = ({row, column}) => {
+  if (column.property === 'name') {
+    detailRef.value.open(row.id);
+  }
+}
+
+const handleBatchDelete = (data: SessionApi.SessionVO[]) => {
+  let ids: string[] = data.map((item) => item.id) as string[];
+  if (ids.length === 0) {
+    proxy.$modal.message({
+      message: '请选择需要删除的用户',
+      status: 'warning',
+    });
+    return;
+  }
+  proxy.$modal
+    .confirm({
+      message: `确定要批量删除回话吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (res === 'confirm') {
+        SessionApi.deleteSessionByIds(ids).then(() => {
+          handleFormQuery();
+          proxy.$modal.message({
+            message: '批量删除成功',
+            status: 'success',
+          });
+        });
+      }
+    });
+};
 const options = ref<any[]>([
   {
-    label: 'large-model.agent.opt.demonstration',
+    label: 'llm.session.opt.messages',
   },
   {
-    permission: 'orange-ai:agent:update',
-    label: 'opt.edit',
-  },
-  {
-    permission: 'orange-ai:agent:delete',
+    permission: 'orange-ai:model:delete',
     label: 'opt.delete',
   },
 ]);
 const detailRef = ref();
-const optionsClick = (label: string, data: AgentApi.AgentVO) => {
+const optionsClick = (label: string, data: SessionApi.SessionVO) => {
   switch (label) {
-    case 'large-model.agent.opt.demonstration': {
-      const route = router.resolve(`${import.meta.env.VITE_CONTEXT}agent-ui/${data.id}`);
-      window.open(route.href, '_blank');
-      break;
-    }
-    case 'opt.edit': {
-      editFormRef.value.open(data.id);
+    case 'llm.session.opt.messages': {
+      detailRef.value.open(data.id);
       break;
     }
     case 'opt.delete': {
@@ -172,16 +213,16 @@ const optionsClick = (label: string, data: AgentApi.AgentVO) => {
   }
 };
 
-const handleDelete = (data: AgentApi.AgentVO) => {
+const handleDelete = (data: SessionApi.SessionVO) => {
   proxy.$modal
     .confirm({
-      message: `确定要删除智能体【${data.name}】吗?`,
+      message: `确定要删除会话【${data.name}】吗?`,
       maskClosable: true,
       title: '删除提示',
     })
     .then((res: string) => {
       if (data.id && res === 'confirm') {
-        AgentApi.deleteAgentById(data.id).then(() => {
+        SessionApi.deleteSessionById(data.id).then(() => {
           handleFormQuery();
           proxy.$modal.message({
             message: '删除成功',
@@ -192,7 +233,7 @@ const handleDelete = (data: AgentApi.AgentVO) => {
     });
 };
 
-const modelList: Ref<ModelApi.PlatformModelTree[]> = ref([])
+const modelList = ref([])
 const queryPlatformList = () => {
   PlatformApi.listPlatform().then((res) => {
     modelList.value = res.data.map((item: ModelApi.ModelVO) => ({'value': item.code, 'label': item.name}))
@@ -209,20 +250,9 @@ const queryModelList = () => {
     modelList.value.forEach(item => {
       item.children = models.filter((model: ModelApi.ModelVO) => model.platform === item.value)
     })
-    // 过滤掉没有模型的供应商
-    modelList.value = modelList.value.filter(item => item.children && item.children.length > 0)
   });
 };
 queryPlatformList()
-
-const platformList: Ref<PlatformApi.PlatformVO[]> = ref([]);
-
-
-const modelTypeList: Ref<AgentApi.AgentTypeVO[]> = ref([]);
-const changePlatform = (item: any) => {
-  modelTypeList.value =
-    platformList.value.filter((p) => p.code === item)[0].modelTypes || [];
-};
 
 const fetchTableData = reactive({
   api: ({page}: any) => {
@@ -234,17 +264,26 @@ const fetchTableData = reactive({
   },
 });
 
-async function getPageData(params: AgentApi.AgentPageParam = {
-  pageNo: 1,
-  pageSize: 10,
-}) {
-  const queryParams: AgentApi.AgentPageParam = {
+async function getPageData(
+  params: SessionApi.SessionPageParam = {
+    pageNo: 1,
+    pageSize: 10,
+  },
+) {
+  if (!props.app?.id) {
+    return {
+      result: [],
+      page: 0,
+    };
+  }
+  const queryParams: SessionApi.SessionPageParam = {
     ...filterOptions.value,
     ...params,
+    associationId: props.app?.id
   };
   state.loading = true;
   try {
-    const {data} = await AgentApi.pageAgent(queryParams);
+    const {data} = await SessionApi.pageSession(queryParams);
     const {records, total} = data;
     return {
       result: records,

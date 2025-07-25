@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <router-view/>
     <global-setting/>
   </div>
@@ -14,5 +14,4 @@ provide('echarts', echarts);
 </script>
 
 <style lang="less" scoped>
-@import '@/assets/style/menu.less'; /* 引入公共样式 */
 </style>

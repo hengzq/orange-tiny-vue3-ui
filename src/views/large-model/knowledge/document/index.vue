@@ -3,8 +3,8 @@
     <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.knowledge.document.fileName')">
-            <tiny-input v-model="filterOptions.fileName" clearable :placeholder="$t('large-model.knowledge.document.fileName.placeholder')"/>
+          <tiny-form-item :label="$t('llm.knowledge.document.fileName')">
+            <tiny-input v-model="filterOptions.fileName" clearable :placeholder="$t('llm.knowledge.document.fileName.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="8">
@@ -20,11 +20,11 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="fileName" :title="$t('large-model.knowledge.document.fileName')"/>
-      <tiny-grid-column field="fileSize" :title="$t('large-model.knowledge.document.fileSize')" width="100">
+      <tiny-grid-column field="fileName" :title="$t('llm.knowledge.document.fileName')"/>
+      <tiny-grid-column field="fileSize" :title="$t('llm.knowledge.document.fileSize')" width="100">
         <template #default="scope"> {{ formatFileSize(scope.row.fileSize) }}</template>
       </tiny-grid-column>
-      <tiny-grid-column field="fileStatus" :title="$t('large-model.knowledge.document.fileStatus')" align="center" width="120">
+      <tiny-grid-column field="fileStatus" :title="$t('llm.knowledge.document.fileStatus')" align="center" width="120">
         <template #default="scope">
           <!--          <icon-loading-shadow v-if="['PARSING','EMB_PENDING','EMB_PROCESSING'].includes(scope.row.fileStatus)"-->
           <!--                               style="fill: blue;  margin-right: 6px"/>-->
@@ -148,7 +148,7 @@ const cellClickEvent = ({row, column}) => {
 
 const options = ref<any[]>([
   {
-    label: 'large-model.knowledge.document.segment',
+    label: 'llm.knowledge.document.segment',
   },
   {
     permission: 'orange-ai:knowledge-doc:delete',
@@ -160,7 +160,7 @@ const editFormRef = ref()
 const segmentIndexRef = ref()
 const optionsClick = (label: string, data: KnowledgeDocumentApi.KnowledgeDocumentVO) => {
   switch (label) {
-    case 'large-model.knowledge.document.segment': {
+    case 'llm.knowledge.document.segment': {
       segmentIndexRef.value.open(data.id);
       break;
     }

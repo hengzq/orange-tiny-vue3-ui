@@ -10,6 +10,9 @@ export default {
   'opt.preview': '预览',
   'opt.save': '保存',
   'opt.cancel': '取消',
+  'opt.add': '添加',
+  'opt.disabled': '禁用',
+  'opt.enabled': '启用',
 
   'attribute.description': '描述',
   'attribute.description.placeholder': '请输入相关描述信息',

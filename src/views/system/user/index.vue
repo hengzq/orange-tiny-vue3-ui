@@ -13,7 +13,8 @@
               v-model="filterOptions.nameLike"
               clearable
               :placeholder="$t('system.user.name.placeholder')"
-            ></tiny-input>
+              @keyup.enter="handleFormQuery"
+            />
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
@@ -22,16 +23,13 @@
               v-model="filterOptions.loginAccountLike"
               clearable
               :placeholder="$t('system.user.loginAccount.placeholder')"
-            ></tiny-input>
+              @keyup.enter="handleFormQuery"
+            />
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>
@@ -46,11 +44,7 @@
       @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
-        <tiny-grid-toolbar
-          :buttons="proxy.$hasPermission(toolbarButtons)"
-          refresh
-          full-screen
-        />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" refresh full-screen/>
       </template>
       <tiny-grid-column type="selection" width="50"></tiny-grid-column>
       <tiny-grid-column
@@ -255,10 +249,10 @@ const toolbarButtons = reactive([
     name: '新增',
     permission: 'system:user:add',
   },
-  {
-    code: 'batchDelete',
-    name: '批量删除',
-  },
+  // {
+  //   code: 'batchDelete',
+  //   name: '批量删除',
+  // },
 ]);
 
 const toolbarButtonClickEvent = ({code, $grid}: any) => {

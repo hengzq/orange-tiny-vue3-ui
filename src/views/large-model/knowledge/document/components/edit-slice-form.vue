@@ -9,7 +9,7 @@
     <tiny-form
         ref="formDataRef" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
         validate-type="text">
-      <tiny-form-item :label="$t('large-model.knowledge.document.slice')" prop="embeddingModel">
+      <tiny-form-item :label="$t('llm.knowledge.document.slice')" prop="embeddingModel">
         <md-editor v-model="formData.content" :toolbars="toolbars" :footers="footers" :preview="false"/>
       </tiny-form-item>
     </tiny-form>

@@ -9,20 +9,12 @@
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.menu.name')">
-            <tiny-input
-              v-model="filterOptions.nameLike"
-              clearable
-              :placeholder="$t('system.menu.name.placeholder')"
-            ></tiny-input>
+            <tiny-input v-model="filterOptions.nameLike" clearable :placeholder="$t('system.menu.name.placeholder')" @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="8" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>

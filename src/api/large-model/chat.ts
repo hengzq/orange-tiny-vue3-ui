@@ -5,7 +5,7 @@ export const CONVERSATION_STREAM_URL =
 
 export const COMPLETIONS_URL =
   '/orange-ai/v1.0/chat/completions';
-export const AGENT_CONVERSATION_STREAM = BASE_URL.concat('/agent-conversation-stream');
+
 // /orange-ai/v1.0/chat/completions
 //
 // export function generateImage(params: TextToImageVO) {
@@ -26,4 +26,4 @@ export interface ConversationParam {
   systemPrompt?: string;
   sessionId?: string;
   temperature?: number;
-};
+}

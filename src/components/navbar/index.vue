@@ -6,7 +6,7 @@
         <h5 @click="jumpUrl">Orange 智慧管理平台</h5>
         <div class="divider"></div>
         <!--                <img class="vue-icon" alt="logo" src="@/assets/images/pro.png" />-->
-        <h4 style="width: 60px;">V1.5.0</h4>
+        <h4 style="width: 60px;">V1.6.0</h4>
         <!--        <div class="divider"></div>-->
 
         <!--        <breadcrumb :items="items"/>-->

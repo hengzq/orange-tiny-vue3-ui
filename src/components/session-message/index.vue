@@ -1,79 +1,72 @@
 <template>
   <div class="session-content" ref="content">
     <template v-for="(item, index) in messageList" :key="index">
-      <!--   用户问题   -->
-      <div v-if="item.role === 'USER'" class="item question">
-        <md-preview v-model="item.content"/>
-        <tiny-user-head type="icon" round min style="display: flex;align-items: center; padding-left: 10px">
-          <div class="user-avatar">
-            <img src="@/assets/images/avatar.png" alt="user"/>
-          </div>
-        </tiny-user-head>
-      </div>
+      <chat-item :message="item"/>
+<!--      <chat-reasoning/>-->
 
       <!--    大模型回答   -->
-      <div v-if="item.role === 'ASSISTANT'" class="item answer">
-        <tiny-user-head type="icon" round min style="display: flex;align-items: flex-start; padding-right: 10px">
-          <div class="user-avatar">
-            <img src="/favicon.ico" alt="user"/>
-          </div>
-        </tiny-user-head>
+      <!--      <div v-if="item.role === 'ASSISTANT'" class="item answer">-->
+      <!--        <tiny-user-head type="icon" round min style="display: flex;align-items: flex-start; padding-right: 10px">-->
+      <!--          <div class="user-avatar">-->
+      <!--            <img src="/favicon.ico" alt="user"/>-->
+      <!--          </div>-->
+      <!--        </tiny-user-head>-->
 
-        <div class="answer-content">
-          <div v-if="item.content === '' || !item.content" class="loading-answer-content">
-            <md-preview v-model="loadingContent" style="width: fit-content;padding: 0px;"/>
-            <div class="dots">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
+      <!--        <div class="answer-content">-->
+      <!--          <div v-if="item.content === '' || !item.content" class="loading-answer-content">-->
+      <!--            <md-preview v-model="loadingContent" style="width: fit-content;padding: 0px;"/>-->
+      <!--            <div class="dots">-->
+      <!--              <div></div>-->
+      <!--              <div></div>-->
+      <!--              <div></div>-->
+      <!--            </div>-->
+      <!--          </div>-->
 
-          <md-preview v-else v-model="item.content" style="width: 100%"/>
-        </div>
+      <!--          <md-preview v-else v-model="item.content" style="width: 100%"/>-->
+      <!--        </div>-->
 
 
-        <div class="tools" v-if="showTool">
-          <tiny-tooltip type="info" content="复制" placement="top">
-            <tiny-button type="text" @click="copyInfo(item)">
-              <svg-icon name="system-copy" width="18" height="18" color="#3f3f3f"/>
-            </tiny-button>
-          </tiny-tooltip>
-          <tiny-tooltip type="info" content="点赞" placement="top">
-            <tiny-button type="text" @click="toRate(item, 'THUMBS_UP')">
-              <svg-icon
-                name="system-good" width="18" height="18"
-                :color="
-                    item.rating === 'THUMBS_UP'
-                      ? 'var(--ti-button-primary-normal-border-color)'
-                      : '#3f3f3f'
-                  "
-              />
-            </tiny-button>
-          </tiny-tooltip>
-          <tiny-tooltip type="info" content="点踩" placement="top">
-            <tiny-button type="text" @click="toRate(item, 'THUMBS_DOWN')">
-              <svg-icon
-                name="system-bad" width="18" height="18"
-                :color="
-                    item.rating === 'THUMBS_DOWN'
-                      ? 'var(--ti-button-primary-normal-border-color)'
-                      : '#3f3f3f'
-                  "
-              />
-            </tiny-button>
-          </tiny-tooltip>
-        </div>
-      </div>
+      <!--        <div class="tools" v-if="showTool">-->
+      <!--          <tiny-tooltip type="info" content="复制" placement="top">-->
+      <!--            <tiny-button type="text" @click="copyInfo(item)">-->
+      <!--              <svg-icon name="system-copy" width="18" height="18" color="#3f3f3f"/>-->
+      <!--            </tiny-button>-->
+      <!--          </tiny-tooltip>-->
+      <!--          <tiny-tooltip type="info" content="点赞" placement="top">-->
+      <!--            <tiny-button type="text" @click="toRate(item, 'THUMBS_UP')">-->
+      <!--              <svg-icon-->
+      <!--                name="system-good" width="18" height="18"-->
+      <!--                :color="-->
+      <!--                    item.rating === 'THUMBS_UP'-->
+      <!--                      ? 'var(&#45;&#45;ti-button-primary-normal-border-color)'-->
+      <!--                      : '#3f3f3f'-->
+      <!--                  "-->
+      <!--              />-->
+      <!--            </tiny-button>-->
+      <!--          </tiny-tooltip>-->
+      <!--          <tiny-tooltip type="info" content="点踩" placement="top">-->
+      <!--            <tiny-button type="text" @click="toRate(item, 'THUMBS_DOWN')">-->
+      <!--              <svg-icon-->
+      <!--                name="system-bad" width="18" height="18"-->
+      <!--                :color="-->
+      <!--                    item.rating === 'THUMBS_DOWN'-->
+      <!--                      ? 'var(&#45;&#45;ti-button-primary-normal-border-color)'-->
+      <!--                      : '#3f3f3f'-->
+      <!--                  "-->
+      <!--              />-->
+      <!--            </tiny-button>-->
+      <!--          </tiny-tooltip>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import {MdPreview} from "md-editor-v3";
-import 'md-editor-v3/lib/style.css';
 import {defineProps, PropType, ref} from "vue";
 import * as SessionMessageApi from "@/api/large-model/session-message";
+import ChatItem from '@/components/chat-item/index.vue'
+import ChatReasoning from '@/components/chat-reasoning/index.vue'
 
 const loadingContent = ref("思考中")
 
@@ -127,7 +120,7 @@ const props = defineProps({
     background-color: var(--tv-color-bg);
     border-radius: 10px;
     padding-right: 10px;
-    width:  calc(100% - 80px);
+    width: calc(100% - 80px);
   }
 
   .loading-answer-content {
@@ -162,41 +155,5 @@ const props = defineProps({
 :deep(.md-editor-preview) {
   font-size: 13px !important;
 }
-
-
-// ----------------------- 思考中的动画
-.dots {
-  width: 1.2em;
-  height: 2.2em;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.dots div {
-  width: 0.2em;
-  height: 0.2em;
-  border-radius: 50%;
-  background-color: black;
-  animation: fade 0.8s ease-in-out infinite;
-}
-
-.dots div:nth-of-type(1) {
-  animation-delay: -0.4s;
-}
-
-.dots div:nth-of-type(2) {
-  animation-delay: -0.2s;
-}
-
-@keyframes fade {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
 
 </style>

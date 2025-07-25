@@ -1,89 +1,82 @@
 <template>
   <div class="container-list">
     <tiny-form
-        :model="filterOptions"
-        label-position="right"
-        label-width="110px"
-        class="filter-form"
+      :model="filterOptions"
+      label-position="right"
+      label-width="110px"
+      class="filter-form"
     >
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.department.name')">
             <tiny-input
-                v-model="filterOptions.nameLike"
-                clearable
-                :placeholder="$t('system.department.name.placeholder')"
-            ></tiny-input>
+              v-model="filterOptions.nameLike" clearable :placeholder="$t('system.department.name.placeholder')" @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8"  class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+        <tiny-col :span="8" class="search-btn">
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>
 
     <tiny-grid
-        :data="tableData"
-        class="table-list"
-        :tree-config="{ children: 'children' }"
-        :loading="loading"
-        @toolbar-button-click="toolbarButtonClickEvent"
+      :data="tableData"
+      class="table-list"
+      :tree-config="{ children: 'children' }"
+      :loading="loading"
+      @toolbar-button-click="toolbarButtonClickEvent"
     >
       <template #toolbar>
         <tiny-grid-toolbar
-            :buttons="proxy.$hasPermission(toolbarButtons)"
-            full-screen
+          :buttons="proxy.$hasPermission(toolbarButtons)"
+          full-screen
 
         />
       </template>
       <tiny-grid-column field="index" width="50" tree-node></tiny-grid-column>
       <tiny-grid-column
-          field="name"
-          :title="$t('system.department.name')"
-          width="200"
+        field="name"
+        :title="$t('system.department.name')"
+        width="200"
       />
       <tiny-grid-column
-          field="sort"
-          :title="$t('attribute.sort')"
-          align="center"
+        field="sort"
+        :title="$t('attribute.sort')"
+        align="center"
       />
       <tiny-grid-column
-          field="createdAt"
-          :title="$t('attribute.createdAt')"
-          align="center"
-          width="170"
+        field="createdAt"
+        :title="$t('attribute.createdAt')"
+        align="center"
+        width="170"
       />
       <tiny-grid-column
-          field="description"
-          show-overflow
-          :title="$t('attribute.description')"
-          width="260"
+        field="description"
+        show-overflow
+        :title="$t('attribute.description')"
+        width="260"
       />
 
       <tiny-grid-column
-          v-if="proxy.$hasPermission(options).length !== 0"
-          :title="$t('table.operations')"
-          align="center"
-          width="100"
+        v-if="proxy.$hasPermission(options).length !== 0"
+        :title="$t('table.operations')"
+        align="center"
+        width="100"
       >
         <template #default="scope">
           <tiny-action-menu
-              :max-show-num="2"
-              :spacing="8"
-              :options="proxy.$hasPermission(options)"
-              @item-click="
+            :max-show-num="2"
+            :spacing="8"
+            :options="proxy.$hasPermission(options)"
+            @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
           >
             <template #item="{ data }">
               <span
-                  v-if="data.label == 'opt.delete'"
-                  style="color: var(--button-delete-color)"
+                v-if="data.label == 'opt.delete'"
+                style="color: var(--button-delete-color)"
               >
                 {{ $t(data.label) }}
               </span>
@@ -147,8 +140,8 @@ const options = ref<any[]>([
   },
 ]);
 const optionsClick = (
-    label: string,
-    data: DepartmentApi.DepartmentTreeVO,
+  label: string,
+  data: DepartmentApi.DepartmentTreeVO,
 ) => {
   switch (label) {
     case 'opt.edit': {
@@ -166,22 +159,22 @@ const optionsClick = (
 
 const handleDelete = (data: DepartmentApi.DepartmentTreeVO) => {
   proxy.$modal
-      .confirm({
-        message: `确定要删除部门【${data.name}】吗?`,
-        maskClosable: true,
-        title: '删除提示',
-      })
-      .then((res: string) => {
-        if (data.id && res === 'confirm') {
-          DepartmentApi.deleteDepartmentById(data.id).then(() => {
-            queryDepartmentList();
-            proxy.$modal.message({
-              message: '删除成功',
-              status: 'success',
-            });
+    .confirm({
+      message: `确定要删除部门【${data.name}】吗?`,
+      maskClosable: true,
+      title: '删除提示',
+    })
+    .then((res: string) => {
+      if (data.id && res === 'confirm') {
+        DepartmentApi.deleteDepartmentById(data.id).then(() => {
+          queryDepartmentList();
+          proxy.$modal.message({
+            message: '删除成功',
+            status: 'success',
           });
-        }
-      });
+        });
+      }
+    });
 };
 
 const tableData: Ref<DepartmentApi.DepartmentTreeVO[]> = ref([]);

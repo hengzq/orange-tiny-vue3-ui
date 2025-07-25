@@ -24,9 +24,9 @@
         <tiny-form
             ref="formDataRef" :rules="formDataRules" label-width="110px" :model="formData" validate-position="bottom"
             validate-type="text">
-          <tiny-form-item :label="$t('large-model.knowledge.document.sliceIdentifierList')" prop="fileName">
+          <tiny-form-item :label="$t('llm.knowledge.document.sliceIdentifierList')" prop="fileName">
             <tiny-select
-                v-model="formData.sliceIdentifierList" :placeholder="$t('large-model.knowledge.document.sliceIdentifierList.placeholder')"
+                v-model="formData.sliceIdentifierList" :placeholder="$t('llm.knowledge.document.sliceIdentifierList.placeholder')"
                 multiple clearable :show-alloption="false">
               <tiny-option
                   v-for="item in proxy.$dict.getDictData('ai_knowledge_base_doc_slice_identifier')" :key="item.dictValue" :label="item.dictLabel"

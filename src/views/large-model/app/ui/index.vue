@@ -4,7 +4,7 @@
       <template #header>
         <tiny-layout>
           <div class="layout-navbar">
-            <navbar-index :agent="agent"/>
+            <navbar-index :app="app"/>
           </div>
         </tiny-layout>
       </template>
@@ -14,22 +14,22 @@
           <tiny-grid
             ref="gridTableRef" :data="sessionList" :show-header="false" max-height="100%" highlight-current-row @current-change="handleCurrentChange">
             <tiny-grid-column field="name" show-overflow/>
-<!--            <tiny-grid-column :title="$t('table.operations')" align="center" width="60">-->
-<!--              <template #default="scope">-->
-<!--                <tiny-action-menu-->
-<!--                  :max-show-num="0" :options="options" more-text="" :suffix-icon="tinyIconConfig"-->
-<!--                  @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">-->
-<!--                  <template #item="{ data }">-->
-<!--                    <span> {{ $t(data.label) }} </span>-->
-<!--                  </template>-->
-<!--                </tiny-action-menu>-->
-<!--              </template>-->
-<!--            </tiny-grid-column>-->
+            <!--            <tiny-grid-column :title="$t('table.operations')" align="center" width="60">-->
+            <!--              <template #default="scope">-->
+            <!--                <tiny-action-menu-->
+            <!--                  :max-show-num="0" :options="options" more-text="" :suffix-icon="tinyIconConfig"-->
+            <!--                  @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">-->
+            <!--                  <template #item="{ data }">-->
+            <!--                    <span> {{ $t(data.label) }} </span>-->
+            <!--                  </template>-->
+            <!--                </tiny-action-menu>-->
+            <!--              </template>-->
+            <!--            </tiny-grid-column>-->
           </tiny-grid>
         </tiny-layout>
       </template>
       <tiny-layout class="layout-main">
-        <conversation-index ref="conversationIndexRef" :agent="agent" @refresh="querySession" style="width: 80%;margin: auto;"/>
+        <conversation-index ref="conversationIndexRef" :app="app" @refresh="querySession"/>
       </tiny-layout>
     </tiny-container>
   </div>
@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
 import {getCurrentInstance, ref, Ref} from "vue";
-import * as AgentApi from '@/api/large-model/agent';
+import * as AppApi from '@/api/large-model/app';
 import * as SessionApi from "@/api/large-model/session";
 import {iconConfig} from '@opentiny/vue-icon'
 
@@ -63,10 +63,10 @@ const options = ref<any[]>([
   },
 ]);
 
-const agent: Ref<AgentApi.AgentVO> = ref({})
+const app: Ref<AppApi.AppDetailVO> = ref({})
 const getAgentById = () => {
-  AgentApi.getAgentById(proxy.$route.params.agentId).then((res) => {
-    agent.value = res.data;
+  AppApi.getLatestAppById(proxy.$route.params.appId, true).then((res) => {
+    app.value = res.data;
   });
 }
 getAgentById()
@@ -74,8 +74,11 @@ getAgentById()
 const gridTableRef = ref('gridTableRef');
 const sessionList: Ref<SessionApi.SessionVO[]> = ref([]);
 const querySession = () => {
+  if (!proxy.$route.params.appId){
+    return;
+  }
   const queryParams = {
-    'associationId': proxy.$route.params.agentId
+    'associationId': proxy.$route.params.appId
   };
   SessionApi.listSession(queryParams).then((res) => {
     sessionList.value = res.data;
@@ -99,7 +102,6 @@ const addSession = () => {
 <style scoped lang="less">
 :deep(.tiny-container__aside) {
   background-color: #fff;
-  //border-left: 1px solid var(--o-border-line-1, #e8e8e8);
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -114,8 +116,7 @@ const addSession = () => {
 }
 
 .layout-main {
-  //background-color: var(--tv-color-bg);
-  height: 100%;
+  margin: 15px;
 }
 
 :deep(.tiny-grid .tiny-grid-body__column, .tiny-grid .tiny-grid-footer__column, .tiny-grid .tiny-grid-header__column) {

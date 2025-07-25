@@ -25,7 +25,7 @@ import Round from './components/round.vue';
 </style>
 
 <style lang="less" scoped>
-// responsive
+ //responsive
 @media (max-width: @screen-xs) {
   .container {
     overflow-x: auto;

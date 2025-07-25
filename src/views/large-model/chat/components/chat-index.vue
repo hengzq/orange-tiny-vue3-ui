@@ -16,31 +16,16 @@
       </div>
       <session-message-index :message-list="sessionMessageList" :show-tool="false" class="session-message"/>
     </div>
-
-    <div class="footer">
-      <md-editor
-        v-model="formData.prompt"
-        :toolbars="toolbars"
-        :footers="footers"
-        :preview="false"
-        class="editor"
-        @keyup.enter="sendMessageStream"
-      />
-      <div class="tools">
-        <tiny-button type="text" @click="sendMessageStream" class="btn-send">
-          <svg-icon name="system-send" width="18" height="18" color="#ffffff"/>
-        </tiny-button>
-      </div>
-    </div>
+    <chat-sender ref="chatSender" style="padding: 0 20px" @send="handleSubmit"/>
   </div>
 </template>
 
 <script lang="ts" setup>
 import {defineProps, getCurrentInstance, PropType, ref, Ref} from 'vue';
+import ChatSender from '@/components/chat-sender/index.vue'
 import * as ChatApi from '@/api/large-model/chat';
 import * as SessionMessageApi from '@/api/large-model/session-message';
 import {fetchEventSource} from '@microsoft/fetch-event-source';
-import {MdEditor} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import {getToken} from '@/utils/auth';
 import {useClipboard} from '@vueuse/core';
@@ -49,9 +34,6 @@ import SessionMessageIndex from "@/components/session-message/index.vue";
 const {copy} = useClipboard();
 const {proxy} = getCurrentInstance() as any;
 const emit = defineEmits(['refresh', 'validate']);
-
-const toolbars: any[] = [];
-const footers: any[] = [];
 
 const {VITE_API_BASE_URL} = import.meta.env || {};
 const props = defineProps({
@@ -73,6 +55,12 @@ const queryHistoryChatList = (sessId = props.conversationParam.sessionId) => {
 };
 
 const formData = ref<ChatApi.ConversationParam>({});
+const handleSubmit = (prompt: string) => {
+  formData.value.prompt = prompt;
+  sendMessageStream()
+};
+
+const chatSender = ref()
 const sendMessageStream = async () => {
   if (!formData.value.prompt) {
     return;
@@ -136,6 +124,7 @@ const sendMessageStream = async () => {
       },
     },
   );
+  chatSender.value.replyComplete()
 };
 
 const copyInfo = (item: SessionMessageApi.SessionMessageVO) => {
@@ -183,7 +172,7 @@ defineExpose({
 }
 
 .content {
-  height: calc(100vh - 300px);
+  height: calc(100vh - 320px);
   overflow-y: auto;
   margin-bottom: 20px;
   padding: 0 20px;

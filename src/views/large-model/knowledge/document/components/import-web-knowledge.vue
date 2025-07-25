@@ -6,8 +6,8 @@
     <tiny-form
         v-if="active == 0" ref="webFormDataRef"  :rules="webFormDataRules" :model="webFormData" label-width="80px"
         validate-position="bottom" validate-type="text">
-      <tiny-form-item :label="$t('large-model.knowledge.document.webUrl')" prop="url">
-        <tiny-input v-model="webFormData.url" :placeholder="$t('large-model.knowledge.document.webUrl.placeholder')"/>
+      <tiny-form-item :label="$t('llm.knowledge.document.webUrl')" prop="url">
+        <tiny-input v-model="webFormData.url" :placeholder="$t('llm.knowledge.document.webUrl.placeholder')"/>
       </tiny-form-item>
     </tiny-form>
 

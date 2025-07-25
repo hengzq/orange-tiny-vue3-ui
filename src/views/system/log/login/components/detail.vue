@@ -1,26 +1,14 @@
 <template>
-  <tiny-drawer
-    :title="title"
-    :visible="visible"
-    :show-footer="true"
-    width="45%"
-    @close="onClose"
-  >
-    <tiny-form
-      class="tiny-drawer-body-form"
-
-      :display-only="true"
-      :model="formData"
-      label-width="110px"
-    >
+  <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="45%" @close="onClose">
+    <tiny-form class="tiny-drawer-body-form" :display-only="true" :model="formData" label-width="110px">
       <tiny-form-item :label="$t('system.log.operation.requestId')">
         <tiny-input v-model="formData.requestId"/>
       </tiny-form-item>
       <tiny-form-item :label="$t('system.log.operation.status')">
-        <dict-tag
-          :value="formData.status"
-          :options="proxy.$dict.getDictData('sys_operation_status')"
-        />
+        <dict-tag :value="formData.status" :options="proxy.$dict.getDictData('sys_operation_status')"/>
+      </tiny-form-item>
+      <tiny-form-item :label="$t('system.log.login.account')">
+        <tiny-input v-model="formData.account"/>
       </tiny-form-item>
       <tiny-form-item :label="$t('system.log.login.userName')">
         <tiny-input v-model="formData.userName"/>

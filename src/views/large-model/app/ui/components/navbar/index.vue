@@ -3,7 +3,7 @@
     <div class="left-side">
       <div style="display: flex; align-items: center">
         <img src="/favicon.ico" class="logo" alt="logo" @click="jumpUrl"/>
-        <h5 @click="jumpUrl">{{ agent.name }}</h5>
+        <h5 @click="jumpUrl">{{ app.app?.name }}</h5>
         <!--        <div class="divider"></div>-->
         <!--        <img class="vue-icon" alt="logo" src="@/assets/images/pro.png"/>-->
         <!--        <h4>TinyPro of Vue</h4>-->
@@ -21,7 +21,7 @@ import router from '@/router';
 import {LOCALE_OPTIONS} from '@/locale';
 import useLocale from '@/hooks/locale';
 import useUser from '@/hooks/user';
-import * as AgentApi from "@/api/large-model/agent";
+import * as AppApi from "@/api/large-model/app";
 
 const i18 = useI18n();
 const iconUser = IconUser();
@@ -35,8 +35,8 @@ const locales = [...LOCALE_OPTIONS];
 
 
 const props = defineProps({
-  agent: {
-    type: Object as PropType<AgentApi.AgentVO>,
+  app: {
+    type: Object as PropType<AppApi.AppDetailVO>,
     required: true
   }
 });
@@ -72,7 +72,7 @@ const switchUser = (e: number) => {
       logout();
       break;
     default:
-      // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-console
   }
 };
 

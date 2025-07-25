@@ -15,6 +15,10 @@ export function updateMcpServerById(id: string, params: McpServerVO) {
   return axios.put(BASE_URL.concat(`/${id}`), params);
 }
 
+export function updateMcpServerEnabledById(id: string, enabled: boolean) {
+  return axios.put(BASE_URL.concat(`/${id}/${enabled}`));
+}
+
 export function getMcpServerById(id: string) {
   return axios.get(BASE_URL.concat(`/${id}`));
 }
@@ -32,8 +36,9 @@ export interface McpServerVO {
   tenantId?: string;
   id?: string;
   name?: string;
-  McpServerName?: string;
+  enabled?: boolean;
   transportProtocol?: string;
+  sseEndpoint?: string;
   connectionUrl?: string;
   description?: string;
 }
@@ -41,6 +46,7 @@ export interface McpServerVO {
 
 export interface McpServerListParam extends McpServerVO {
   name?: string;
+  ids?: string[];
 }
 
 export type McpServerPageParam = McpServerListParam & PageParam;

@@ -20,7 +20,7 @@
             <tiny-form-item :label="$t('large-model.image.prompt')" prop="prompt">
               <tiny-input
                 v-model="formData.prompt" :placeholder="$t('large-model.image.prompt.placeholder')"
-                type="textarea" :maxlength="500" :rows="5" show-word-limit/>
+                type="textarea" :maxlength="500" :rows="5" resize="none" show-word-limit/>
             </tiny-form-item>
             <tiny-form-item :label="$t('large-model.image.quantity')" prop="quantity">
               <tiny-numeric v-model="formData.quantity" :min="1" :max="4" circulate></tiny-numeric>

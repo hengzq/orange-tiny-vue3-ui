@@ -10,28 +10,18 @@
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-type.name')">
             <tiny-input
-              v-model="filterOptions.nameLike"
-              clearable
-              :placeholder="$t('system.dict-type.name.placeholder')"
-            ></tiny-input>
+              v-model="filterOptions.nameLike" clearable :placeholder="$t('system.dict-type.name.placeholder')" @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('system.dict-type.dictType')">
             <tiny-input
-              v-model="filterOptions.dictType"
-              clearable
-              :placeholder="$t('system.dict-type.dictType.placeholder')"
-            ></tiny-input>
+              v-model="filterOptions.dictType" clearable :placeholder="$t('system.dict-type.dictType.placeholder')" @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4" class="search-btn">
-          <tiny-button type="primary" @click="handleFormQuery">
-            {{ $t('opt.search') }}
-          </tiny-button>
-          <tiny-button @click="handleFormReset">
-            {{ $t('opt.reset') }}
-          </tiny-button>
+          <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
+          <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
       </tiny-row>
     </tiny-form>

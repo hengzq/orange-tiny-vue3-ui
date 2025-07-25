@@ -3,18 +3,18 @@
     <tiny-form :model="filterOptions" label-position="right" label-width="110px" class="filter-form">
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.session.modelId')" prop="modelId">
+          <tiny-form-item :label="$t('llm.session.modelId')" prop="modelId">
             <tiny-cascader v-model="filterOptions.modelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.session.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.session.name.placeholder')"/>
+          <tiny-form-item :label="$t('llm.session.name')">
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('llm.session.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
         <!--        <tiny-col :span="4">-->
-        <!--          <tiny-form-item :label="$t('large-model.session.sessionType')" prop="quantity">-->
-        <!--            <tiny-select v-model="filterOptions.source" :placeholder="$t('large-model.session.sessionType.placeholder')" clearable>-->
+        <!--          <tiny-form-item :label="$t('llm.session.sessionType')" prop="quantity">-->
+        <!--            <tiny-select v-model="filterOptions.source" :placeholder="$t('llm.session.sessionType.placeholder')" clearable>-->
         <!--              <tiny-option-->
         <!--                v-for="item in proxy.$dict.getDictData('ai_session_source')" :key="item.dictValue" :label="item.dictLabel"-->
         <!--                :value="item.dictValue"/>-->
@@ -40,7 +40,7 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('large-model.session.name')" show-overflow/>
+      <tiny-grid-column field="name" :title="$t('llm.session.name')" show-overflow/>
       <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
@@ -52,7 +52,7 @@
           </template>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="source" :title="$t('large-model.session.sessionType')" width="150" align="center">
+      <tiny-grid-column field="source" :title="$t('llm.session.sessionType')" width="150" align="center">
         <template #default="scope">
           <dict-tag :value="scope.row.sessionType" :options="proxy.$dict.getDictData('ai_session_source')"/>
         </template>
@@ -145,10 +145,9 @@ const toolbarButtonClickEvent = ({code, $grid}: any) => {
   }
 };
 
-const cellClickEvent = ({row, column}) => {
-  if (column.property === 'name') {
-    detailRef.value.open(row.id);
-  }
+const cellClickEvent = ({column, row}: { column: any, row: SessionApi.SessionVO }) => {
+  if (column.title === '操作') return;
+  detailRef.value.open(row.id);
 }
 
 const handleBatchDelete = (data: SessionApi.SessionVO[]) => {
@@ -180,7 +179,7 @@ const handleBatchDelete = (data: SessionApi.SessionVO[]) => {
 };
 const options = ref<any[]>([
   {
-    label: 'large-model.session.opt.messages',
+    label: 'llm.session.opt.messages',
   },
   {
     permission: 'orange-ai:model:delete',
@@ -190,7 +189,7 @@ const options = ref<any[]>([
 const detailRef = ref();
 const optionsClick = (label: string, data: SessionApi.SessionVO) => {
   switch (label) {
-    case 'large-model.session.opt.messages': {
+    case 'llm.session.opt.messages': {
       detailRef.value.open(data.id);
       break;
     }

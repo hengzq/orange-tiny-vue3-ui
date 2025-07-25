@@ -40,8 +40,15 @@ const router = createRouter({
             children: appRoutes,
         },
         {
-            path: import.meta.env.VITE_CONTEXT + 'agent-ui/:agentId',
-            component: () => import('@/views/large-model/agent-ui/index.vue'),
+            path: import.meta.env.VITE_CONTEXT + 'app-ui/:appId',
+            component: () => import('@/views/large-model/app/ui/index.vue'),
+            meta: {
+                requiresAuth: false,
+            },
+        },
+        {
+            path: import.meta.env.VITE_CONTEXT + 'large-model/app-config/:appId',
+            component: () => import('@/views/large-model/app/management/config/index.vue'),
             meta: {
                 requiresAuth: false,
             },

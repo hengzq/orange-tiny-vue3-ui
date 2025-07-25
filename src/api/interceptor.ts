@@ -50,8 +50,9 @@ axios.interceptors.response.use(
     (response: AxiosResponse) => {
         const res = response.data;
         if (res.code !== '0' && res.code !== '200') {
-            res.msg && Modal.message({message: res.msg, status: 'error'});
-            return Promise.reject(new Error(res.msg || 'Error'));
+            const errorMessage = res.msg || '请求失败，请稍后重试';
+            Modal.message({ message: errorMessage, status: 'error' });
+            return Promise.reject(new Error(errorMessage));
         }
         return res;
     },

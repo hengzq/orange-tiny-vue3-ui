@@ -10,10 +10,10 @@
         ref="formDataRef" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
         validate-type="text">
 
-      <tiny-form-item :label="$t('large-model.knowledge.document.fileName')" prop="fileName">
-        <tiny-input v-model="formData.fileName" :placeholder="$t('large-model.knowledge.document.fileName.placeholder')"/>
+      <tiny-form-item :label="$t('llm.knowledge.document.fileName')" prop="fileName">
+        <tiny-input v-model="formData.fileName" :placeholder="$t('llm.knowledge.document.fileName.placeholder')"/>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.knowledge.document.slice')" prop="embeddingModel">
+      <tiny-form-item :label="$t('llm.knowledge.document.slice')" prop="embeddingModel">
         <tiny-card v-for="(item,index) in formData.documentSliceList" :key="index" type="text" style="width: 100%">
           {{ item.content }}
         </tiny-card>

@@ -1,6 +1,6 @@
 <template>
   <tiny-drawer
-    :title="title" :visible="visible" :show-footer="true" width="30%" @close="onClose()">
+    :title="title" :visible="visible" width="25%" @close="onClose()">
     <tiny-form
       ref="formDataRef"
       :rules="formDataRules"
@@ -54,8 +54,8 @@ const resetForm = () => {
 };
 
 const open = (modelConfig: ModelApi.ModelConfig) => {
-  resetForm();
-  formData.value = modelConfig
+  // resetForm();
+  // formData.value = modelConfig
   visible.value = true;
 };
 

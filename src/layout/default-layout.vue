@@ -26,6 +26,7 @@
         </tiny-layout>
       </template>
     </tiny-container>
+
     <div class="theme-box" @click="themeVisible">
       <img src="@/assets/images/theme.png"/>
     </div>
@@ -48,13 +49,14 @@ import {onMounted, ref, watch} from 'vue';
 import {Container as TinyContainer, Layout as TinyLayout, Modal as tinyModal,} from '@opentiny/vue';
 import TinyThemeTool from '@opentiny/vue-theme/theme-tool.js';
 import {useAppStore} from '@/store';
-// eslint-disable-next-line import/extensions
+
 import Footer from '@/components/footer/index.vue';
 import NavBar from '@/components/navbar/index.vue';
 import Theme from '@/components/theme/index.vue';
 import Menu from '@/components/menu/index.vue';
 import {DefaultTheme} from '@/components/theme/default-theme';
 import PageLayout from './page-layout.vue';
+
 // 动态切换
 const appStore = useAppStore();
 const changefooter = ref('#fff');
@@ -156,10 +158,6 @@ onMounted(() => {
   top: 8px !important;
 }
 
-
-:deep(.tiny-tree-node__children > .tree-node-body) {
-  padding-left: 50px;
-}
 
 .theme-box {
   position: fixed;

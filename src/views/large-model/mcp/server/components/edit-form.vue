@@ -1,72 +1,76 @@
 <template>
-  <tiny-drawer
-    :title="title"
-    :visible="visible"
-    :show-footer="true"
-    width="38%"
-    @close="onClose(false)"
-  >
-    <tiny-form
-      ref="formDataRef"
-      :rules="formDataRules"
-      :model="formData"
-      label-width="90px"
-      validate-position="bottom"
-      validate-type="text"
-    >
-      <tiny-form-item :label="$t('large-model.mcp-server.name')" prop="name">
-        <tiny-input v-model="formData.name" :placeholder="$t('large-model.mcp-server.name.placeholder')"/>
+  <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="39%" @close="onClose(false)">
+    <tiny-form ref="formDataRef" :rules="formDataRules" :display-only="displayOnly" :model="formData" label-width="90px" validate-position="bottom"
+               validate-type="text">
+      <tiny-form-item :label="$t('llm.mcp-server.name')" prop="name">
+        <tiny-input v-model="formData.name" :placeholder="$t('llm.mcp-server.name.placeholder')"/>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.mcp-server.transportProtocol')" prop="transportProtocol">
+      <tiny-form-item :label="$t('llm.mcp-server.transportProtocol')" prop="transportProtocol">
         <tiny-radio
           v-for="(item, index) in proxy.$dict.getDictData('ai_mcp_server_transport_protocol')"
+          :key="index" v-model="formData.transportProtocol" :label="item.dictValue">
+          {{ item.dictLabel }}
+        </tiny-radio>
+      </tiny-form-item>
+
+      <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">
+        <tiny-radio
+          v-for="(item, index) in proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"
           :key="index"
-          v-model="formData.transportProtocol"
-          :label="item.dictValue"
+          v-model="formData.enabled"
+          :label="item.dictValue == 'true'"
         >
           {{ item.dictLabel }}
         </tiny-radio>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.mcp-server.connectionUrl')" prop="connectionUrl">
-        <tiny-input v-model="formData.connectionUrl" :placeholder="$t('large-model.mcp-server.connectionUrl.placeholder')"/>
+
+      <tiny-form-item :label="$t('llm.mcp-server.connectionUrl')" prop="connectionUrl">
+        <tiny-input v-model="formData.connectionUrl" :placeholder="$t('llm.mcp-server.connectionUrl.placeholder')"/>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.model.description')" prop="description">
-        <md-editor v-model="formData.description" :preview="false"/>
+      <tiny-form-item :label="$t('llm.mcp-server.sseEndpoint')" prop="sseEndpoint">
+        <tiny-input v-model="formData.sseEndpoint" :placeholder="$t('llm.mcp-server.sseEndpoint.placeholder')"/>
+      </tiny-form-item>
+      <tiny-form-item :label="$t('llm.mcp-server.description')" prop="description">
+        <md-preview v-if="displayOnly" v-model="formData.description"/>
+        <md-editor v-else v-model="formData.description" :preview="false" :toolbars="toolbars"/>
       </tiny-form-item>
     </tiny-form>
     <template #footer>
-      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
       <tiny-button @click="onClose(false)">取消</tiny-button>
+      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
     </template>
   </tiny-drawer>
 </template>
 
 <script lang="ts" setup>
-import {MdEditor} from 'md-editor-v3';
+import {MdEditor, MdPreview} from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+
 import * as PlatformApi from '@/api/large-model/platform';
 import * as McpServerApi from '@/api/large-model/mcp-server';
 import {computed, getCurrentInstance, Ref, ref, toRaw} from 'vue';
+
+const toolbars = ['italic', 'underline', 'italic', 'strikeThrough', '-', 'bold', 'codeRow', 'unorderedList', 'orderedList', 'previewOnly'];
 
 const emit = defineEmits(['ok']);
 const {proxy} = getCurrentInstance() as any;
 const visible = ref(false);
 const isModify = ref(false);
+const displayOnly = ref(false);
+
 const title = computed(() => {
-  return isModify.value ? '修改模型' : '新增模型';
+  if (displayOnly.value) {
+    return "详情";
+  }
+  return isModify.value ? '修改 MCP 服务' : '新增 MCP 服务';
 });
 
 const formData = ref<McpServerApi.McpServerVO>({});
 
 const formDataRules = {
-  platform: [
-    {required: true, message: '所属平台不能为空', trigger: 'change'},
-  ],
-  modelType: [{required: true, message: '模型类型不能为空', trigger: 'change'}],
-  name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
-  modelName: [{required: true, message: '模型编码不能为空', trigger: 'change'}],
-  apiKey: [{required: true, message: 'ApiKey 不能为空.', trigger: 'change'}],
-  baseUrl: [{required: true, message: '基础URL不能为空.', trigger: 'change'}],
+  name: [{required: true, message: '服务名称不能为空', trigger: 'change'}],
+  connectionUrl: [{required: true, message: '基础URL不能为空.', trigger: 'change'}],
+  // sseEndpoint: [{required: true, message: '断点不能为空.', trigger: 'change'}],
 };
 
 const onSubmit = () => {
@@ -112,16 +116,23 @@ const queryPlatformList = () => {
 };
 
 const resetForm = () => {
-  formData.value = {};
+  if (!displayOnly.value) {
+    formData.value = {
+      transportProtocol: 'SSE',
+      enabled: true,
+    };
+  }
   proxy.$refs.formDataRef.resetFields();
 };
 
-const open = (id: string) => {
+const open = (id: string, display?: boolean) => {
   isModify.value = false;
+  displayOnly.value = display || false;
   resetForm();
   if (id) {
     McpServerApi.getMcpServerById(id).then((res) => {
       formData.value = res.data;
+      formData.value.description = res.data.description || "";
       isModify.value = true;
     });
   }
