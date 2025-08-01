@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {PageParam} from '@/api/global';
 
-const BASE_URL = '/orange-ai/v1.0/knowledge-base';
+const BASE_URL = '/orange-ai/v1.0/knowledge-bases';
 
 export function addKnowledge(params: KnowledgeVO) {
   return axios.post(BASE_URL, params);
@@ -13,6 +13,10 @@ export function deleteKnowledgeById(id: string) {
 
 export function updateKnowledgeById(id: string, params: KnowledgeVO) {
   return axios.put(BASE_URL.concat(`/${id}`), params);
+}
+
+export function updateKnowledgeEnabledById(id: string, enabled: boolean) {
+  return axios.put(BASE_URL.concat(`/${id}/${enabled}`));
 }
 
 export function getKnowledgeById(id: string) {

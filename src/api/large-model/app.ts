@@ -1,7 +1,8 @@
 import axios from 'axios';
-import {PageParam} from '@/api/global';
-import {ModelConfig} from "@/api/large-model/model";
-import {McpServerVO} from "@/api/large-model/mcp-server";
+import { PageParam } from '@/api/global';
+import { ModelConfig } from "@/api/large-model/model";
+import { McpServerVO } from "@/api/large-model/mcp-server";
+import { KnowledgeVO } from './knowledge-base';
 
 const BASE_URL = '/orange-ai/v1.0/apps';
 export const DEBUG_CONVERSATION_STREAM_URL =
@@ -9,7 +10,7 @@ export const DEBUG_CONVERSATION_STREAM_URL =
 
 export const CONVERSATION_STREAM = BASE_URL.concat('/conversation-stream');
 
-export function addApp(params: AppVO) {
+export function addApp(params: EditAppVO) {
   return axios.post(BASE_URL, params);
 }
 
@@ -60,17 +61,12 @@ export interface AppVersionVO {
   baseIds?: string[];
 }
 
-export interface EditAppVO {
-  name?: string;
-  systemPrompt?: string;
-  description?: string;
-  modelId?: string;
-  modelConfig?: ModelConfig;
-  baseIds?: string[];
+export type EditAppVO = AppVO & AppVersionVO & {
+  baseIds: string[];
+  baseList?: KnowledgeVO[];
+  mcpServerList?: McpServerVO[];
   mcpIds?: string[];
-  mcpServerList?: McpServerVO[]
 }
-
 
 export type AppListParam = AppVO
 

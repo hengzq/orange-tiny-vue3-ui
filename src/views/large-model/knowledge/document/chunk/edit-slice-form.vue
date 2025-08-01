@@ -1,21 +1,15 @@
 <template>
-  <tiny-drawer
-      :title="title"
-      :visible="visible"
-      width="60%"
-      :show-footer="true"
-      @close="onClose(false)"
-  >
+  <tiny-drawer :title="title" :visible="visible" width="60%" :show-footer="true" @close="onClose(false)">
     <tiny-form
-        ref="formDataRef" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
-        validate-type="text">
+      ref="formDataRef" :rules="formDataRules" :model="formData" label-width="110px" validate-position="bottom"
+      validate-type="text">
       <tiny-form-item :label="$t('llm.knowledge.document.slice')" prop="embeddingModel">
-        <md-editor v-model="formData.content" :toolbars="toolbars" :footers="footers" :preview="false"/>
+        <md-editor v-model="formData.text" :toolbars="toolbars" :footers="footers" :preview="false"/>
       </tiny-form-item>
     </tiny-form>
     <template #footer>
-      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
       <tiny-button @click="onClose(false)">取消</tiny-button>
+      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
     </template>
   </tiny-drawer>
 </template>
@@ -48,16 +42,16 @@ const onSubmit = () => {
     if (valid) {
       if (formData.value.id) {
         KnowledgeDocSliceApi.updateKnowledgeDocSliceById(formData.value.id, toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '修改成功', status: 'success'});
-              onClose(true);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '修改成功', status: 'success'});
+            onClose(true);
+          });
       } else {
         KnowledgeDocSliceApi.addKnowledgeDocSlice(toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '创建成功', status: 'success'});
-              onClose(true);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '创建成功', status: 'success'});
+            onClose(true);
+          });
       }
     }
   });

@@ -26,17 +26,17 @@ export default {
   'large-model.image.resolution': '选择分辨率:',
   'large-model.image.resolution.placeholder': '请选择分辨率',
 
+  'llm.knowledge.base.opt.management': '知识管理',
 
-  'large-model.knowledge.name': '知识库名称',
-  'large-model.knowledge.name.placeholder': '请输入知识库名称',
-  'large-model.knowledge.description': '知识库描述',
-  'large-model.knowledge.description.placeholder': '请输入知识库描述',
-  'large-model.knowledge.base.embeddingModelId': '向量模型',
-  'large-model.knowledge.base.embeddingModelId.placeholder': '请选择向量模型',
-  'large-model.knowledge.base.vectorCollectionName': '向量集合',
+  'llm.knowledge.base.name': '知识库名称',
+  'llm.knowledge.base.name.placeholder': '请输入知识库名称',
+  'llm.knowledge.name.description': '知识库描述',
+  'llm.knowledge.name.description.placeholder': '请输入知识库描述',
+  'llm.knowledge.base.embeddingModelId': '向量模型',
+  'llm.knowledge.base.embeddingModelId.placeholder': '请选择向量模型',
+  'llm.knowledge.base.vectorCollectionName': '向量集合',
 
-
-  'llm.knowledge.document.segment': '查看切片',
+  'llm.knowledge.document.segment': '切片管理',
 
   'llm.knowledge.document.webUrl': '网址 ',
   'llm.knowledge.document.webUrl.placeholder': '请输入网址，http://或https://开头',
@@ -48,19 +48,14 @@ export default {
   'llm.knowledge.document.sliceIdentifierList': '分段标识符 ',
   'llm.knowledge.document.sliceIdentifierList.placeholder': '请选择分段标识符 ',
   'llm.knowledge.document.fileStatus': '文件状态 ',
+  'llm.knowledge.document.chunkSize': '分段预估长度 ',
+  'llm.knowledge.document.chunkSize.placeholder': '请输入分段预估长度 ',
 
   'large-model.agent.opt.demonstration': '演示',
 
-  'large-model.agent.name': '智能体名称',
-  'large-model.agent.name.placeholder': '请输入智能体名称',
   'large-model.agent.model': '模型',
-  'large-model.agent.knowledgeBase': '关联知识库',
-  'large-model.agent.modelId': '选择模型',
-  'large-model.agent.modelId.placeholder': '请选择模型',
   'large-model.agent.systemPrompt': '系统提示词',
   'large-model.agent.systemPrompt.placeholder': '请在这里编辑系统提示词，包括角色设定、任务目标、具备的能力及回复的要求与限制等，好的提示词会直接影响智能体效果。',
-  'large-model.agent.baseIds': '关联知识库',
-  'large-model.agent.baseIds.placeholder': '请选择知识库',
   'large-model.agent.mcp-server': 'MCP 服务',
   'large-model.agent.mcp-server.placeholder': '请选择MCP 服务',
 
@@ -73,6 +68,10 @@ export default {
   'llm.app.type.placeholder': '请选择应用类型',
   'llm.app.description': '应用描述',
   'llm.app.description.placeholder': '请输入应用描述',
+  'llm.app.modelId': '选择模型',
+  'llm.app.modelId.placeholder': '请选择模型',
+  'llm.app.baseIds': '关联知识库',
+  'llm.app.baseIds.placeholder': '请选择知识库',
 
   'llm.app.user.total': '用户总数',
   'llm.app.question.total': '提问总数',
@@ -88,15 +87,17 @@ export default {
   'llm.session.name': '会话名称',
   'llm.session.name.placeholder': '请输入会话名称',
 
+  'llm.mcp-server.opt.tool': '工具',
+
   'llm.mcp-server.name': '服务名称',
   'llm.mcp-server.name.placeholder': '请输入服务名称',
   'llm.mcp-server.transportProtocol': '传输协议',
   'llm.mcp-server.sseEndpoint': '端点',
   'llm.mcp-server.sseEndpoint.placeholder': '请输入端点',
-
   'llm.mcp-server.url': '连接地址',
   'llm.mcp-server.connectionUrl': '基础地址',
   'llm.mcp-server.connectionUrl.placeholder': '请输入服务基础地址',
   'llm.mcp-server.description': '服务描述',
   'llm.mcp-server.description.placeholder': '请输入服务描述',
+  'llm.mcp-server.tool': '工具',
 };

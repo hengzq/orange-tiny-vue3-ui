@@ -4,10 +4,12 @@
       <tiny-row :flex="true" justify="center">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('llm.knowledge.document.fileName')">
-            <tiny-input v-model="filterOptions.fileName" clearable :placeholder="$t('llm.knowledge.document.fileName.placeholder')"/>
+            <tiny-input
+              v-model="filterOptions.fileName" clearable :placeholder="$t('llm.knowledge.document.fileName.placeholder')"
+              @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
-        <tiny-col :span="8">
+        <tiny-col :span="8" class="search-btn">
           <tiny-button type="primary" @click="handleFormQuery"> {{ $t('opt.search') }}</tiny-button>
           <tiny-button @click="handleFormReset"> {{ $t('opt.reset') }}</tiny-button>
         </tiny-col>
@@ -22,7 +24,7 @@
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="fileName" :title="$t('llm.knowledge.document.fileName')"/>
       <tiny-grid-column field="fileSize" :title="$t('llm.knowledge.document.fileSize')" width="100">
-        <template #default="scope"> {{ formatFileSize(scope.row.fileSize) }}</template>
+        <template #default="scope"> {{ formatFileSize(scope.row.fileSize || 0) }}</template>
       </tiny-grid-column>
       <tiny-grid-column field="fileStatus" :title="$t('llm.knowledge.document.fileStatus')" align="center" width="120">
         <template #default="scope">
@@ -30,7 +32,7 @@
           <!--                               style="fill: blue;  margin-right: 6px"/>-->
           <!--          <icon-operationfaild-l v-else-if="['PARSE_FAILED','EMB_FAILED'].includes(scope.row.fileStatus)" style="fill: red; margin-right: 6px"/>-->
           <!--          <icon-successful v-else style="fill: green; margin-right: 6px"/>-->
-          <dict-tag :value="scope.row.fileStatus" :options="proxy.$dict.getDictData('ai_knowledge_doc_status')"/>
+          <dict-tag :value="scope.row.fileStatus" :options="proxy.$dict.getDictData('ai_kb_doc_status')"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
@@ -39,7 +41,7 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        :width="proxy.$hasPermission(options).length * 80"
+        :width="proxy.$hasPermission(options).length * 60"
       >
         <template #default="scope">
           <tiny-action-menu
@@ -63,19 +65,15 @@
 
 <script lang="ts" setup>
 import {formatFileSize} from '@/utils/format';
-import {IconLoadingShadow, IconOperationfaildL, IconSuccessful} from '@opentiny/vue-icon'
 
 import * as KnowledgeDocumentApi from '@/api/large-model/knowledge-document';
 import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import ImportWebKnowledge from './components/import-web-knowledge.vue';
 import ImportFileKnowledge from './components/import-file-knowledge.vue';
 import EditForm from './components/edit-form.vue';
-import SliceIndex from './components/slice-index.vue';
+import SliceIndex from './chunk/index.vue';
 
 const {proxy} = getCurrentInstance() as any;
-const iconLoadingShadow = IconLoadingShadow();
-const iconSuccessful = IconSuccessful();
-const iconOperationfaildL = IconOperationfaildL();
 
 const pagerConfig = reactive({
   attrs: {
@@ -111,11 +109,11 @@ const handleFormReset = () => {
 };
 
 const toolbarButtons = reactive<any[]>([
-  {
-    permission: 'orange-ai:knowledge-doc:add-text-to-knowledge',
-    code: 'import-web-knowledge',
-    name: '从网页导入',
-  },
+  // {
+  //   permission: 'orange-ai:knowledge-doc:add-text-to-knowledge',
+  //   code: 'import-web-knowledge',
+  //   name: '从网页导入',
+  // },
   {
     permission: 'orange-ai:knowledge-doc:batch-add-document-and-slice',
     code: 'import-file-knowledge',
@@ -176,7 +174,7 @@ const optionsClick = (label: string, data: KnowledgeDocumentApi.KnowledgeDocumen
 const handleDelete = (data: KnowledgeDocumentApi.KnowledgeDocumentVO) => {
   proxy.$modal
     .confirm({
-      message: `确定要删除模型【${data.fileName}】吗?`,
+      message: `确定要删除文件【${data.fileName}】吗?`,
       maskClosable: true,
       title: '删除提示',
     })

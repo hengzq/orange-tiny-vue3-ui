@@ -9,7 +9,7 @@ export default {
   'login.form.mailpassword2.errMsg': '确认密码不能为空',
   'login.form.login.errMsg': '登录出错，轻刷新重试',
   'login.form.login.success': '欢迎使用',
-  'login.form.userName.placeholder': '请输入账号:orange',
+  'login.form.userName.placeholder': '请输入账号:admin',
   'login.form.password.placeholder': '请输入密码:hengzq.cn',
   'login.form.mailName.placeholder': "邮箱名：123{'@'}example.com",
   'login.form.mailpassword.placeholder': '密码：admin',

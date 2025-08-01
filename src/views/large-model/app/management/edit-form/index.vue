@@ -1,5 +1,5 @@
 <template>
-  <tiny-dialog-box :visible="visible" :title="title" @close="onClose(false)">
+  <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="32%" @close="onClose(false)">
     <tiny-form
       ref="formDataRef" :rules="formDataRules" :model="formData" label-width="90px"
       validate-position="bottom" validate-type="text">
@@ -16,17 +16,16 @@
       </tiny-form-item>
       <tiny-form-item :label="$t('llm.app.description')" prop="description">
         <tiny-input
-          v-model="formData.description" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
+          v-model="formData.description" type="textarea" :autosize="{ minRows: 5 }" :maxlength="1500" show-word-limit
           :placeholder="$t('llm.app.description.placeholder')"/>
       </tiny-form-item>
     </tiny-form>
 
     <template #footer>
       <tiny-button @click="onClose(false)">取消</tiny-button>
-      <tiny-button type="primary" @click="onSubmit(true)">保存</tiny-button>
+      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
     </template>
-  </tiny-dialog-box>
-<!--  <app-design ref="appDesignRef"/>-->
+  </tiny-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -35,7 +34,6 @@ import * as AppApi from '@/api/large-model/app';
 import {computed, getCurrentInstance, Ref, ref, toRaw} from 'vue';
 import * as ModelApi from "@/api/large-model/model";
 import * as KnowledgeBaseApi from "@/api/large-model/knowledge-base";
-import AppDesign from '../config/index.vue';
 
 
 const emit = defineEmits(['ok']);
@@ -46,45 +44,28 @@ const title = computed(() => {
   return isModify.value ? '修改应用' : '新增应用';
 });
 
-const formData = ref<AppApi.AppVO>({});
+const formData = ref<AppApi.EditAppVO>({});
 
 const formDataRules = {
   name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
   modelId: [{required: true, message: '请选择模型', trigger: 'change'}],
 };
 
-const appDesignRef = ref();
-
-const onSubmit = (isColse: boolean) => {
+const onSubmit = () => {
   proxy.$refs.formDataRef.validate((valid: boolean) => {
     if (valid) {
       if (formData.value.id) {
         AppApi.updateAppById(formData.value.id, toRaw(formData.value))
           .then((res) => {
             proxy.$modal.message({message: '修改成功', status: 'success'});
-            if (isColse) {
-              onClose(true);
-            }
+            onClose(true);
           })
-          .catch((err) => {
-            console.log(err);
-          });
       } else {
         AppApi.addApp(toRaw(formData.value))
           .then((res) => {
             proxy.$modal.message({message: '创建成功', status: 'success'});
-            appDesignRef.value.open();
-            if (isColse) {
-              onClose(true);
-            } else {
-              formData.value.id = res.data
-              // 刷新一下列表
-              emit('ok');
-            }
+            onClose(true);
           })
-          .catch((err) => {
-            console.log(err);
-          });
       }
     }
   });
@@ -142,8 +123,13 @@ const open = (id: string) => {
   isModify.value = false;
   resetForm();
   if (id) {
-    AppApi.getAppById(id).then((res) => {
+    AppApi.getLatestAppById(id, false).then((res) => {
       formData.value = res.data;
+      const {latestVersion} = res.data;
+      if (latestVersion) {
+        formData.value.name = latestVersion.name;
+        formData.value.description = latestVersion.description;
+      }
       isModify.value = true;
     });
   }

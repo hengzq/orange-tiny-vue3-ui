@@ -15,6 +15,10 @@ export function updateModelById(id: string, params: ModelVO) {
     return axios.put(BASE_URL.concat(`/${id}`), params);
 }
 
+export function updateModelEnabledById(id: string, enabled: boolean) {
+    return axios.put(BASE_URL.concat(`/${id}/${enabled}`));
+}
+
 export function getModelById(id: string) {
     return axios.get(BASE_URL.concat(`/${id}`));
 }

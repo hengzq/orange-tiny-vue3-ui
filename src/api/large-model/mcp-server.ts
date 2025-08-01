@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {PageParam} from '@/api/global';
+import { PageParam } from '@/api/global';
 
 const BASE_URL = '/orange-ai/v1.0/mcp-server';
 
@@ -31,6 +31,10 @@ export function listMcpServer(params: McpServerListParam) {
   return axios.post(BASE_URL.concat('/list'), params);
 }
 
+export function listMcpServerTool(id: string) {
+  return axios.post(BASE_URL.concat(`/list-tools/${id}`));
+}
+
 
 export interface McpServerVO {
   tenantId?: string;
@@ -51,3 +55,17 @@ export interface McpServerListParam extends McpServerVO {
 
 export type McpServerPageParam = McpServerListParam & PageParam;
 
+
+export interface McpTool {
+  name?: string;
+  description?: string;
+  properties?: McpToolProperty[];
+}
+
+export interface McpToolProperty {
+  name?: string;
+  description?: string;
+  type?: string;
+  required?: boolean;
+  defaultValue?: any;
+}

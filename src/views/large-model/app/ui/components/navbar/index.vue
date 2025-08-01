@@ -3,7 +3,7 @@
     <div class="left-side">
       <div style="display: flex; align-items: center">
         <img src="/favicon.ico" class="logo" alt="logo" @click="jumpUrl"/>
-        <h5 @click="jumpUrl">{{ app.app?.name }}</h5>
+        <h5 @click="jumpUrl">{{ app.latestVersion?.name }}</h5>
         <!--        <div class="divider"></div>-->
         <!--        <img class="vue-icon" alt="logo" src="@/assets/images/pro.png"/>-->
         <!--        <h4>TinyPro of Vue</h4>-->
@@ -13,68 +13,15 @@
 </template>
 
 <script lang="ts" setup>
-import {defineProps, PropType, ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {IconCheckOut, IconUser} from '@opentiny/vue-icon';
-import {useAppStore} from '@/store';
-import router from '@/router';
-import {LOCALE_OPTIONS} from '@/locale';
-import useLocale from '@/hooks/locale';
-import useUser from '@/hooks/user';
+import {defineProps, PropType} from 'vue';
 import * as AppApi from "@/api/large-model/app";
-
-const i18 = useI18n();
-const iconUser = IconUser();
-const iconCheckOut = IconCheckOut();
-const lan = ref(false);
-
-const appStore = useAppStore();
-const {logout} = useUser();
-const {changeLocale} = useLocale();
-const locales = [...LOCALE_OPTIONS];
-
 
 const props = defineProps({
   app: {
-    type: Object as PropType<AppApi.AppDetailVO>,
+    type: Object as PropType<AppApi.AppVO>,
     required: true
   }
 });
-
-
-// 切换语言
-const changeLan = () => {
-  lan.value = !lan.value;
-};
-
-// 帮助中心
-const help = () => {
-  window.open('http://hengzq.cn', '_blank');
-};
-
-// 设置页面显示
-const setVisible = () => {
-  appStore.updateSettings({Settings: true});
-};
-
-// 用户设置
-const userList = [
-  {label: 'messageBox.userCenter', value: 1},
-  {label: 'messageBox.logout', value: 10},
-];
-
-const switchUser = (e: number) => {
-  switch (e) {
-    case 1:
-      router.push({name: 'Info'});
-      break;
-    case 10:
-      logout();
-      break;
-    default:
-    // eslint-disable-next-line no-console
-  }
-};
 
 // 点击图标跳转首页
 const jumpUrl = () => {
@@ -105,7 +52,7 @@ const jumpUrl = () => {
   align-items: center;
   justify-content: center;
   height: 60px;
-  padding-left: 10px;
+  padding-left: 20px;
   cursor: pointer;
 
   .logo {

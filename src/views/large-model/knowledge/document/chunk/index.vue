@@ -1,19 +1,18 @@
 <template>
   <tiny-drawer
     :title="formData.fileName" :visible="visible" width="70%" :show-footer="false" @close="onClose(false)">
-    <!--    <div v-for="(item,index) in formData.documentSliceList" :key="index" style=" margin-bottom: 10px; padding: 10px">-->
-    <!--      &lt;!&ndash;      <div style="display: flex;justify-content:flex-end; margin-bottom: 10px;">&ndash;&gt;-->
-    <!--      &lt;!&ndash;        <tiny-button type="primary" size="small" :icon="IconEditor"></tiny-button>&ndash;&gt;-->
-    <!--      &lt;!&ndash;        <tiny-button type="danger" size="small" :icon="IconDeleteL"></tiny-button>&ndash;&gt;-->
-    <!--      &lt;!&ndash;      </div>&ndash;&gt;-->
-    <div style="display: flex;flex-wrap: wrap">
-      <div v-for="(item,index) in sliceList" :key="index" class="slice-item">
-        <div class="content"> {{ item.content }}</div>
+    <div class="chunk-list">
+      <div v-for="(item,index) in sliceList" :key="index" class="item">
+        <div class="content"> {{ item.text }}</div>
         <div class="tool">
           <div>
-            {{ formatFileSize(item.content?.length || 0) }}
+<!--            <dict-tag-->
+<!--              :value="item.embStatus"-->
+<!--              :options="proxy.$dict.getDictData('ai_kb_doc_chunk_emb_status')"-->
+<!--            />-->
+            {{ formatFileSize(item.text?.length || 0) }}
           </div>
-          <!--          <tiny-button type="text" size="small" @click="handleEdit(item)">查看详情</tiny-button>-->
+
           <tiny-action-menu
             :options="proxy.$hasPermission(options)" mode="card" :max-show-num="0"
             @item-click=" (data: any) => optionsClick(data.itemData.label, item) ">
@@ -57,7 +56,6 @@ import 'md-editor-v3/lib/style.css';
 import * as KnowledgeDocumentApi from "@/api/large-model/knowledge-document";
 import * as KnowledgeDocSliceApi from "@/api/large-model/knowledge-doc-slice";
 import {getCurrentInstance, ref} from 'vue';
-import {iconDeleteL, iconEditor} from '@opentiny/vue-icon'
 import EditForm from "./edit-slice-form.vue";
 
 
@@ -69,16 +67,10 @@ const isModify = ref(false);
 //   return isModify.value ? formData.fileName;
 // });
 
-const IconDeleteL = iconDeleteL()
-const IconEditor = iconEditor()
-
-const toolbars: any[] = [];
-const footers: any[] = [];
-
 const pagerConfig = ref({
   currentPage: 1,
-  pageSize: 10,
-  pageSizes: [10, 20, 30, 50, 100],
+  pageSize: 12,
+  pageSizes: [12, 20, 30, 50, 100],
   total: 0,
   align: 'right',
   layout: 'total, prev, pager, next, jumper, sizes',
@@ -194,40 +186,45 @@ defineExpose({
 });
 </script>
 <style scoped>
-.slice-item {
-  flex: 1 1 48%;
-  border: 1px solid rgba(135, 138, 171, .15);
-  margin: 0 5px 10px;
-  padding: 15px;
-  height: 130px;
+.chunk-list {
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
   display: flex;
-  flex-direction: column;
-  color: rgba(38, 36, 76, .8);
-  font-size: 13px;
-  line-height: 23px;
 
-  .content {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .item {
+    border: 1px solid #878aab26;
+    border-radius: 16px;
+    width: calc(33.3333% - 8px);
+    padding: 12px 20px;
+    color: #26244ccc;
+    font-size: 12px;
+
+    .content {
+      min-height: 44px;
+      margin-bottom: 13px;
+      line-height: 22px;
+      display: -webkit-box; /* 将对象作为弹性伸缩盒子模型显示 */
+      -webkit-line-clamp: 5; /* 限制在一个块元素显示的文本的行数 */
+      -webkit-box-orient: vertical; /* 设置或检索伸缩盒对象的子元素的排列方式 */
+      overflow: hidden;
+      text-overflow: ellipsis; /* 溢出部分用 ... 表示 */
+      word-wrap: break-word; /* 允许长单词或 URL 在需要时断行 */
+    }
+
+    .tool {
+      display: flex;
+      justify-content: space-between;
+      height: 30px;
+      line-height: 30px;
+      //padding: 10px 0 0;
+    }
   }
 
-  .tool {
-    display: flex;
-    justify-content: space-between;
-    height: 30px;
-    line-height: 30px;
-    margin-top: auto;
-    padding: 10px 0px 0px;
-    margin-top: auto;
+  .item:hover {
+    border: 1px solid #624aff;
   }
 }
 
-.slice-item:hover {
-  //border-color: #2f5bea;
-  background-color: #f5f6f7;
-}
 
 </style>

@@ -4,30 +4,30 @@
       <template #header>
         <tiny-layout>
           <div class="layout-navbar">
-            <NavBar/>
+            <NavBar />
           </div>
         </tiny-layout>
       </template>
       <template #aside>
         <tiny-layout class="layout-sider">
           <div class="menu-wrapper">
-            <Menu/>
+            <Menu />
           </div>
         </tiny-layout>
       </template>
       <tiny-layout class="layout-content">
-        <PageLayout/>
+        <PageLayout />
       </tiny-layout>
       <template #footer>
         <tiny-layout>
           <div class="layout-footer">
-            <Footer/>
+            <Footer />
           </div>
         </tiny-layout>
       </template>
     </tiny-container>
 
-    <div class="theme-box" @click="themeVisible">
+    <!-- <div class="theme-box" @click="themeVisible">
       <img src="@/assets/images/theme.png"/>
     </div>
     <div v-if="disTheme">
@@ -40,21 +40,29 @@
         <template #footer></template>
       </tiny-modal>
     </div>
-    <img v-if="!appStore.navbar" src="@/assets/images/global.png" class="global-setting" @click="switchSet"/>
+    <img v-if="!appStore.navbar" src="@/assets/images/global.png" class="global-setting" @click="switchSet"/> -->
+
+    <div class="assistant-iF8ew" @click="toConversation">
+      <!-- <img src="/favicon.ico" /> -->
+      <svg-icon name="system-ai-assistant" :width="32" :height="32" color="#1476ff" />
+    </div>
+    <conversation-index ref="conversationIndexRef" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, ref, watch} from 'vue';
-import {Container as TinyContainer, Layout as TinyLayout, Modal as tinyModal,} from '@opentiny/vue';
+import { onMounted, ref, watch } from 'vue';
+import { Container as TinyContainer, Layout as TinyLayout, Modal as tinyModal, } from '@opentiny/vue';
 import TinyThemeTool from '@opentiny/vue-theme/theme-tool.js';
-import {useAppStore} from '@/store';
+import { useAppStore } from '@/store';
 
 import Footer from '@/components/footer/index.vue';
 import NavBar from '@/components/navbar/index.vue';
 import Theme from '@/components/theme/index.vue';
 import Menu from '@/components/menu/index.vue';
-import {DefaultTheme} from '@/components/theme/default-theme';
+import { DefaultTheme } from '@/components/theme/default-theme';
+import ConversationIndex from '@/components/conversation/index.vue';
+
 import PageLayout from './page-layout.vue';
 
 // 动态切换
@@ -66,7 +74,7 @@ const top = ref('10px');
 
 // 判断是否显示设置图标
 const switchSet = () => {
-  appStore.updateSettings({Settings: true});
+  appStore.updateSettings({ Settings: true });
 };
 
 // 是否显示切换框架结构
@@ -101,10 +109,17 @@ watch(appStore.$state, (newValue, oldValue) => {
 });
 // 初始化默认主题
 onMounted(() => {
-  appStore.updateSettings({theme: 'light'});
+  appStore.updateSettings({ theme: 'light' });
   theme.changeTheme(DefaultTheme);
-  appStore.updateSettings({themelist: 'default'});
+  appStore.updateSettings({ themelist: 'default' });
 });
+
+const conversationIndexRef = ref()
+
+const toConversation = () => {
+  conversationIndexRef.value.open()
+}
+
 </script>
 
 <style scoped lang="less">
@@ -169,7 +184,7 @@ onMounted(() => {
   justify-content: center;
   width: 44px;
   height: 44px;
-  background-color: #fff;
+  // background-color: #fff;
   border-radius: 100%;
   cursor: pointer;
 
@@ -178,5 +193,21 @@ onMounted(() => {
     width: inherit;
     height: inherit;
   }
+}
+
+.assistant-iF8ew {
+  position: fixed;
+  top: 90%;
+  right: 80px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 100%;
+  cursor: pointer;
+ 
 }
 </style>

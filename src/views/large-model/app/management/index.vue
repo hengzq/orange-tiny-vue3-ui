@@ -189,7 +189,7 @@ const optionsClick = (label: string, data: AppApi.AppVO) => {
 const handleDelete = (data: AppApi.AppVO) => {
   proxy.$modal
     .confirm({
-      message: `确定要删除智能体【${data.name}】吗?`,
+      message: `确定要删除应用【${data.latestVersion?.name}】吗?`,
       maskClosable: true,
       title: '删除提示',
     })

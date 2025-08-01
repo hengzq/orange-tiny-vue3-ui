@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {PageParam} from '@/api/global';
 
-const BASE_URL = '/orange-ai/v1.0/knowledge-doc-slice';
+const BASE_URL = '/orange-ai/v1.0/knowledge-base-doc-chunks';
 
 export function addKnowledgeDocSlice(params: KnowledgeDocSliceVO) {
     return axios.post(BASE_URL, params);

@@ -8,13 +8,16 @@
     >
       <tiny-row :flex="true">
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.knowledge.base.embeddingModelId')" prop="embeddingModelId">
-            <tiny-cascader v-model="filterOptions.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
+          <tiny-form-item :label="$t('llm.knowledge.base.embeddingModelId')" prop="embeddingModelId">
+            <tiny-cascader
+              v-model="filterOptions.embeddingModelId" :placeholder="$t('llm.knowledge.base.embeddingModelId.placeholder')"
+              :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
-          <tiny-form-item :label="$t('large-model.knowledge.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('large-model.knowledge.name.placeholder')"/>
+          <tiny-form-item :label="$t('llm.knowledge.base.name')">
+            <tiny-input
+              v-model="filterOptions.name" clearable :placeholder="$t('llm.knowledge.base.name.placeholder')" @keyup.enter="handleFormQuery"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4" class="search-btn">
@@ -35,13 +38,13 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
       <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('large-model.knowledge.name')"/>
+      <tiny-grid-column field="name" :title="$t('llm.knowledge.base.name')"/>
       <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="90">
         <template #default="scope">
           <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="embeddingModelId" :title="$t('large-model.knowledge.base.embeddingModelId')" align="center">
+      <tiny-grid-column field="embeddingModelId" :title="$t('llm.knowledge.base.embeddingModelId')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
             <template v-for="(item, index) in modelItem.children">
@@ -54,7 +57,7 @@
       </tiny-grid-column>
 
       <tiny-grid-column field="sort" :title="$t('attribute.sort')" align="center" width="100"/>
-      <tiny-grid-column field="vectorCollectionName" :title="$t('large-model.knowledge.base.vectorCollectionName')" align="center"/>
+      <tiny-grid-column field="vectorCollectionName" :title="$t('llm.knowledge.base.vectorCollectionName')" align="center"/>
       <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center"/>
       <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="150"/>
       <tiny-grid-column
@@ -67,7 +70,7 @@
           <tiny-action-menu
             :max-show-num="3"
             :spacing="8"
-            :options="proxy.$hasPermission(options)"
+            :options="proxy.$hasPermission(optionsBtnFilter(scope.row))"
             @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
@@ -143,7 +146,13 @@ const toolbarButtonClickEvent = ({code}: any) => {
 };
 const options = ref<any[]>([
   {
-    label: 'opt.view',
+    label: 'llm.knowledge.base.opt.management',
+  },
+  {
+    label: 'opt.disabled',
+  },
+  {
+    label: 'opt.enabled',
   },
   {
     permission: 'orange-ai:knowledge:update',
@@ -155,12 +164,28 @@ const options = ref<any[]>([
   },
 ]);
 
+
+const optionsBtnFilter = (data: KnowledgeApi.KnowledgeVO) => {
+  if (data.enabled) {
+    return options.value.filter((item) => ['opt.disabled', 'llm.knowledge.base.opt.management', 'opt.edit', 'opt.delete'].includes(item.label))
+  }
+  return options.value.filter((item) => ['opt.enabled', 'llm.knowledge.base.opt.management', 'opt.edit', 'opt.delete'].includes(item.label))
+}
+
 const optionsClick = (label: string, data: KnowledgeApi.KnowledgeVO) => {
   switch (label) {
-    case 'opt.view': {
+    case 'llm.knowledge.base.opt.management': {
       proxy.$router.push({
         path: `${import.meta.env.VITE_CONTEXT}large-model/knowledge-document/${data.id}`,
       });
+      break;
+    }
+    case 'opt.disabled': {
+      handleEnableDisable(data.id, false);
+      break;
+    }
+    case 'opt.enabled': {
+      handleEnableDisable(data.id, true);
       break;
     }
     case 'opt.edit': {
@@ -198,6 +223,18 @@ const queryModelList = () => {
   });
 };
 queryPlatformList()
+
+
+const handleEnableDisable = (id: string | undefined, enabled: boolean) => {
+  if (!id) return;
+  KnowledgeApi.updateKnowledgeEnabledById(id, enabled).then(() => {
+    handleFormQuery();
+    proxy.$modal.message({
+      message: enabled ? '启用成功' : '禁用成功',
+      status: 'success',
+    });
+  });
+}
 
 const handleDelete = (data: KnowledgeApi.KnowledgeVO) => {
   proxy.$modal

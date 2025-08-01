@@ -116,13 +116,13 @@
         v-if="proxy.$hasPermission(options).length !== 0"
         :title="$t('table.operations')"
         align="center"
-        :width="proxy.$hasPermission(options).length * 50"
+        width="130"
       >
         <template #default="scope">
           <tiny-action-menu
             :max-show-num="3"
             :spacing="8"
-            :options="proxy.$hasPermission(options)"
+            :options="proxy.$hasPermission(optionsBtnFilter(scope.row))"
             @item-click="
               (data: any) => optionsClick(data.itemData.label, scope.row)
             "
@@ -209,6 +209,12 @@ const options = ref<any[]>([
   //   label: 'opt.detail',
   // },
   {
+    label: 'opt.disabled',
+  },
+  {
+    label: 'opt.enabled',
+  },
+  {
     permission: 'orange-ai:model:update',
     label: 'opt.edit',
   },
@@ -217,11 +223,27 @@ const options = ref<any[]>([
     label: 'opt.delete',
   },
 ]);
+
+const optionsBtnFilter = (data: ModelApi.ModelVO) => {
+  if (data.enabled) {
+    return options.value.filter((item) => ['opt.disabled'].includes(item.label))
+  }
+  return options.value.filter((item) => ['opt.enabled', 'opt.edit', 'opt.delete'].includes(item.label))
+}
+
 const detailRef = ref();
 const optionsClick = (label: string, data: ModelApi.ModelVO) => {
   switch (label) {
     case 'opt.detail': {
       detailRef.value.open(data.id);
+      break;
+    }
+    case 'opt.disabled': {
+      handleEnableDisable(data.id, false);
+      break;
+    }
+    case 'opt.enabled': {
+      handleEnableDisable(data.id, true);
       break;
     }
     case 'opt.edit': {
@@ -236,6 +258,17 @@ const optionsClick = (label: string, data: ModelApi.ModelVO) => {
       console.log('code is error.');
   }
 };
+
+const handleEnableDisable = (id: string | undefined, enabled: boolean) => {
+  if (!id) return;
+  ModelApi.updateModelEnabledById(id, enabled).then(() => {
+    handleFormQuery();
+    proxy.$modal.message({
+      message: enabled ? '启用成功' : '禁用成功',
+      status: 'success',
+    });
+  });
+}
 
 const handleDelete = (data: ModelApi.ModelVO) => {
   proxy.$modal

@@ -63,7 +63,7 @@ const options = ref<any[]>([
   },
 ]);
 
-const app: Ref<AppApi.AppDetailVO> = ref({})
+const app: Ref<AppApi.AppVO> = ref({})
 const getAgentById = () => {
   AppApi.getLatestAppById(proxy.$route.params.appId, true).then((res) => {
     app.value = res.data;
@@ -78,7 +78,8 @@ const querySession = () => {
     return;
   }
   const queryParams = {
-    'associationId': proxy.$route.params.appId
+    'associationId': proxy.$route.params.appId,
+    'sessionType': 'AGENT',  
   };
   SessionApi.listSession(queryParams).then((res) => {
     sessionList.value = res.data;

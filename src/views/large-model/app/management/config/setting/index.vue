@@ -2,44 +2,43 @@
   <div class="setting">
     <tiny-row>
       <tiny-col :span="5" class="left-col">
-        <tiny-form
-          ref="formDataRef" :rules="formDataRules" :model="formData" label-position="top" label-width="110px"
+        <tiny-form ref="formDataRef" :rules="formDataRules" :model="formData" label-position="top" label-width="110px"
           validate-position="bottom" validate-type="text">
           <tiny-form-item prop="modelId">
             <template #label>
               <div class="ai-model-label">
-                {{ $t('large-model.agent.modelId') }}
-                <tiny-button type="text" @click="setModelConfig(formData)" :disabled="!formData.modelId">参数设置</tiny-button>
+                {{ $t('llm.app.modelId') }}
+                <tiny-button type="text" @click="setModelConfig(formData)"
+                  :disabled="!formData.modelId">参数设置</tiny-button>
               </div>
             </template>
-            <tiny-cascader
-              v-model="formData.modelId" :options="modelList" :props="{ emitPath: false }" @change="handleUpdateApp"
-              style="width: 100%"/>
+            <tiny-cascader v-model="formData.modelId" :options="modelList" :props="{ emitPath: false }"
+              @change="handleUpdateApp" style="width: 100%" />
           </tiny-form-item>
 
           <tiny-form-item :label="$t('large-model.agent.systemPrompt')" prop="systemPrompt">
-            <tiny-input
-              v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
-              :placeholder="$t('large-model.agent.systemPrompt.placeholder')" @change="handleUpdateApp"/>
+            <tiny-input v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000"
+              show-word-limit :placeholder="$t('large-model.agent.systemPrompt.placeholder')"
+              @change="handleUpdateApp" />
           </tiny-form-item>
 
           <tiny-form-item prop="baseIds">
             <template #label>
               <div class="ai-model-label">
-                {{ $t('large-model.agent.baseIds') }}
-                <tiny-button @click="setKnowledgeBase" :disabled="!formData.modelId" type="text">
-                  <svg-icon name="system-add"/>
+                {{ $t('llm.app.baseIds') }}
+                <tiny-button @click="setKnowledgeBase" type="text">
+                  <svg-icon name="system-add" />
                   添加
                 </tiny-button>
               </div>
             </template>
 
             <div class="list">
-              <div v-for="(item,index) in formData.baseList" :key="index" class="list-item">
+              <div v-for="(item, index) in formData.baseList" :key="index" class="list-item">
                 <span> {{ item.name }}</span>
                 <div class="right-btn">
                   <tiny-button type="text" @click="handleDeleteKnowledgeBase(item.id)">
-                    <svg-icon name="system-trash"/>
+                    <svg-icon name="system-trash" />
                   </tiny-button>
                 </div>
               </div>
@@ -50,18 +49,18 @@
             <template #label>
               <div class="ai-model-label">
                 {{ $t('large-model.agent.mcp-server') }}
-                <tiny-button type="text" @click="setMcpServer(formData)" :disabled="!formData.modelId">
-                  <svg-icon name="system-add"/>
+                <tiny-button type="text" @click="setMcpServer(formData)">
+                  <svg-icon name="system-add" />
                   添加
                 </tiny-button>
               </div>
             </template>
             <div class="list">
-              <div v-for="(item,index) in formData.mcpServerList" :key="index" class="list-item">
+              <div v-for="(item, index) in formData.mcpServerList" :key="index" class="list-item">
                 <span> {{ item.name }}</span>
                 <div class="right-btn">
                   <tiny-button type="text" @click="handleDeleteMcpServer(item.id)">
-                    <svg-icon name="system-trash"/>
+                    <svg-icon name="system-trash" />
                   </tiny-button>
                 </div>
               </div>
@@ -71,19 +70,19 @@
         </tiny-form>
       </tiny-col>
       <tiny-col :span="7" class="right-col">
-        <conversation-index ref="conversationIndexRef" :app="app"/>
+        <conversation-index ref="conversationIndexRef" :app="app" />
       </tiny-col>
     </tiny-row>
 
-    <model-config-index ref="modelConfigRef"/>
-    <knowledge-base-index ref="knowledgeBaseRef" @select="selectKnowledgeBase"/>
-    <mcp-server-index ref="mcpServerRef" @select="selectMcpServer"/>
+    <model-config-index ref="modelConfigRef" />
+    <knowledge-base-index ref="knowledgeBaseRef" @select="selectKnowledgeBase" />
+    <mcp-server-index ref="mcpServerRef" @select="selectMcpServer" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import * as PlatformApi from '@/api/large-model/platform';
-import {computed, defineProps, getCurrentInstance, onMounted, PropType, Ref, ref, toRaw, watch} from 'vue';
+import { computed, defineProps, getCurrentInstance, onMounted, PropType, Ref, ref, toRaw, watch } from 'vue';
 import * as ModelApi from "@/api/large-model/model";
 import * as KnowledgeBaseApi from "@/api/large-model/knowledge-base";
 import * as McpServerApi from "@/api/large-model/mcp-server";
@@ -95,7 +94,7 @@ import McpServerIndex from './components/mcp-server/index.vue'
 import KnowledgeBaseIndex from './components/knowledge-base/index.vue'
 
 const emit = defineEmits(['save']);
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const visible = ref(false);
 const isModify = ref(false);
 const title = computed(() => {
@@ -116,7 +115,7 @@ watch(
   (newApp, oldApp) => {
     updateForm()
   },
-  {deep: true, immediate: false}
+  { deep: true, immediate: false }
 );
 
 onMounted(() => {
@@ -147,8 +146,8 @@ const updateForm = () => {
 const formData = ref<AppApi.EditAppVO>({});
 
 const formDataRules = {
-  name: [{required: true, message: '模型名称不能为空', trigger: 'change'}],
-  modelId: [{required: true, message: '请选择模型', trigger: 'change'}],
+  name: [{ required: true, message: '模型名称不能为空', trigger: 'change' }],
+  modelId: [{ required: true, message: '请选择模型', trigger: 'change' }],
 };
 
 const modelConfigRef = ref()
@@ -178,7 +177,7 @@ const onClose = (refresh: boolean) => {
 const modelList: Ref<ModelApi.PlatformModelTree[]> = ref([])
 const queryPlatformList = () => {
   PlatformApi.listPlatform().then((res) => {
-    modelList.value = res.data.map((item: ModelApi.ModelVO) => ({'value': item.code, 'label': item.name}))
+    modelList.value = res.data.map((item: ModelApi.ModelVO) => ({ 'value': item.code, 'label': item.name }))
     queryModelList()
   });
 };
@@ -188,7 +187,7 @@ const queryModelList = () => {
     modelType: 'CHAT',
     enabled: true,
   }).then((res) => {
-    const models = res.data.map((item: ModelApi.ModelVO) => ({'value': item.id, 'label': item.name, 'platform': item.platform}))
+    const models = res.data.map((item: ModelApi.ModelVO) => ({ 'value': item.id, 'label': item.name, 'platform': item.platform }))
     modelList.value.forEach(item => {
       item.children = models.filter((model: ModelApi.ModelVO) => model.platform === item.value)
     })
@@ -208,7 +207,7 @@ const selectKnowledgeBase = (baseList: KnowledgeBaseApi.KnowledgeVO[]) => {
     return
   }
   formData.value.baseList = baseList;
-  formData.value.baseIds = baseList.map(item => item.id);
+  formData.value.baseIds = baseList.map(item => item.id) as string[];
   handleUpdateApp()
 }
 
@@ -289,5 +288,4 @@ const handleDeleteMcpServer = (id: string) => {
 .list-item :deep(.tiny-button.tiny-button--text:not(.is-only-icon):not(.is-icon)) {
   color: #26244ca6;
 }
-
 </style>

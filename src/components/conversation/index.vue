@@ -1,45 +1,32 @@
 <template>
-  <div class="s-chat-container">
-    <div class="title">
-      <div class="left">
-        <h5> 调试与预览</h5>
-      </div>
-      <div class="right">
-        <tiny-button class="right-btn" @click="clearSession">
-          <svg-icon name="system-trash" :width="18" :height="18"/>
-        </tiny-button>
-      </div>
+  <tiny-dialog-box :visible="visible" title="Orange AI 助手" width="25%" max-height="800px" draggable :modal="false"
+    :close-on-click-modal="false" @close="close">
+    <div class="container_x5eE">
+      <chat-index ref="chatIndexRef" :message-list="sessionMessageList" @send="handleSubmit"
+        @refresh="queryHistoryChatList" />
     </div>
-    <div class="dialog">
-      <chat-index
-        ref="chatIndexRef"
-        :message-list="sessionMessageList"
-        @send="handleSubmit"
-        @refresh="queryHistoryChatList"/>
-    </div>
-  </div>
+  </tiny-dialog-box>
+
 </template>
 
 <script lang="ts" setup>
 import ChatIndex from '@/components/chat/index.vue'
 
-import {getToken} from "@/utils/auth";
-import * as AppApi from "@/api/large-model/app";
+import { getToken } from "@/utils/auth";
 import * as ChatApi from '@/api/large-model/chat';
-import {fetchEventSource} from "@microsoft/fetch-event-source";
-import {defineProps, PropType, Ref, ref} from "vue";
+import * as AppApi from "@/api/large-model/app";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { defineProps, PropType, Ref, ref } from "vue";
 import * as SessionMessageApi from "@/api/large-model/session-message";
+
+const visible = ref(false);
 
 const emit = defineEmits(['refresh']);
 
-const {VITE_API_BASE_URL} = import.meta.env || {};
+const app = ref<AppApi.AppVO>()
+const sessionIdKey = ref<string>('ai-session-id')
 
-const props = defineProps({
-  app: {
-    type: Object as PropType<AppApi.AppVO>,
-    required: true
-  }
-});
+const { VITE_API_BASE_URL } = import.meta.env || {};
 
 const sessionMessageList: Ref<SessionMessageApi.SessionMessageVO[]> = ref([])
 
@@ -78,8 +65,8 @@ const sendMessageStream = async () => {
   });
   const conversationParam = {
     ...formData.value,
-    appId: props.app?.id,
-    'sessionType': 'AGENT_DEBUG'
+    appId: app.value?.id,
+    'sessionType': 'AGENT'
   };
   formData.value.prompt = '';
   let refreshed = false;
@@ -99,7 +86,7 @@ const sendMessageStream = async () => {
           refreshed = true;
           emit('refresh', {});
         }
-        const {code, msg, data} = JSON.parse(event.data);
+        const { code, msg, data } = JSON.parse(event.data);
         let last = sessionMessageList.value[sessionMessageList.value.length - 1];
         if (code !== '200') {
           last.content += msg;
@@ -109,6 +96,9 @@ const sendMessageStream = async () => {
         last.content += data.content;
         last.generating = data.event !== 'FINISHED';
         formData.value.sessionId = data.sessionId
+        if (!localStorage.getItem(sessionIdKey.value)) {
+          localStorage.setItem(sessionIdKey.value, data.sessionId)
+        }
       },
       onclose() {
         console.log('close stream.');
@@ -121,58 +111,38 @@ const sendMessageStream = async () => {
   chatIndexRef.value?.replyComplete()
 };
 
-const clearSession = () => {
-  sessionMessageList.value = []
-  formData.value = {}
-}
+const close = () => {
+  visible.value = false;
+};
 
+const open = () => {
+  visible.value = true;
+  AppApi.getLatestAppById("1", true).then((res) => {
+    app.value = res.data;
+  });
+  const sessionId = localStorage.getItem(sessionIdKey.value)
+  if (sessionId) {
+    queryHistoryChatList(sessionId);
+  }
+};
+
+
+defineExpose({
+  open,
+});
 </script>
 
 
 <style lang="less" scoped>
-:deep(.tiny-button) {
-  min-width: 20px;
-  border: none;
-  background-color: transparent;
-  padding: 10px;
+:deep(.tiny-dialog-box .tiny-dialog-box__body) {
+  padding: 0;
 }
 
-:deep(.tiny-button:hover) {
-  min-width: 20px !important;
-  border: none;
-  background-color: #f3f4f7;
-}
 
-.s-chat-container {
+.container_x5eE {
+  height: 580px;
   width: 100%;
-  height: 100%;
+  padding: 10px 20px;
   background-color: #ffffff;
-
-  .title {
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    line-height: 32px;
-    background-color: #cdd0dc26;
-    border-bottom: 1px solid #26244c0d;
-
-    h5 {
-      margin: 0;
-      color: var(--ti-base-common-title-color);
-      font-weight: 500;
-      font-size: 16px;
-      letter-spacing: 0.55px;
-    }
-  }
-
-  .dialog {
-    height: calc(100% - 50px);
-    margin: 0 20px;
-    padding-bottom: 10px;
-  }
-}
-
-.right-btn {
-  color: #26244ca6 !important;
 }
 </style>

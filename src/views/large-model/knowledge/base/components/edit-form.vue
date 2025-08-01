@@ -1,30 +1,29 @@
 <template>
   <tiny-drawer
-      :title="title"
-      :visible="visible"
-      :show-footer="true"
-      width="30%"
-      @close="onClose(false)"
+    :title="title"
+    :visible="visible"
+    :show-footer="true"
+    width="30%"
+    @close="onClose(false)"
   >
     <tiny-form
-        ref="formDataRef" :rules="formDataRules" :model="formData" label-width="120px" validate-position="bottom"
-        validate-type="text">
-
-      <tiny-form-item :label="$t('large-model.knowledge.name')" prop="name">
-        <tiny-input v-model="formData.name" :placeholder="$t('large-model.knowledge.name.placeholder')"/>
+      ref="formDataRef" :rules="formDataRules" :model="formData" label-width="120px" validate-position="bottom" validate-type="text">
+      <tiny-form-item :label="$t('llm.knowledge.base.name')" prop="name">
+        <tiny-input v-model="formData.name" :placeholder="$t('llm.knowledge.base.name.placeholder')"/>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.knowledge.base.embeddingModelId')" prop="embeddingModelId">
-        <tiny-cascader v-model="formData.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%"/>
+      <tiny-form-item :label="$t('llm.knowledge.base.embeddingModelId')" prop="embeddingModelId">
+        <tiny-cascader
+          v-model="formData.embeddingModelId" :options="modelList" :props="{ emitPath: false }" style="width: 100%" :disabled="isModify"/>
       </tiny-form-item>
 
       <tiny-form-item :label="$t('attribute.enabled.status')" prop="enabled">
         <tiny-radio
-            v-for="(item, index) in proxy.$dict.getDictData(
+          v-for="(item, index) in proxy.$dict.getDictData(
                 proxy.$dict.SYS_DATA_ENABLE_STATUS,
               )"
-            :key="index"
-            v-model="formData.enabled"
-            :label="item.dictValue == 'true'"
+          :key="index"
+          v-model="formData.enabled"
+          :label="item.dictValue == 'true'"
         >
           {{ item.dictLabel }}
         </tiny-radio>
@@ -32,15 +31,15 @@
       <tiny-form-item :label="$t('attribute.sort')" prop="sort">
         <tiny-numeric v-model="formData.sort"></tiny-numeric>
       </tiny-form-item>
-      <tiny-form-item :label="$t('large-model.knowledge.description')" prop="description">
+      <tiny-form-item :label="$t('llm.knowledge.name.description')" prop="description">
         <tiny-input
-            v-model="formData.description" :placeholder="$t('large-model.knowledge.description.placeholder')"
-            type="textarea" :maxlength="500" :rows="5" show-word-limit/>
+          v-model="formData.description" :placeholder="$t('llm.knowledge.name.description.placeholder')" type="textarea" :maxlength="500" :rows="5"
+          show-word-limit/>
       </tiny-form-item>
     </tiny-form>
     <template #footer>
-      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
       <tiny-button @click="onClose(false)">取消</tiny-button>
+      <tiny-button type="primary" @click="onSubmit">保存</tiny-button>
     </template>
   </tiny-drawer>
 </template>
@@ -71,16 +70,16 @@ const onSubmit = () => {
     if (valid) {
       if (formData.value.id) {
         KnowledgeApi.updateKnowledgeById(formData.value.id, toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '修改成功', status: 'success'});
-              onClose(true);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '修改成功', status: 'success'});
+            onClose(true);
+          });
       } else {
         KnowledgeApi.addKnowledge(toRaw(formData.value))
-            .then((res) => {
-              proxy.$modal.message({message: '创建成功', status: 'success'});
-              onClose(true);
-            });
+          .then((res) => {
+            proxy.$modal.message({message: '创建成功', status: 'success'});
+            onClose(true);
+          });
       }
     }
   });

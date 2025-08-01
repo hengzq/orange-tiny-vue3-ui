@@ -66,9 +66,9 @@ axios.interceptors.response.use(
                 status: 'error',
             });
         } else {
-            data.errMsg &&
+            data.msg &&
             Modal.message({
-                message: locale.t(`http.error.${data.errMsg}`),
+                message:  data.msg || '请求失败，请稍后重试',
                 status: 'error',
             });
         }

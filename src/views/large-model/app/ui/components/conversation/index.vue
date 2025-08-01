@@ -47,7 +47,9 @@ const handleSubmit = (prompt: string) => {
   formData.value.prompt = prompt;
   sendMessageStream()
 };
-const chatSender = ref()
+
+const chatIndexRef = ref<InstanceType<typeof ChatIndex>>()
+
 const sendMessageStream = async () => {
   if (!formData.value.prompt) {
     return;
@@ -105,7 +107,7 @@ const sendMessageStream = async () => {
       },
     },
   );
-  chatSender.value.replyComplete()
+  chatIndexRef.value?.replyComplete()
 };
 
 const addSession = () => {

@@ -38,7 +38,7 @@ export interface SessionVO {
     associationId?: string;
     modelId?: string;
     name?: string;
-    source?: string;
+    sessionType?: string;
 }
 
 export interface SessionListParam extends SessionVO {
