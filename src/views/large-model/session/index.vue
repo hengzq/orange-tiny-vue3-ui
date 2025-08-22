@@ -41,7 +41,7 @@
       </template>
       <tiny-grid-column type="selection" width="60"/>
       <tiny-grid-column field="name" :title="$t('llm.session.name')" show-overflow/>
-      <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">
+      <tiny-grid-column field="modelId" :title="$t('llm.app.model')" align="center">
         <template #default="scope">
           <template v-for="(modelItem) in modelList">
             <template v-for="(item, index) in modelItem.children">

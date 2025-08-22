@@ -1,5 +1,5 @@
 <template>
-  <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="39%" @close="onClose(false)">
+  <tiny-drawer :title="title" :visible="visible" :show-footer="!displayOnly" width="39%" @close="onClose(false)">
     <tiny-form ref="formDataRef" :rules="formDataRules" :display-only="displayOnly" :model="formData" label-width="90px"
       validate-position="bottom" validate-type="text">
       <tiny-form-item :label="$t('llm.mcp-server.name')" prop="name">

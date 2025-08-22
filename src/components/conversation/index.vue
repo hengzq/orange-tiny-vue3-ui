@@ -2,7 +2,7 @@
   <tiny-dialog-box :visible="visible" title="Orange AI 助手" width="25%" max-height="800px" draggable :modal="false"
     :close-on-click-modal="false" @close="close">
     <div class="container_x5eE">
-      <chat-index ref="chatIndexRef" :message-list="sessionMessageList" @send="handleSubmit"
+      <chat-index ref="chatIndexRef" :message-list="sessionMessageList" @send="handleSubmit" @stop="handleStop"
         @refresh="queryHistoryChatList" />
     </div>
   </tiny-dialog-box>
@@ -46,6 +46,14 @@ const handleSubmit = (prompt: string) => {
   formData.value.prompt = prompt;
   sendMessageStream()
 };
+
+const handleStop = () => {
+  if (!formData.value.sessionId) return;
+  ChatApi.stopBySessionId(formData.value.sessionId).then(() => {
+    console.log('停止会话成功');
+  });
+};
+
 const chatIndexRef = ref<InstanceType<typeof ChatIndex>>()
 
 const sendMessageStream = async () => {

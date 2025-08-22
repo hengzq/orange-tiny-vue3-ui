@@ -31,7 +31,7 @@
           <dict-tag :value="scope.row.appStatus" :options="proxy.$dict.getDictData('ai_app_status')"/>
         </template>
       </tiny-grid-column>
-      <!--      <tiny-grid-column field="modelId" :title="$t('large-model.agent.model')" align="center">-->
+      <!--      <tiny-grid-column field="modelId" :title="$t('llm.app.model')" align="center">-->
       <!--        <template #default="scope">-->
       <!--          <template v-for="(modelItem) in modelList">-->
       <!--            <template v-for="(item, index) in modelItem.children">-->

@@ -26,7 +26,7 @@
             <tiny-form-item :label="$t('large-model.model.systemPrompt')" prop="systemPrompt">
               <tiny-input
                 v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000" show-word-limit
-                :placeholder="$t('large-model.agent.systemPrompt.placeholder')"/>
+                :placeholder="$t('llm.app.systemPrompt.placeholder')"/>
             </tiny-form-item>
             <tiny-form-item :label="$t('large-model.model.config.temperature')">
               <tiny-slider v-model="formData.temperature" :show-input="true" :min="0" :max="1" :step="0.01" unit=""></tiny-slider>

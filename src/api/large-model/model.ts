@@ -48,6 +48,7 @@ export interface ModelVO {
 
 export interface ModelConfig {
     temperature?: number;
+    sessionRound?: number;
 }
 
 

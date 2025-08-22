@@ -6,17 +6,17 @@
       </template>
     </div>
 
-    <chat-sender ref="chatSenderRef" @send="handleSend" />
+    <chat-sender ref="chatSenderRef" @send="handleSend" @stop="handleStop" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import ChatSender from '@/components/chat-sender/index.vue'
 import ChatItem from '@/components/chat-item/index.vue'
-import { defineProps, PropType,ref, watch, nextTick } from 'vue';
+import { defineProps, PropType, ref, watch, nextTick } from 'vue';
 import * as SessionMessageApi from "@/api/large-model/session-message";
 
-const emit = defineEmits(['refresh', 'send']);
+const emit = defineEmits(['refresh', 'send', 'stop']);
 
 const props = defineProps({
   messageList: {
@@ -40,6 +40,10 @@ watch(
 
 const handleSend = (prompt: string) => {
   emit("send", prompt);
+};
+
+const handleStop = () => {
+  emit("stop", "");
 };
 
 const chatSenderRef = ref<InstanceType<typeof ChatSender>>()

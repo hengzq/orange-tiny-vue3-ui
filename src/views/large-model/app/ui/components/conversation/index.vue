@@ -1,26 +1,23 @@
 <template>
   <div class="container">
-    <chat-index
-      ref="chatIndexRef"
-      :message-list="sessionMessageList"
-      @send="handleSubmit"
-      @refresh="queryHistoryChatList"/>
+    <chat-index ref="chatIndexRef" :message-list="sessionMessageList" @send="handleSubmit" @stop="handleStop"
+      @refresh="queryHistoryChatList" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import ChatIndex from '@/components/chat/index.vue'
 
-import {getToken} from "@/utils/auth";
+import { getToken } from "@/utils/auth";
 import * as ChatApi from '@/api/large-model/chat';
 import * as AppApi from "@/api/large-model/app";
-import {fetchEventSource} from "@microsoft/fetch-event-source";
-import {defineProps, PropType, Ref, ref} from "vue";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
+import { defineProps, PropType, Ref, ref } from "vue";
 import * as SessionMessageApi from "@/api/large-model/session-message";
 
 const emit = defineEmits(['refresh']);
 
-const {VITE_API_BASE_URL} = import.meta.env || {};
+const { VITE_API_BASE_URL } = import.meta.env || {};
 
 const props = defineProps({
   app: {
@@ -47,6 +44,15 @@ const handleSubmit = (prompt: string) => {
   formData.value.prompt = prompt;
   sendMessageStream()
 };
+
+
+const handleStop = () => {
+  if (!formData.value.sessionId) return;
+  ChatApi.stopBySessionId(formData.value.sessionId).then(() => {
+    console.log('停止会话成功');
+  });
+};
+
 
 const chatIndexRef = ref<InstanceType<typeof ChatIndex>>()
 
@@ -88,7 +94,7 @@ const sendMessageStream = async () => {
           refreshed = true;
           emit('refresh', {});
         }
-        const {code, msg, data} = JSON.parse(event.data);
+        const { code, msg, data } = JSON.parse(event.data);
         let last = sessionMessageList.value[sessionMessageList.value.length - 1];
         if (code !== '200') {
           last.content += msg;
@@ -123,7 +129,6 @@ defineExpose({
 
 
 <style lang="less" scoped>
-
 :deep(.tiny-button) {
   min-width: 30px !important;
 }

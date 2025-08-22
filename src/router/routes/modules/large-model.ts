@@ -50,6 +50,12 @@ export default {
       id: 'McpServer',
       label: 'McpServer',
       component: () => import('@/views/large-model/mcp/server/index.vue'),
+    },
+    {
+      path: 'workflow',
+      id: 'Workflow',
+      label: 'Workflow',
+      component: () => import('@/views/large-model/workflow/management/index.vue'),
     }
   ],
 };

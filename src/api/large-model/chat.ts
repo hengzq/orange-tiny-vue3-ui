@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const BASE_URL = '/orange-ai/v1.0/chat';
 
 export const CONVERSATION_STREAM_URL =
@@ -19,6 +21,12 @@ export const COMPLETIONS_URL =
 // export function listTextToImage(params: TextToImageListParam) {
 //   return axios.post(BASE_URL.concat('/list'), params);
 // }
+
+
+export function stopBySessionId(sessionId: string) {
+  return axios.post(BASE_URL.concat(`/${sessionId}/stop`));
+}
+
 
 export interface ConversationParam {
   modelId?: string;

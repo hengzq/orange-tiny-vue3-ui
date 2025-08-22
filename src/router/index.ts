@@ -54,6 +54,13 @@ const router = createRouter({
             },
         },
         {
+            path: import.meta.env.VITE_CONTEXT + 'workflow/design/:wfId',
+            component: () => import('@/views/large-model/workflow/design/index.vue'),
+            meta: {
+                requiresAuth: false,
+            },
+        },
+        {
             path: import.meta.env.VITE_CONTEXT + ':pathMatch(.*)*',
             name: 'notFound',
             redirect: {path: `${import.meta.env.VITE_CONTEXT}exception/404`},

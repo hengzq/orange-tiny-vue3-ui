@@ -13,7 +13,7 @@
             :style="{ background: prompt == '' ? '#cfd5de' : '#356bfd' }" @click="sendMessage">
             <svg-icon name="system-arrow-top" width="25" height="25" color="#ffffff" />
           </tiny-button>
-          <tiny-button v-else type="text" class="btn-send" @click="sendMessage">
+          <tiny-button v-else type="text" class="btn-send" @click="handleStop">
             <svg-icon name="system-stop" width="18" height="18" color="#ffffff" />
           </tiny-button>
         </div>
@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const emit = defineEmits(['send']);
+const emit = defineEmits(['send','stop']);
 // 流式加载中
 const isStreamLoad = ref(false)
 const replyComplete = () => {
@@ -40,6 +40,11 @@ const sendMessage = () => {
   emit("send", prompt.value);
   prompt.value = "";
 }
+
+const handleStop = () => {
+  isStreamLoad.value = false;
+  emit("stop", ""); 
+};
 
 // 中文输入监听
 const isComposing = ref(false);

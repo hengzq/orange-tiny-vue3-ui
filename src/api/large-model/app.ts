@@ -59,13 +59,14 @@ export interface AppVersionVO {
   modelId?: string;
   modelConfig?: ModelConfig;
   baseIds?: string[];
+  mcpIds?: string[];
+  workflowIds?: string[];
 }
 
 export type EditAppVO = AppVO & AppVersionVO & {
-  baseIds: string[];
   baseList?: KnowledgeVO[];
   mcpServerList?: McpServerVO[];
-  mcpIds?: string[];
+  workflowList?: McpServerVO[];
 }
 
 export type AppListParam = AppVO

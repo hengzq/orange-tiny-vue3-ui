@@ -16,6 +16,7 @@ export default {
   'large-model.model.description.placeholder': '请输入模型信息',
   'large-model.model.llm': '大模型',
   'large-model.model.config.temperature': '温度系数',
+  'large-model.model.config.sessionRound': '携带上下文轮数',
   'large-model.model.systemPrompt': '系统提示词',
   'large-model.model.systemPrompt.placeholder': '请在这里编辑系统提示词，包括角色设定、任务目标、具备的能力及回复的要求与限制等，好的提示词会直接影响智能体效果。',
 
@@ -53,11 +54,12 @@ export default {
 
   'large-model.agent.opt.demonstration': '演示',
 
-  'large-model.agent.model': '模型',
-  'large-model.agent.systemPrompt': '系统提示词',
-  'large-model.agent.systemPrompt.placeholder': '请在这里编辑系统提示词，包括角色设定、任务目标、具备的能力及回复的要求与限制等，好的提示词会直接影响智能体效果。',
+  'llm.app.model': '模型',
+  'llm.app.systemPrompt': '系统提示词',
+  'llm.app.systemPrompt.placeholder': '请在这里编辑系统提示词，包括角色设定、任务目标、具备的能力及回复的要求与限制等，好的提示词会直接影响智能体效果。',
   'large-model.agent.mcp-server': 'MCP 服务',
   'large-model.agent.mcp-server.placeholder': '请选择MCP 服务',
+  'llm.app.workflow': '工作流',
 
   'llm.app.opt.config': '配置',
 
@@ -100,4 +102,15 @@ export default {
   'llm.mcp-server.description': '服务描述',
   'llm.mcp-server.description.placeholder': '请输入服务描述',
   'llm.mcp-server.tool': '工具',
+
+
+  'llm.workflow.model': '模型',
+
+  'llm.wf.opt.design': '设计',
+
+  'llm.wf.name': '工作流名称',
+  'llm.wf.name.placeholder': '请输入工作流名称',
+  'llm.wf.wfStatus': '状态',
+  'llm.wf.description': '工作流描述',
+  'llm.wf.description.placeholder': '请输入工作流描述',
 };

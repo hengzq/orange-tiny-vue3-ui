@@ -4,14 +4,14 @@
       <tiny-row :flex="true">
         <tiny-col :span="4">
           <tiny-form-item :label="$t('llm.mcp-server.name')">
-            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('llm.mcp-server.name.placeholder')" />
+            <tiny-input v-model="filterOptions.name" clearable :placeholder="$t('llm.mcp-server.name.placeholder')"/>
           </tiny-form-item>
         </tiny-col>
         <tiny-col :span="4">
           <tiny-form-item :label="$t('llm.mcp-server.transportProtocol')" prop="platform">
             <tiny-select v-model="filterOptions.transportProtocol">
               <tiny-option v-for="(item) in proxy.$dict.getDictData('ai_mcp_server_transport_protocol')"
-                :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue" />
+                           :key="item.dictValue" :label="item.dictLabel" :value="item.dictValue"/>
             </tiny-select>
           </tiny-form-item>
         </tiny-col>
@@ -22,12 +22,12 @@
       </tiny-row>
     </tiny-form>
     <tiny-grid ref="gridTableRef" class="table-list" :fetch-data="fetchTableData" :pager="pagerConfig"
-      :loading="loading" @cell-click="cellClickEvent" @toolbar-button-click="toolbarButtonClickEvent">
+               :loading="loading" @cell-click="cellClickEvent" @toolbar-button-click="toolbarButtonClickEvent">
       <template #toolbar>
-        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen />
+        <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen/>
       </template>
-      <tiny-grid-column type="selection" width="60" />
-      <tiny-grid-column field="name" :title="$t('llm.mcp-server.name')" />
+      <tiny-grid-column type="selection" width="60"/>
+      <tiny-grid-column field="name" :title="$t('llm.mcp-server.name')"/>
       <tiny-grid-column field="enabled" :title="$t('llm.mcp-server.url')" align="center">
         <template #default="scope">
           {{ scope.row.connectionUrl }}{{ scope.row.sseEndpoint }}
@@ -35,21 +35,22 @@
       </tiny-grid-column>
       <tiny-grid-column field="enabled" :title="$t('attribute.enabled.status')" align="center" width="90">
         <template #default="scope">
-          <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)" />
+          <dict-tag :value="scope.row.enabled" :options="proxy.$dict.getDictData(proxy.$dict.SYS_DATA_ENABLE_STATUS)"/>
         </template>
       </tiny-grid-column>
       <tiny-grid-column field="transportProtocol" :title="$t('llm.mcp-server.transportProtocol')" align="center"
-        width="120" />
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170" />
+                        width="120"/>
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
 
       <tiny-grid-column v-if="proxy.$hasPermission(options).length !== 0" :title="$t('table.operations')" align="center"
-        width="150">
+                        width="150">
         <template #default="scope">
           <tiny-action-menu :max-show-num="2" :spacing="8" :options="proxy.$hasPermission(optionsBtnFilter(scope.row))"
-            @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
+                            @item-click="(data: any) => optionsClick(data.itemData.label, scope.row)">
             <template #item="{ data }">
-              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">{{ $t(data.label)
-              }}</span>
+              <span v-if="data.label == 'opt.delete'" style="color: var(--button-delete-color)">{{
+                  $t(data.label)
+                }}</span>
               <span v-else> {{ $t(data.label) }} </span>
             </template>
           </tiny-action-menu>
@@ -63,10 +64,10 @@
 
 <script lang="ts" setup>
 import * as McpServerApi from '@/api/large-model/mcp-server';
-import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
+import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import EditForm from './edit-form/index.vue';
 
-const { proxy } = getCurrentInstance() as any;
+const {proxy} = getCurrentInstance() as any;
 
 const pagerConfig = reactive({
   attrs: {
@@ -86,7 +87,7 @@ const state = reactive<{
   loading: false,
   filterOptions: {} as McpServerApi.McpServerPageParam,
 });
-const { loading, filterOptions } = toRefs(state);
+const {loading, filterOptions} = toRefs(state);
 const gridTableRef = ref();
 
 const handleFormQuery = () => {
@@ -98,7 +99,7 @@ const handleFormReset = () => {
 };
 
 
-const cellClickEvent = ({ column, row }: { column: any, row: McpServerApi.McpServerVO }) => {
+const cellClickEvent = ({column, row}: { column: any, row: McpServerApi.McpServerVO }) => {
   if (column.title === '操作') return;
   editFormRef.value.open(row.id, true);
 };
@@ -111,7 +112,7 @@ const toolbarButtons = reactive<any[]>([
   },
 ]);
 const editFormRef = ref();
-const toolbarButtonClickEvent = ({ code }: any) => {
+const toolbarButtonClickEvent = ({code}: any) => {
   switch (code) {
     case 'insert': {
       editFormRef.value.open();
@@ -122,6 +123,9 @@ const toolbarButtonClickEvent = ({ code }: any) => {
   }
 };
 const options = ref<any[]>([
+  {
+    label: 'opt.view'
+  },
   {
     label: 'opt.disabled',
   },
@@ -140,13 +144,17 @@ const options = ref<any[]>([
 
 const optionsBtnFilter = (data: McpServerApi.McpServerVO) => {
   if (data.enabled) {
-    return options.value.filter((item) => ['opt.disabled', 'opt.edit', 'opt.delete'].includes(item.label))
+    return options.value.filter((item) => ['opt.view', 'opt.disabled', 'opt.edit', 'opt.delete'].includes(item.label))
   }
-  return options.value.filter((item) => ['opt.enabled', 'opt.edit', 'opt.delete'].includes(item.label))
+  return options.value.filter((item) => ['opt.view', 'opt.enabled', 'opt.edit', 'opt.delete'].includes(item.label))
 }
 
 const optionsClick = (label: string, data: McpServerApi.McpServerVO) => {
   switch (label) {
+    case 'opt.view': {
+      editFormRef.value.open(data.id, true);
+      break;
+    }
     case 'opt.disabled': {
       handleEnableDisable(data.id, false);
       break;
@@ -201,8 +209,8 @@ const handleDelete = (data: McpServerApi.McpServerVO) => {
 
 
 const fetchTableData = reactive({
-  api: ({ page }: any) => {
-    const { currentPage, pageSize } = page;
+  api: ({page}: any) => {
+    const {currentPage, pageSize} = page;
     return getPageData({
       pageNo: currentPage,
       pageSize,
@@ -222,11 +230,11 @@ async function getPageData(
   };
   state.loading = true;
   try {
-    const { data } = await McpServerApi.pageMcpServer(queryParams);
-    const { records, total } = data;
+    const {data} = await McpServerApi.pageMcpServer(queryParams);
+    const {records, total} = data;
     return {
       result: records,
-      page: { total },
+      page: {total},
     };
   } finally {
     state.loading = false;

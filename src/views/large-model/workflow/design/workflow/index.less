@@ -1,0 +1,131 @@
+.vue-flow {
+  height: calc(100vh - 80px);
+}
+
+.workflow-container .tiny-dialog-box.is-right-slide .tiny-dialog-box__body {
+  padding: 2px 20px;
+}
+
+.workflow-container .tiny-collapse-item__header {
+  padding: 12px 0;
+}
+
+.workflow-container .tiny-collapse-item__content {
+  padding: 0;
+}
+
+
+.node-container {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.node-container:hover {
+  border-color: #615ced;
+  box-shadow: 0 4px 36px #3c34c514;
+
+  .vue-flow__handle {
+    width: 10px;
+    height: 10px;
+    background: #4d53e8;
+  }
+}
+
+.node-container .vue-flow__handle:hover {
+  width: 15px;
+  height: 15px;
+}
+
+
+
+.node-container .node-title {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  line-height: 50px;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #e6e8ee;
+  border-radius: 12px;
+  padding: 10px;
+
+  svg {
+    margin-right: 8px;
+    fill: #8080ff;
+  }
+
+  .right-btn {
+    display: flex;
+    justify-content: center;
+
+    .tiny-button.is-only-icon.is-only-icon {
+      min-width: 24px;
+      min-height: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+  }
+}
+
+.run-result {
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #e6e8ee;
+  border-radius: 12px;
+  width: 350px;
+}
+
+.run-result .tiny-collapse-item__header {
+  padding: 0;
+  min-height: 30px;
+}
+
+.output-data {
+  border: 1px solid #e6e8ee;
+  border-radius: 5px;
+  padding: 5px;
+
+  span {
+    color: #8080ff;
+  }
+}
+
+
+
+.node-container .tiny-dropdown__trigger:not(.tiny-button) .tiny-svg {
+  fill: var(--tv-ActionMenu-icon-color-card);
+}
+
+
+.tiny-collapse {
+  border: none;
+}
+
+.tiny-collapse-item {
+  border: none;
+}
+
+
+.config-dialog .tiny-dialog-box.is-right-slide .tiny-dialog-box__header {
+  padding: var(--tv-DialogBox-padding) 0 10px;
+}
+
+.config-dialog .description .tiny-input__inner {
+  border: none;
+  color: gray;
+}
+
+.config-dialog .tiny-divider--horizontal {
+  margin: 5px 0 10px !important;
+}
+
+.config-dialog .tiny-button.tiny-button--text:not(.is-only-icon):not(.is-icon) {
+  color: #26244ca6;
+}
+
+.config-dialog .tiny-grid.tiny-grid-editable .tiny-grid-body__column.col__actived,
+.tiny-grid.tiny-grid-editable .tiny-grid-body__column.edit__visible {
+  padding: 0px 5px 0 0;
+}

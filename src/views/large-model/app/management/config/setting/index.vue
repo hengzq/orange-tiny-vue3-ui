@@ -8,18 +8,24 @@
             <template #label>
               <div class="ai-model-label">
                 {{ $t('llm.app.modelId') }}
-                <tiny-button type="text" @click="setModelConfig(formData)"
-                  :disabled="!formData.modelId">参数设置</tiny-button>
+                <tiny-button type="text" @click="setModelConfig" :disabled="!formData.modelId">参数设置</tiny-button>
               </div>
             </template>
             <tiny-cascader v-model="formData.modelId" :options="modelList" :props="{ emitPath: false }"
               @change="handleUpdateApp" style="width: 100%" />
           </tiny-form-item>
 
-          <tiny-form-item :label="$t('large-model.agent.systemPrompt')" prop="systemPrompt">
+          <tiny-form-item :label="$t('llm.app.systemPrompt')" prop="systemPrompt">
+            <template #label>
+              <div class="ai-model-label">
+                {{ $t('llm.app.systemPrompt') }}
+                <!-- <tiny-button type="text" @click="setModelConfig" :disabled="!formData.modelId">
+                 <svg-icon name="system-ai" color="#1476ff" style="padding-right: 2px;"/>优化
+                </tiny-button> -->
+              </div>
+            </template>
             <tiny-input v-model="formData.systemPrompt" type="textarea" :autosize="{ minRows: 5 }" :maxlength="5000"
-              show-word-limit :placeholder="$t('large-model.agent.systemPrompt.placeholder')"
-              @change="handleUpdateApp" />
+              show-word-limit :placeholder="$t('llm.app.systemPrompt.placeholder')" @change="handleUpdateApp" />
           </tiny-form-item>
 
           <tiny-form-item prop="baseIds">
@@ -49,7 +55,7 @@
             <template #label>
               <div class="ai-model-label">
                 {{ $t('large-model.agent.mcp-server') }}
-                <tiny-button type="text" @click="setMcpServer(formData)">
+                <tiny-button type="text" @click="setMcpServer()">
                   <svg-icon name="system-add" />
                   添加
                 </tiny-button>
@@ -67,6 +73,29 @@
             </div>
           </tiny-form-item>
 
+
+          <!-- <tiny-form-item prop="workflowId">
+            <template #label>
+              <div class="ai-model-label">
+                {{ $t('llm.app.workflow') }}
+                <tiny-button type="text" @click="setWorkflow()">
+                  <svg-icon name="system-add" />
+                  添加
+                </tiny-button>
+              </div>
+            </template>
+            <div class="list">
+              <div v-for="(item, index) in formData.workflowList" :key="index" class="list-item">
+                <span> {{ item.name }}</span>
+                <div class="right-btn">
+                  <tiny-button type="text" @click="handleDeleteMcpServer(item.id)">
+                    <svg-icon name="system-trash" />
+                  </tiny-button>
+                </div>
+              </div>
+            </div>
+          </tiny-form-item> -->
+
         </tiny-form>
       </tiny-col>
       <tiny-col :span="7" class="right-col">
@@ -74,24 +103,27 @@
       </tiny-col>
     </tiny-row>
 
-    <model-config-index ref="modelConfigRef" />
+    <model-config-index ref="modelConfigRef" @config="handleModelConfig" />
     <knowledge-base-index ref="knowledgeBaseRef" @select="selectKnowledgeBase" />
     <mcp-server-index ref="mcpServerRef" @select="selectMcpServer" />
+    <workflow-index ref="workflowIndexRef" @select="selectWorkflow" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import * as PlatformApi from '@/api/large-model/platform';
-import { computed, defineProps, getCurrentInstance, onMounted, PropType, Ref, ref, toRaw, watch } from 'vue';
-import * as ModelApi from "@/api/large-model/model";
+import * as AppApi from "@/api/large-model/app";
 import * as KnowledgeBaseApi from "@/api/large-model/knowledge-base";
 import * as McpServerApi from "@/api/large-model/mcp-server";
-import * as AppApi from "@/api/large-model/app";
+import * as ModelApi from "@/api/large-model/model";
+import * as PlatformApi from '@/api/large-model/platform';
+import * as WfApi from "@/api/large-model/wf";
+import { computed, defineProps, getCurrentInstance, onMounted, PropType, Ref, ref, toRaw, watch } from 'vue';
 
 import ConversationIndex from './components/conversation/index.vue';
+import KnowledgeBaseIndex from './components/knowledge-base/index.vue';
+import McpServerIndex from './components/mcp-server/index.vue';
 import ModelConfigIndex from './components/model-config/index.vue';
-import McpServerIndex from './components/mcp-server/index.vue'
-import KnowledgeBaseIndex from './components/knowledge-base/index.vue'
+import WorkflowIndex from './components/workflow/index.vue';
 
 const emit = defineEmits(['save']);
 const { proxy } = getCurrentInstance() as any;
@@ -151,8 +183,8 @@ const formDataRules = {
 };
 
 const modelConfigRef = ref()
-const setModelConfig = (item: AppApi.AppVO) => {
-  modelConfigRef.value.open(item.latestVersion?.modelConfig)
+const setModelConfig = () => {
+  modelConfigRef.value.open(props.app.latestVersion?.modelConfig)
 }
 
 
@@ -195,6 +227,11 @@ const queryModelList = () => {
     modelList.value = modelList.value.filter(item => item.children && item.children.length > 0)
   });
 };
+
+const handleModelConfig = (modelConfig: ModelApi.ModelConfig) => {
+  formData.value.modelConfig = modelConfig;
+  handleUpdateApp()
+}
 
 
 const knowledgeBaseRef = ref()
@@ -256,6 +293,21 @@ const handleDeleteMcpServer = (id: string) => {
   formData.value.mcpIds = formData.value.mcpIds?.filter(item => item !== id);
   handleUpdateApp()
 }
+
+const workflowIndexRef = ref();
+const setWorkflow = () => {
+  workflowIndexRef.value.open(formData.value.workflowIds);
+}
+
+const selectWorkflow = (workflowList: WfApi.WfVO[]) => {
+  if (!workflowList) {
+    return
+  }
+  formData.value.mcpServerList = workflowList
+  formData.value.workflowIds = workflowList.map(item => item.id) as string[]
+  handleUpdateApp()
+}
+
 
 </script>
 

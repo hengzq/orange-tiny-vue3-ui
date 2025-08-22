@@ -1,9 +1,10 @@
 <template>
   <tiny-drawer :title="title" :visible="visible" :show-footer="true" width="32%" @close="onClose()">
-    <tiny-grid ref="gridTableRef" class="table-list" :fetch-data="fetchTableData" :pager="pagerConfig" :loading="loading" row-id="id">
-      <tiny-grid-column type="selection" width="60"/>
-      <tiny-grid-column field="name" :title="$t('llm.mcp-server.name')"/>
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170"/>
+    <tiny-grid ref="gridTableRef" class="table-list" :fetch-data="fetchTableData" :pager="pagerConfig"
+      :loading="loading" row-id="id">
+      <tiny-grid-column type="selection" width="60" />
+      <tiny-grid-column field="name" :title="$t('llm.mcp-server.name')" />
+      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170" />
     </tiny-grid>
 
     <template #footer>
@@ -14,12 +15,12 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, getCurrentInstance, reactive, ref, toRefs} from 'vue';
+import { computed, getCurrentInstance, reactive, ref, toRefs } from 'vue';
 import * as ModelApi from "@/api/large-model/model";
 import * as McpServerApi from '@/api/large-model/mcp-server';
 
 const emit = defineEmits(['ok']);
-const {proxy} = getCurrentInstance() as any;
+const { proxy } = getCurrentInstance() as any;
 const visible = ref(false);
 const title = computed(() => {
   return '选择MCP服务';
@@ -55,12 +56,12 @@ const state = reactive<{
   filterOptions: {} as McpServerApi.McpServerPageParam,
 });
 
-const {loading, filterOptions} = toRefs(state);
+const { loading, filterOptions } = toRefs(state);
 const gridTableRef = ref();
 
 const fetchTableData = reactive({
-  api: ({page}: any) => {
-    const {currentPage, pageSize} = page;
+  api: ({ page }: any) => {
+    const { currentPage, pageSize } = page;
     return getPageData({
       pageNo: currentPage,
       pageSize,
@@ -81,11 +82,11 @@ async function getPageData(
   };
   state.loading = true;
   try {
-    const {data} = await McpServerApi.pageMcpServer(queryParams);
-    const {records, total} = data;
+    const { data } = await McpServerApi.pageMcpServer(queryParams);
+    const { records, total } = data;
     return {
       result: records,
-      page: {total},
+      page: { total },
     };
   } finally {
     state.loading = false;
@@ -120,5 +121,4 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
