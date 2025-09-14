@@ -20,15 +20,14 @@
         <tiny-grid-toolbar :buttons="proxy.$hasPermission(toolbarButtons)" full-screen />
       </template>
       <tiny-grid-column type="selection" width="60" />
-      <tiny-grid-column field="latestVersion.name" :title="$t('llm.wf.name')" />
+      <tiny-grid-column field="name" :title="$t('llm.wf.name')" />
       <tiny-grid-column field="workflowStatus" :title="$t('llm.wf.wfStatus')" width="120" align="center">
         <template #default="scope">
           <dict-tag :value="scope.row.workflowStatus" :options="proxy.$dict.getDictData('ai_app_status')" />
         </template>
       </tiny-grid-column>
-      <tiny-grid-column field="latestVersion.description" show-overflow :title="$t('attribute.description')"
-        width="260" />
-      <tiny-grid-column field="createdAt" :title="$t('attribute.createdAt')" align="center" width="170" />
+      <tiny-grid-column field="description" show-overflow :title="$t('attribute.description')" width="260" />
+      <tiny-grid-column field="updatedAt" :title="$t('attribute.updatedAt')" align="center" width="170" />
       <tiny-grid-column v-if="proxy.$hasPermission(options).length !== 0" :title="$t('table.operations')" align="center"
         :width="proxy.$hasPermission(options).length * 50">
         <template #default="scope">
@@ -141,7 +140,7 @@ const optionsClick = (label: string, data: WfApi.WfVO) => {
 const handleDelete = (data: WfApi.WfVO) => {
   proxy.$modal
     .confirm({
-      message: `确定要删除应用【${data.version?.name}】吗?`,
+      message: `确定要删除工作流【${data?.latestVersion?.name}】吗?`,
       maskClosable: true,
       title: '删除提示',
     })

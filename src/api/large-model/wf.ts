@@ -48,8 +48,12 @@ export function listWf(params: WfListParam) {
 export interface WfVO {
   tenantId?: string;
   id: string;
+  name?: string;
+  description?: string;
   WfType?: string;
   version?: WfVersionVO;
+  latestVersion?: WfVersionVO;
+
 }
 
 export interface WfDetailVO extends WfVO {

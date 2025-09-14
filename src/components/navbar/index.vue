@@ -2,14 +2,13 @@
   <div class="navbar">
     <div class="left-side">
       <div style="display: flex; align-items: center">
-        <img src="/favicon.ico" class="logo" alt="logo" @click="jumpUrl"/>
+        <img src="/favicon.ico" class="logo" alt="logo" @click="jumpUrl" />
         <h5 @click="jumpUrl">Orange AI 管理平台</h5>
         <div class="divider"></div>
         <!--                <img class="vue-icon" alt="logo" src="@/assets/images/pro.png" />-->
-        <h4 style="width: 60px;">V1.7.0</h4>
+        <h4 style="width: 60px;">V1.7.1</h4>
         <!--        <div class="divider"></div>-->
-
-        <!--        <breadcrumb :items="items"/>-->
+               <!-- <breadcrumb :items="items"/> -->
       </div>
     </div>
     <ul class="right-side">
@@ -22,43 +21,44 @@
       <li @click="changeLan">
         <span v-if="i18.locale.value === 'zhCN'">中文</span>
         <span v-else>English</span>
-        <img src="@/assets/images/lan.png" alt="lan" class="navbar-lan"/>
+        <img src="@/assets/images/lan.png" alt="lan" class="navbar-lan" />
         <div v-if="lan" class="trigger-lan">
-          <li v-for="(item, index) in locales" :key="index" :value="item.value" @click="changeLocale(locales[index].value)">{{ item.label }}</li>
-        </div>
-      </li>
-      <li>
-        <span @click="help">{{ $t('settings.navbar.help') }}</span>
-      </li>
-      <!--      <li>-->
-      <!--        <span @click="setVisible">{{ $t('settings.title') }}</span>-->
-      <!--      </li>-->
-      <li class="navbar-user">
-        <tiny-user-head type="icon" round min>
-          <div class="user-image">
-            <img src="@/assets/images/avatar.png" alt="user"/>
-          </div>
-        </tiny-user-head>
-        <div class="trigger-user">
-          <li v-for="(item, index) in userList" :key="index" :value="item.label" @click="switchUser(item.value)">
-            <iconUser v-if="item.value === 1"></iconUser>
-            <iconCheckOut v-if="item.value === 10"></iconCheckOut>
-            {{ $t(item.label) }}
-          </li>
-        </div>
-      </li>
-    </ul>
+      <li v-for="(item, index) in locales" :key="index" :value="item.value" @click="changeLocale(locales[index].value)">
+        {{ item.label }}</li>
+  </div>
+  </li>
+  <li>
+    <span @click="help">{{ $t('settings.navbar.help') }}</span>
+  </li>
+  <!--      <li>-->
+  <!--        <span @click="setVisible">{{ $t('settings.title') }}</span>-->
+  <!--      </li>-->
+  <li class="navbar-user">
+    <tiny-user-head type="icon" round min>
+      <div class="user-image">
+        <img src="@/assets/images/avatar.png" alt="user" />
+      </div>
+    </tiny-user-head>
+    <div class="trigger-user">
+  <li v-for="(item, index) in userList" :key="index" :value="item.label" @click="switchUser(item.value)">
+    <iconUser v-if="item.value === 1"></iconUser>
+    <iconCheckOut v-if="item.value === 10"></iconCheckOut>
+    {{ $t(item.label) }}
+  </li>
+  </div>
+  </li>
+  </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {UserHead as TinyUserHead} from '@opentiny/vue';
-import {IconCheckOut, IconUser} from '@opentiny/vue-icon';
-import {useAppStore} from '@/store';
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { UserHead as TinyUserHead } from '@opentiny/vue';
+import { IconCheckOut, IconUser } from '@opentiny/vue-icon';
+import { useAppStore } from '@/store';
 import router from '@/router';
-import {LOCALE_OPTIONS} from '@/locale';
+import { LOCALE_OPTIONS } from '@/locale';
 import useLocale from '@/hooks/locale';
 import useUser from '@/hooks/user';
 
@@ -68,8 +68,8 @@ const iconCheckOut = IconCheckOut();
 const lan = ref(false);
 
 const appStore = useAppStore();
-const {logout} = useUser();
-const {changeLocale} = useLocale();
+const { logout } = useUser();
+const { changeLocale } = useLocale();
 const locales = [...LOCALE_OPTIONS];
 
 // 切换语言
@@ -89,19 +89,19 @@ const help = () => {
 
 // 设置页面显示
 const setVisible = () => {
-  appStore.updateSettings({Settings: true});
+  appStore.updateSettings({ Settings: true });
 };
 
 // 用户设置
 const userList = [
-  {label: 'messageBox.userCenter', value: 1},
-  {label: 'messageBox.logout', value: 10},
+  { label: 'messageBox.userCenter', value: 1 },
+  { label: 'messageBox.logout', value: 10 },
 ];
 
 const switchUser = (e: number) => {
   switch (e) {
     case 1:
-      router.push({name: 'Info'});
+      router.push({ name: 'Info' });
       break;
     case 10:
       logout();
@@ -244,7 +244,7 @@ const jumpUrl = () => {
     margin-left: -35px;
   }
 
-  .navbar-user:hover > .trigger-user {
+  .navbar-user:hover>.trigger-user {
     display: inline-block;
   }
 

@@ -3,7 +3,7 @@ import { PageParam } from '@/api/global';
 import { RoleDetailQueryParam, RoleVO } from '@/api/system/role';
 import { jsonToUrlParam } from '@/utils/formatter';
 
-const BASE_URL = '/orange-system/v1.0/user';
+const BASE_URL = '/orange-system/v1.0/users';
 
 export function pageUser(params: UserPageParam) {
   return axios.post(BASE_URL.concat('/page'), params);
@@ -25,7 +25,7 @@ export function addUser(params: UserVO) {
   return axios.post(BASE_URL, params);
 }
 
-export function getUserById(id: string,params?: UserDetailQueryParam) {
+export function getUserById(id: string, params?: UserDetailQueryParam) {
   let url = BASE_URL.concat(`/${id}`);
   if (params) {
     url = url.concat(`?${jsonToUrlParam(params)}`);
@@ -37,8 +37,8 @@ export function updateUserById(id: string, params: UserVO) {
   return axios.put(BASE_URL.concat(`/${id}`), params);
 }
 
-export function resetUserPassword(params: ResetPasswordParam) {
-  return axios.put(BASE_URL.concat(`/reset-password`), params);
+export function resetUserPassword(id: string, params: ResetPasswordParam) {
+  return axios.put(BASE_URL.concat(`/${id}/reset-password`), params);
 }
 
 export interface UserVO {

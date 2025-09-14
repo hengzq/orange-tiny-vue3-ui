@@ -164,7 +164,7 @@ const onClose = () => {
 };
 
 const open = (id: string) => {
-  RoleApi.getRoleById(id, {
+  RoleApi.getRoleDetailById(id, {
     showMenu: true,
     showButton: true,
   }).then((res) => {

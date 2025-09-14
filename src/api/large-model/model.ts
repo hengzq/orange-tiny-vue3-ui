@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {PageParam} from '@/api/global';
 
-const BASE_URL = '/orange-ai/v1.0/model';
+const BASE_URL = '/orange-ai/v1.0/models';
 
 export function addModel(params: ModelVO) {
     return axios.post(BASE_URL, params);

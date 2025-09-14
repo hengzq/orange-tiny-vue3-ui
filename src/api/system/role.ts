@@ -2,7 +2,7 @@ import axios from 'axios';
 import { PageParam } from '@/api/global';
 import { jsonToUrlParam } from '@/utils/formatter';
 
-const BASE_URL = '/orange-system/v1.0/role';
+const BASE_URL = '/orange-system/v1.0/roles';
 
 export function pageRole(params: RolePageParam) {
   return axios.post(BASE_URL.concat('/page'), params);
@@ -20,8 +20,13 @@ export function addRole(params: RoleVO) {
   return axios.post(BASE_URL, params);
 }
 
-export function getRoleById(id: string, params?: RoleDetailQueryParam) {
-  let url = BASE_URL.concat(`/${id}`);
+export function getRoleById(id: string) {
+  return axios.get(BASE_URL.concat(`/${id}`));
+}
+
+
+export function getRoleDetailById(id: string, params?: RoleDetailQueryParam) {
+  let url = BASE_URL.concat(`/${id}/detail`);
   if (params) {
     url = url.concat(`?${jsonToUrlParam(params)}`);
   }
